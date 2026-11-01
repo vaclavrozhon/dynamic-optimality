@@ -1,0 +1,61 @@
+Interactive Lean dependency graph: verification
+==============================================
+
+Completed: 2026-11-01.
+Source snapshot: 5de2fc38489d6565a1dbf57666a2cf46bef2c569.
+Registered Lean sources match that commit. No mathematical library sources
+were changed for the graph. Exact fingerprints are in dependency-graph-summary.json.
+
+Exporter
+--------
+
+python3 tools/dependency_graph/export.py
+
+The explicit build of every registered tracked module passed (10887 jobs).
+Compiler-generated import metadata reduced the driver to 37 entry modules;
+both import-closure validation and actual environment coverage confirmed
+all 2224 registered modules. Of those, 2214 contain declarations.
+
+  Declarations:                  63307
+  Theorem declarations:          39435
+  Direct local dependency pairs: 541141
+  Private declarations:          5050
+  Self references retained:      985
+  External reference pairs:      1412861 (counted, excluded as graph nodes)
+  Unresolved constants:          0
+
+Independent review checked the exact proof dependencies and source lines
+of all five DynamicOptimality.Results endpoints, type/value edge masks,
+private declaration inclusion, and source-range availability.
+
+Standalone viewer
+-----------------
+
+python3 tools/dependency_graph/build.py
+
+The packager validates unique names, consecutive node IDs, every edge
+endpoint, edge-kind masks, unique directed pairs, and relative source paths.
+The compressed offline artifact is approximately 3.7 MiB.
+
+Headless Chrome, opening the actual file directly, passed these checks:
+  - 63307 declarations and 541141 edges retained in the complete view;
+  - 2214 module nodes and 29018 aggregated inter-module edges;
+  - type/body and theorem filters agree with the original exported data;
+  - an exact theorem neighborhood and its source link agree with that data;
+  - PNG download and mobile controls work;
+  - rendering every one of the 541141 edges works when explicitly enabled;
+  - no browser errors and no network requests while exploring the graph.
+
+Separate boundary fixtures checked empty filters and recovery, self loops,
+names containing HTML-like text, and both compressed and plain embedding.
+JavaScript syntax checks and local documentation-link checks passed.
+
+Mathematical library audit
+-------------------------
+
+flock /tmp/dynamic-optimality-lean-build.lock make audit
+
+Exit status 0. Default build: 10814 jobs. AuditAll checked 61003 declarations;
+AuditDynamicOptimality checked 45185. Both reported no nonstandard axioms.
+These audit counts overlap and concern their existing imported namespaces;
+they are not the declaration count of the broader all-module graph.

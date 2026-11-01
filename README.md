@@ -6,6 +6,8 @@ Dynamic optimality asks whether an online binary search tree can serve every req
 
 Start with [the public theorem statements](DynamicOptimalityResults.lean), or read the [formalization map](FORMALIZATION.md) for the definitions and proof dependencies. The main source papers are [*Splay trees are almost dynamically optimal*](https://arxiv.org/abs/2607.18498) and the forthcoming public manuscript [*Dynamic Optimality to within O(log log log n)*](#chacha2026). Full references and [BibTeX entries](docs/references.bib) appear below.
 
+The [interactive dependency graph](docs/DEPENDENCY_GRAPH.md) lets you explore all repository declarations and their direct references, with a spring layout, module overview, and searchable theorem neighborhoods. [Download the standalone HTML](https://github.com/vaclavrozhon/dynamic-optimality/raw/refs/heads/main/docs/dependency-graph.html) and open it locally; it works offline.
+
 ## What is proved
 
 Let `n` be the number of keys and `X` a finite sequence of successful searches. `OPT(X)` is the minimum cost of an offline BST execution, with a freely chosen initial tree; it charges one unit per request and one per ordinary rotation, and brings each requested key to the root. Every algorithm bound has the form

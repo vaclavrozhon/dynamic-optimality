@@ -1,0 +1,2150 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Dynamic optimality · Lean proof atlas</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        --bg: #10191e;
+        --panel: #18242b;
+        --panel2: #1e2e37;
+        --line: #32424b;
+        --ink: #edf3f4;
+        --muted: #a9bdc5;
+        --accent: #91e1d0;
+        --Splay: #7ab8fa;
+        --Greedy: #f0c66d;
+        --Cha-Cha: #91e1b1;
+        --MultiSplay: #cbadf6;
+        --Shared: #f28e9d;
+        --Other: #a9bdc5;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--ink);
+        font:
+          14px/1.45 system-ui,
+          -apple-system,
+          BlinkMacSystemFont,
+          "Segoe UI",
+          sans-serif;
+      }
+      button,
+      input,
+      select {
+        font: inherit;
+      }
+      button,
+      select,
+      input {
+        border: 1px solid var(--line);
+        border-radius: 7px;
+        background: var(--panel2);
+        color: var(--ink);
+      }
+      button {
+        cursor: pointer;
+        padding: 7px 11px;
+        transition: background 0.12s;
+      }
+      button:hover {
+        background: #334954;
+      }
+      button:disabled {
+        opacity: 0.45;
+        cursor: default;
+      }
+      button.primary {
+        background: #235e54;
+        border-color: #418b7d;
+      }
+      button.primary:hover {
+        background: #307468;
+      }
+      a {
+        color: var(--accent);
+        text-decoration: none;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+      header {
+        height: 100px;
+        padding: 20px 26px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        border-bottom: 1px solid var(--line);
+        gap: 18px;
+      }
+      .eyebrow {
+        color: var(--accent);
+        font-size: 10px;
+        font-weight: 750;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+      }
+      h1 {
+        font-size: 26px;
+        letter-spacing: -0.04em;
+        line-height: 1.1;
+        margin: 5px 0;
+      }
+      header p {
+        margin: 3px 0;
+        color: var(--muted);
+        font-size: 12px;
+      }
+      .headstats {
+        display: flex;
+        gap: 24px;
+        flex-shrink: 0;
+      }
+      .headstats strong {
+        display: block;
+        font-size: 22px;
+        line-height: 1.2;
+        font-weight: 550;
+        font-variant-numeric: tabular-nums;
+      }
+      .headstats span {
+        color: var(--muted);
+        font-size: 11px;
+      }
+      .app {
+        height: calc(100vh - 100px);
+        display: grid;
+        grid-template-columns: 320px minmax(0, 1fr);
+      }
+      aside {
+        padding: 19px 18px;
+        overflow-y: auto;
+        background: var(--panel);
+        border-right: 1px solid var(--line);
+      }
+      .section {
+        margin: 0 0 20px;
+      }
+      .section-title {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 8px;
+        font-size: 10px;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        font-weight: 750;
+        color: var(--muted);
+      }
+      .field {
+        display: block;
+        font-size: 12px;
+        color: var(--muted);
+        margin: 10px 0 5px;
+      }
+      select,
+      input[type="search"] {
+        width: 100%;
+        padding: 8px 9px;
+      }
+      input[type="checkbox"] {
+        accent-color: var(--accent);
+        width: 14px;
+        height: 14px;
+        vertical-align: -2px;
+        margin: 0 7px 0 0;
+      }
+      .checks label {
+        display: block;
+        margin: 7px 0;
+        font-size: 12px;
+      }
+      .groups {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 7px 4px;
+      }
+      .groups label {
+        font-size: 12px;
+        white-space: nowrap;
+      }
+      .dot {
+        display: inline-block;
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        margin-right: 6px;
+      }
+      .row {
+        display: flex;
+        gap: 7px;
+        align-items: center;
+      }
+      .row > * {
+        flex: 1;
+      }
+      .small {
+        font-size: 11px;
+        color: var(--muted);
+      }
+      .note {
+        font-size: 12px;
+        color: var(--muted);
+        line-height: 1.5;
+      }
+      .search-wrap {
+        position: relative;
+      }
+      .search-results {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        z-index: 8;
+        background: #20313b;
+        border: 1px solid #607782;
+        border-radius: 7px;
+        max-height: 340px;
+        overflow: auto;
+        box-shadow: 0 8px 30px #0008;
+      }
+      .search-results button {
+        display: block;
+        border: 0;
+        border-bottom: 1px solid var(--line);
+        border-radius: 0;
+        text-align: left;
+        width: 100%;
+        padding: 9px;
+        font-size: 11px;
+        overflow-wrap: anywhere;
+        background: transparent;
+      }
+      .search-results button:hover,
+      .search-results button:focus {
+        background: #345263;
+      }
+      .search-results .small {
+        display: block;
+        margin-top: 3px;
+      }
+      .graph-wrap {
+        position: relative;
+        overflow: hidden;
+        min-height: 300px;
+        background: radial-gradient(ellipse at 48% 45%, #1c2b34 0, #10191e 80%);
+      }
+      canvas {
+        width: 100%;
+        height: 100%;
+        display: block;
+        touch-action: none;
+      }
+      .graph-top {
+        position: absolute;
+        left: 20px;
+        right: 20px;
+        top: 17px;
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 20px;
+        pointer-events: none;
+      }
+      .view-title {
+        font-size: 16px;
+        font-weight: 600;
+      }
+      .view-subtitle {
+        font-size: 11px;
+        color: var(--muted);
+        max-width: 600px;
+        margin-top: 4px;
+      }
+      .toolbar {
+        display: flex;
+        gap: 6px;
+        pointer-events: auto;
+        flex-shrink: 0;
+      }
+      .toolbar button {
+        background: #18242be8;
+        font-size: 12px;
+      }
+      .graph-bottom {
+        position: absolute;
+        bottom: 17px;
+        left: 20px;
+        right: 20px;
+        pointer-events: none;
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        gap: 20px;
+      }
+      .status {
+        font-size: 11px;
+        color: var(--muted);
+        max-width: 750px;
+        background: #10191edb;
+        padding: 7px 10px;
+        border-radius: 6px;
+      }
+      .help {
+        font-size: 10px;
+        color: var(--muted);
+        text-align: right;
+        max-width: 210px;
+      }
+      .tooltip {
+        position: absolute;
+        pointer-events: none;
+        background: #263b46f5;
+        border: 1px solid #65808d;
+        padding: 8px 10px;
+        max-width: min(560px, 80%);
+        border-radius: 7px;
+        font-size: 11px;
+        overflow-wrap: anywhere;
+        box-shadow: 0 5px 15px #0005;
+        z-index: 5;
+      }
+      .loading {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        gap: 12px;
+        background: #10191ee8;
+        z-index: 9;
+        text-align: center;
+        padding: 30px;
+      }
+      .spinner {
+        width: 28px;
+        height: 28px;
+        border: 2px solid #344d56;
+        border-top-color: var(--accent);
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+      }
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+      [hidden] {
+        display: none !important;
+      }
+      .details {
+        border-top: 1px solid var(--line);
+        padding-top: 17px;
+      }
+      .details h2 {
+        font-size: 13px;
+        margin: 0 0 8px;
+        overflow-wrap: anywhere;
+        font-weight: 650;
+      }
+      .badge {
+        display: inline-block;
+        font-size: 10px;
+        padding: 2px 6px;
+        border: 1px solid var(--line);
+        border-radius: 4px;
+        margin: 0 4px 5px 0;
+        color: var(--muted);
+      }
+      .details-buttons {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin: 11px 0;
+      }
+      .details-buttons button {
+        font-size: 11px;
+      }
+      .source-link {
+        display: block;
+        font-size: 11px;
+        overflow-wrap: anywhere;
+        margin: 5px 0 12px;
+      }
+      .neighbors {
+        margin: 9px 0;
+      }
+      .neighbors summary {
+        cursor: pointer;
+        font-size: 12px;
+        font-weight: 550;
+        color: var(--muted);
+        padding: 4px 0;
+      }
+      .neighbor-list {
+        max-height: 280px;
+        overflow: auto;
+      }
+      .neighbor-list button {
+        display: block;
+        width: 100%;
+        font-size: 10px;
+        text-align: left;
+        border: 0;
+        background: transparent;
+        padding: 5px 3px;
+        overflow-wrap: anywhere;
+        border-radius: 3px;
+      }
+      .neighbor-list button:hover {
+        background: #2c414b;
+      }
+      .neighbor-list .more {
+        color: var(--accent);
+        font-size: 11px;
+      }
+      .metadata {
+        font-size: 10px;
+        color: #8da5af;
+        border-top: 1px solid var(--line);
+        padding-top: 13px;
+        overflow-wrap: anywhere;
+      }
+      .toggle-sidebar {
+        display: none;
+      }
+      .empty {
+        position: absolute;
+        top: 48%;
+        left: 20%;
+        right: 20%;
+        text-align: center;
+        color: var(--muted);
+        pointer-events: none;
+      }
+      .legend-note {
+        font-size: 10px;
+        color: var(--muted);
+        margin-top: 8px;
+      }
+      .no-results {
+        padding: 10px;
+        font-size: 12px;
+        color: var(--muted);
+      }
+      @media (max-width: 850px) {
+        header {
+          padding: 14px 18px;
+          height: 90px;
+        }
+        .headstats {
+          gap: 12px;
+        }
+        .headstats strong {
+          font-size: 18px;
+        }
+        h1 {
+          font-size: 23px;
+        }
+        .app {
+          height: calc(100vh - 90px);
+          grid-template-columns: 280px minmax(0, 1fr);
+        }
+        aside {
+          padding: 16px 12px;
+        }
+        .graph-top {
+          left: 12px;
+          right: 12px;
+          gap: 10px;
+          flex-wrap: wrap;
+        }
+        .toolbar button {
+          padding: 5px 8px;
+        }
+        .help {
+          display: none;
+        }
+      }
+      @media (max-width: 620px) {
+        header {
+          height: 95px;
+          align-items: flex-start;
+        }
+        .headstats {
+          gap: 12px;
+          padding-top: 10px;
+        }
+        .headstats strong {
+          font-size: 16px;
+        }
+        .headstats span {
+          font-size: 9px;
+        }
+        header p {
+          max-width: 210px;
+          font-size: 10px;
+        }
+        h1 {
+          font-size: 21px;
+        }
+        .app {
+          height: calc(100vh - 95px);
+          display: block;
+        }
+        aside {
+          position: absolute;
+          top: 95px;
+          bottom: 0;
+          left: 0;
+          width: 285px;
+          z-index: 7;
+          box-shadow: 4px 0 20px #0008;
+          transform: translateX(-100%);
+          transition: transform 0.15s;
+        }
+        .app.sidebar-open aside {
+          transform: none;
+        }
+        .graph-wrap {
+          height: 100%;
+        }
+        .toggle-sidebar {
+          display: block;
+          position: absolute;
+          z-index: 8;
+          bottom: 20px;
+          right: 15px;
+        }
+        .graph-bottom {
+          bottom: 62px;
+        }
+        .view-title {
+          font-size: 14px;
+        }
+        .view-subtitle {
+          max-width: 230px;
+        }
+        .headstats .module-stat {
+          display: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div>
+        <div class="eyebrow">Dynamic optimality · Lean</div>
+        <h1>Proof atlas</h1>
+        <p>Explore the declarations behind the formal proofs.</p>
+      </div>
+      <div class="headstats" aria-label="Repository totals">
+        <div><strong id="total-nodes">—</strong><span>declarations</span></div>
+        <div>
+          <strong id="total-edges">—</strong><span>direct references</span>
+        </div>
+        <div class="module-stat">
+          <strong id="total-modules">—</strong><span>modules</span>
+        </div>
+      </div>
+    </header>
+    <main class="app" id="app">
+      <aside aria-label="Graph controls">
+        <div class="section search-wrap">
+          <div class="section-title">Find a declaration</div>
+          <input
+            id="search"
+            type="search"
+            placeholder="Name or namespace…"
+            autocomplete="off"
+            aria-label="Search Lean declaration names"
+            aria-controls="search-results"
+          />
+          <div id="search-results" class="search-results" hidden></div>
+          <div class="small" style="margin-top: 6px">
+            Select a result to explore its direct neighbors.
+          </div>
+        </div>
+        <div class="section">
+          <div class="section-title">View</div>
+          <select id="view" aria-label="Graph view">
+            <option value="modules">Module overview</option>
+            <option value="local">Declaration neighborhood</option>
+            <option value="all">All declarations</option></select
+          ><label class="field" for="module">Module</label
+          ><select id="module">
+            <option value="">All modules</option>
+          </select>
+          <div id="local-controls" hidden>
+            <label class="field" for="radius">Neighborhood distance</label>
+            <div class="row">
+              <select id="radius" aria-label="Neighborhood distance">
+                <option value="1">1 edge</option>
+                <option value="2">2 edges</option>
+                <option value="3">3 edges</option>
+                <option value="all">Entire reachable graph</option></select
+              ><select id="direction" aria-label="Neighborhood direction">
+                <option value="both">Both directions</option>
+                <option value="out">Dependencies</option>
+                <option value="in">Used by</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="section">
+          <div class="section-title">
+            Results & shared framework
+            <button id="groups-all" style="padding: 2px 6px; font-size: 10px">
+              All
+            </button>
+          </div>
+          <div class="groups" id="groups"></div>
+          <label class="field" for="kind">Declaration kind</label
+          ><select id="kind">
+            <option value="">All kinds</option>
+            <option value="theorem">Theorems</option>
+            <option value="definition">Definitions</option>
+            <option value="inductive">Inductive types</option>
+            <option value="constructor">Constructors</option>
+            <option value="recursor">Recursors</option>
+            <option value="opaque">Opaque declarations</option>
+            <option value="axiom">Axioms</option>
+            <option value="quotient">Quotient declarations</option>
+          </select>
+          <div class="checks">
+            <label
+              ><input type="checkbox" id="generated" checked />Include generated
+              declarations</label
+            >
+          </div>
+        </div>
+        <div class="section">
+          <div class="section-title">References</div>
+          <div class="checks">
+            <label
+              ><input type="checkbox" id="type-edges" checked />In the statement
+              / type</label
+            ><label
+              ><input type="checkbox" id="value-edges" checked />In the proof /
+              definition body</label
+            ><label
+              ><input type="checkbox" id="draw-all" />Draw every visible
+              edge</label
+            >
+          </div>
+          <div class="legend-note">
+            An arrow points from a declaration to a declaration it uses. Select
+            a node to highlight its arrows. Module edges combine these direct
+            references. Large views use an explicitly counted drawing sample
+            unless “Draw every visible edge” is selected.
+          </div>
+        </div>
+        <div class="section details" id="details">
+          <div class="section-title">Inspect</div>
+          <div class="note">
+            Click a node to inspect it. Double-click a module to open its
+            declarations. Search finds declarations across the whole repository.
+          </div>
+        </div>
+        <div class="metadata" id="metadata">Loading graph metadata…</div>
+      </aside>
+      <section class="graph-wrap" aria-label="Interactive dependency graph">
+        <canvas
+          id="canvas"
+          aria-label="Force-directed graph. Use the search and inspection controls for text access to declarations and dependencies."
+        ></canvas>
+        <div class="graph-top">
+          <div>
+            <div class="view-title" id="view-title">Module overview</div>
+            <div class="view-subtitle" id="view-subtitle">
+              Direct dependencies, grouped by Lean module.
+            </div>
+          </div>
+          <div class="toolbar">
+            <button id="pause" title="Pause or resume spring layout">
+              Pause</button
+            ><button id="fit" title="Fit all visible nodes (F)">Fit</button
+            ><button id="reset" title="Reset the deterministic spring layout">
+              Reset</button
+            ><button id="png" title="Download the current view as a PNG image">
+              PNG
+            </button>
+          </div>
+        </div>
+        <div class="graph-bottom">
+          <div class="status" id="status" aria-live="polite">
+            Preparing graph…
+          </div>
+          <div class="help">
+            Drag the background to pan · scroll to zoom<br />Drag a node to move
+            it · F to fit
+          </div>
+        </div>
+        <div class="tooltip" id="tooltip" hidden></div>
+        <div class="empty" id="empty" hidden>
+          No declarations match these filters.
+        </div>
+        <div class="loading" id="loading">
+          <div class="spinner"></div>
+          <div id="loading-text">Loading the Lean dependency graph…</div>
+        </div>
+        <button class="toggle-sidebar" id="toggle-sidebar">Controls</button>
+      </section>
+    </main>
+    <!-- GRAPH_DATA -->
+    <script id="layout-worker" type="text/plain">
+"use strict";
+let n = 0,
+  xy,
+  velocity,
+  links,
+  weights,
+  pin = -1,
+  running = false,
+  timer = null,
+  tick = 0,
+  epoch = 0,
+  groupMode = false;
+let cap = 0,
+  mass,
+  sumX,
+  sumY,
+  centerX,
+  centerY,
+  half,
+  point,
+  children,
+  used = 0,
+  stack;
+function allocate(k) {
+  cap = Math.max(32, k * 4 + 64);
+  mass = new Float32Array(cap);
+  sumX = new Float64Array(cap);
+  sumY = new Float64Array(cap);
+  centerX = new Float32Array(cap);
+  centerY = new Float32Array(cap);
+  half = new Float32Array(cap);
+  point = new Int32Array(cap);
+  children = new Int32Array(cap * 4);
+  stack = new Int32Array(cap);
+}
+function cell(x, y, h) {
+  if (used >= cap) return -1;
+  const q = used++;
+  mass[q] = 0;
+  sumX[q] = sumY[q] = 0;
+  centerX[q] = x;
+  centerY[q] = y;
+  half[q] = h;
+  point[q] = -1;
+  children.fill(-1, q * 4, q * 4 + 4);
+  return q;
+}
+function quadrant(q, x, y) {
+  return (x >= centerX[q] ? 1 : 0) + (y >= centerY[q] ? 2 : 0);
+}
+function child(q, quadr) {
+  let c = children[q * 4 + quadr];
+  if (c < 0) {
+    const h = half[q] / 2;
+    c = cell(
+      centerX[q] + (quadr & 1 ? h : -h),
+      centerY[q] + (quadr & 2 ? h : -h),
+      h,
+    );
+    children[q * 4 + quadr] = c;
+  }
+  return c;
+}
+function insert(i) {
+  let q = 0,
+    depth = 0;
+  const x = xy[2 * i],
+    y = xy[2 * i + 1];
+  while (q >= 0) {
+    mass[q]++;
+    sumX[q] += x;
+    sumY[q] += y;
+    const old = point[q];
+    if (old === -1) {
+      point[q] = i;
+      return;
+    }
+    if (depth++ > 24 || half[q] < 1e-6) return;
+    if (old >= 0) {
+      const c = child(q, quadrant(q, xy[2 * old], xy[2 * old + 1]));
+      if (c < 0) return;
+      mass[c] = 1;
+      sumX[c] = xy[2 * old];
+      sumY[c] = xy[2 * old + 1];
+      point[c] = old;
+      point[q] = -2;
+    }
+    q = child(q, quadrant(q, x, y));
+  }
+}
+function step() {
+  if (!n) return;
+  let minX = Infinity,
+    minY = Infinity,
+    maxX = -Infinity,
+    maxY = -Infinity;
+  for (let i = 0; i < n; i++) {
+    const x = xy[2 * i],
+      y = xy[2 * i + 1];
+    minX = Math.min(minX, x);
+    maxX = Math.max(maxX, x);
+    minY = Math.min(minY, y);
+    maxY = Math.max(maxY, y);
+  }
+  used = 0;
+  cell(
+    (minX + maxX) / 2,
+    (minY + maxY) / 2,
+    Math.max(10, maxX - minX, maxY - minY) / 2 + 1,
+  );
+  for (let i = 0; i < n; i++) insert(i);
+  const alpha = Math.max(0.09, 0.75 * Math.pow(0.994, tick)),
+    charge = groupMode ? 115 : 36;
+  for (let i = 0; i < n; i++) {
+    const x = xy[2 * i],
+      y = xy[2 * i + 1];
+    let fx = -x * 0.00075,
+      fy = -y * 0.00075,
+      sp = 0;
+    stack[sp++] = 0;
+    while (sp) {
+      const q = stack[--sp];
+      if (!mass[q] || (mass[q] === 1 && point[q] === i)) continue;
+      const dx = x - sumX[q] / mass[q],
+        dy = y - sumY[q] / mass[q],
+        d2 = dx * dx + dy * dy + 25;
+      const contains =
+        Math.abs(x - centerX[q]) <= half[q] &&
+        Math.abs(y - centerY[q]) <= half[q];
+      if (point[q] !== -2 || (!contains && 4 * half[q] * half[q] < 0.81 * d2)) {
+        const f = (charge * mass[q]) / d2;
+        fx += dx * f;
+        fy += dy * f;
+      } else
+        for (let k = 0; k < 4; k++) {
+          const c = children[q * 4 + k];
+          if (c >= 0) stack[sp++] = c;
+        }
+    }
+    velocity[2 * i] =
+      (velocity[2 * i] + Math.max(-24, Math.min(24, fx)) * alpha) * 0.72;
+    velocity[2 * i + 1] =
+      (velocity[2 * i + 1] + Math.max(-24, Math.min(24, fy)) * alpha) * 0.72;
+  }
+  for (let e = 0; e < links.length; e += 2) {
+    const a = links[e],
+      b = links[e + 1];
+    if (a === b) continue;
+    const dx = xy[2 * b] - xy[2 * a],
+      dy = xy[2 * b + 1] - xy[2 * a + 1],
+      dist = Math.sqrt(dx * dx + dy * dy) + 0.001;
+    const desired = groupMode ? 105 : 40;
+    const strength =
+      (groupMode ? 0.005 : 0.008) * Math.min(3, weights[e / 2] || 1);
+    const f =
+      Math.max(-2.5, Math.min(2.5, (dist - desired) * strength)) * alpha;
+    const sx = (dx / dist) * f,
+      sy = (dy / dist) * f;
+    velocity[2 * a] += sx;
+    velocity[2 * a + 1] += sy;
+    velocity[2 * b] -= sx;
+    velocity[2 * b + 1] -= sy;
+  }
+  let motion = 0;
+  for (let i = 0; i < n; i++) {
+    if (i === pin) {
+      velocity[2 * i] = velocity[2 * i + 1] = 0;
+      continue;
+    }
+    const vx = Math.max(-18, Math.min(18, velocity[2 * i])),
+      vy = Math.max(-18, Math.min(18, velocity[2 * i + 1]));
+    xy[2 * i] += vx;
+    xy[2 * i + 1] += vy;
+    motion += vx * vx + vy * vy;
+  }
+  tick++;
+  return motion / n;
+}
+function publish() {
+  const copy = xy.slice();
+  postMessage({ type: "positions", epoch, tick, positions: copy, running }, [
+    copy.buffer,
+  ]);
+}
+function loop() {
+  timer = null;
+  if (!running) return;
+  const start = performance.now();
+  let motion = 0;
+  do {
+    motion = step();
+  } while (n < 1500 && performance.now() - start < 14);
+  if (tick >= 700 || (tick > 90 && motion < 0.003)) running = false;
+  publish();
+  if (running) timer = setTimeout(loop, n > 12000 ? 65 : 25);
+}
+onmessage = (e) => {
+  const m = e.data;
+  if (m.type === "init") {
+    if (timer) clearTimeout(timer);
+    epoch = m.epoch;
+    n = m.positions.length / 2;
+    xy = m.positions;
+    velocity = new Float32Array(xy.length);
+    links = m.edges;
+    weights = m.weights;
+    groupMode = m.groupMode;
+    pin = -1;
+    tick = 0;
+    allocate(n);
+    running = n > 0 && !m.paused;
+    publish();
+    if (running) timer = setTimeout(loop, 0);
+  } else if (m.epoch === epoch && m.type === "pause") {
+    running = n > 0 && !m.paused;
+    if (timer) clearTimeout(timer);
+    timer = null;
+    if (running) {
+      if (tick >= 700) tick = 0;
+      timer = setTimeout(loop, 0);
+    } else publish();
+  } else if (m.epoch === epoch && m.type === "pin") {
+    pin = m.index;
+    if (pin >= 0) {
+      xy[2 * pin] = m.x;
+      xy[2 * pin + 1] = m.y;
+      velocity[2 * pin] = velocity[2 * pin + 1] = 0;
+    }
+    if (!running) publish();
+  }
+};
+</script>
+    <script>
+      "use strict";
+      (() => {
+        const $ = (id) => document.getElementById(id),
+          fmt = (n) => n.toLocaleString("en-US");
+        const colors = {
+          Splay: "#7ab8fa",
+          Greedy: "#f0c66d",
+          "Cha-Cha": "#91e1b1",
+          MultiSplay: "#cbadf6",
+          Shared: "#f28e9d",
+          Other: "#a9bdc5",
+        };
+        const groupNames = Object.keys(colors),
+          groupEnabled = new Set(groupNames);
+        const canvas = $("canvas"),
+          ctx = canvas.getContext("2d", { alpha: false });
+        let data,
+          nodes,
+          edges,
+          modules = [],
+          outStart,
+          inStart,
+          outEdges,
+          inEdges,
+          worker;
+        let graph = { nodes: [], edges: [], internal: 0, referenceCount: 0 },
+          positions = new Float32Array(),
+          nodeMap = new Map(),
+          selected = null,
+          hover = -1,
+          localCenter = null;
+        let width = 100,
+          height = 100,
+          dpr = 1,
+          camera = { x: 50, y: 50, k: 1 },
+          paused = false,
+          epoch = 0,
+          drawPending = false,
+          filterPending = false,
+          firstFit = true;
+        let drag = null,
+          lastHover = 0,
+          layoutTicks = 0,
+          layoutRunning = true,
+          matchedCount = 0,
+          drawnEdges = 0,
+          matchedReferences = 0;
+        const neighborCache = new Map();
+        function make(tag, text, className) {
+          const e = document.createElement(tag);
+          if (text !== undefined) e.textContent = text;
+          if (className) e.className = className;
+          return e;
+        }
+        function escapeKey(s) {
+          let h = 2166136261;
+          for (let i = 0; i < s.length; i++) {
+            h ^= s.charCodeAt(i);
+            h = Math.imul(h, 16777619);
+          }
+          return h >>> 0;
+        }
+        function color(n) {
+          return colors[n.group] || colors.Other;
+        }
+        function nodeTitle(n) {
+          return n.moduleNode ? n.name : n.name;
+        }
+        function edgeAllowed(e) {
+          const mask =
+            ($("type-edges").checked ? 1 : 0) |
+            ($("value-edges").checked ? 2 : 0);
+          return (e[2] & mask) !== 0;
+        }
+        function nodeAllowed(n) {
+          return (
+            groupEnabled.has(n.group || "Other") &&
+            (!$("kind").value || n.kind === $("kind").value) &&
+            ($("generated").checked || !n.generated) &&
+            (!$("module").value || n.module === $("module").value)
+          );
+        }
+        function filterSummary() {
+          const items = [];
+          if (groupEnabled.size !== groupNames.length)
+            items.push([...groupEnabled].join(", ") || "no groups");
+          if ($("kind").value) items.push($("kind").selectedOptions[0].text);
+          if (!$("generated").checked)
+            items.push("generated declarations excluded");
+          if ($("module").value) items.push($("module").value);
+          return items.length ? " · Filters: " + items.join("; ") : "";
+        }
+        function requestDraw() {
+          if (!drawPending) {
+            drawPending = true;
+            requestAnimationFrame(() => {
+              drawPending = false;
+              draw();
+            });
+          }
+        }
+        function resize() {
+          const rect = canvas.getBoundingClientRect();
+          const oldW = width,
+            oldH = height;
+          width = Math.max(1, rect.width);
+          height = Math.max(1, rect.height);
+          dpr = Math.min(2, devicePixelRatio || 1);
+          canvas.width = Math.round(width * dpr);
+          canvas.height = Math.round(height * dpr);
+          camera.x += (width - oldW) / 2;
+          camera.y += (height - oldH) / 2;
+          requestDraw();
+        }
+        function fit() {
+          if (!positions.length) return;
+          let minX = Infinity,
+            maxX = -Infinity,
+            minY = Infinity,
+            maxY = -Infinity;
+          for (let i = 0; i < positions.length; i += 2) {
+            minX = Math.min(minX, positions[i]);
+            maxX = Math.max(maxX, positions[i]);
+            minY = Math.min(minY, positions[i + 1]);
+            maxY = Math.max(maxY, positions[i + 1]);
+          }
+          camera.k = Math.min(
+            3,
+            (width - 100) / Math.max(120, maxX - minX),
+            (height - 170) / Math.max(120, maxY - minY),
+          );
+          camera.k = Math.max(0.002, camera.k);
+          camera.x = width / 2 - ((minX + maxX) / 2) * camera.k;
+          camera.y = height / 2 + 15 - ((minY + maxY) / 2) * camera.k;
+          requestDraw();
+        }
+        function initialPositions(g) {
+          const p = new Float32Array(g.nodes.length * 2);
+          const count = g.nodes.length,
+            radius = Math.max(80, Math.sqrt(count) * (g.moduleMode ? 30 : 13));
+          for (let i = 0; i < count; i++) {
+            const n = g.nodes[i],
+              hash = escapeKey(n.name),
+              hash2 = escapeKey(n.name + "@");
+            const a = (hash / 4294967296) * Math.PI * 2,
+              r = radius * Math.sqrt((hash2 + 0.5) / 4294967296);
+            p[2 * i] = Math.cos(a) * r;
+            p[2 * i + 1] = Math.sin(a) * r;
+          }
+          return p;
+        }
+        function launchLayout() {
+          epoch++;
+          layoutTicks = 0;
+          positions = initialPositions(graph);
+          nodeMap = new Map(graph.nodes.map((n, i) => [n.key, i]));
+          const packed = new Uint32Array(graph.edges.length * 2),
+            weights = new Float32Array(graph.edges.length);
+          for (let i = 0; i < graph.edges.length; i++) {
+            packed[2 * i] = graph.edges[i].a;
+            packed[2 * i + 1] = graph.edges[i].b;
+            weights[i] = Math.log2((graph.edges[i].weight || 1) + 1);
+          }
+          const copy = positions.slice();
+          worker.postMessage(
+            {
+              type: "init",
+              epoch,
+              positions: copy,
+              edges: packed,
+              weights,
+              groupMode: graph.moduleMode,
+              paused,
+            },
+            [copy.buffer, packed.buffer, weights.buffer],
+          );
+          firstFit = true;
+          hover = -1;
+          fit();
+          updateStatus();
+          requestDraw();
+        }
+        function rebuild() {
+          if (!data) return;
+          const mode = $("view").value;
+          const allowed = new Uint8Array(nodes.length);
+          matchedCount = 0;
+          for (let i = 0; i < nodes.length; i++)
+            if (nodeAllowed(nodes[i])) {
+              allowed[i] = 1;
+              matchedCount++;
+            }
+          let included = allowed;
+          if (mode === "local") {
+            included = new Uint8Array(nodes.length);
+            if (localCenter !== null && allowed[localCenter]) {
+              const max =
+                  $("radius").value === "all"
+                    ? Infinity
+                    : Number($("radius").value),
+                direction = $("direction").value;
+              let frontier = [localCenter];
+              included[localCenter] = 1;
+              for (let d = 0; d < max && frontier.length; d++) {
+                const next = [];
+                for (const id of frontier) {
+                  if (direction !== "in")
+                    for (let p = outStart[id]; p < outStart[id + 1]; p++) {
+                      const edge = edges[outEdges[p]],
+                        target = edge[1];
+                      if (
+                        allowed[target] &&
+                        !included[target] &&
+                        edgeAllowed(edge)
+                      ) {
+                        included[target] = 1;
+                        next.push(target);
+                      }
+                    }
+                  if (direction !== "out")
+                    for (let p = inStart[id]; p < inStart[id + 1]; p++) {
+                      const edge = edges[inEdges[p]],
+                        target = edge[0];
+                      if (
+                        allowed[target] &&
+                        !included[target] &&
+                        edgeAllowed(edge)
+                      ) {
+                        included[target] = 1;
+                        next.push(target);
+                      }
+                    }
+                }
+                frontier = next;
+              }
+            }
+          }
+          graph = {
+            nodes: [],
+            edges: [],
+            moduleMode: mode === "modules",
+            internal: 0,
+            referenceCount: 0,
+          };
+          const map = new Int32Array(nodes.length);
+          map.fill(-1);
+          if (mode === "modules") {
+            const moduleMap = new Map();
+            for (let i = 0; i < nodes.length; i++)
+              if (included[i]) {
+                const n = nodes[i];
+                let index = moduleMap.get(n.module);
+                if (index === undefined) {
+                  index = graph.nodes.length;
+                  moduleMap.set(n.module, index);
+                  graph.nodes.push({
+                    name: n.module,
+                    label: n.module.split(".").slice(-2).join("."),
+                    module: n.module,
+                    group: n.group,
+                    moduleNode: true,
+                    key: "module:" + n.module,
+                    count: 0,
+                    ids: [],
+                    groups: {},
+                  });
+                }
+                const m = graph.nodes[index];
+                m.count++;
+                m.ids.push(i);
+                m.groups[n.group] = (m.groups[n.group] || 0) + 1;
+                map[i] = index;
+              }
+            for (const m of graph.nodes)
+              m.group = Object.keys(m.groups).sort(
+                (a, b) => m.groups[b] - m.groups[a],
+              )[0];
+            const aggregate = new Map();
+            for (const e of edges)
+              if (included[e[0]] && included[e[1]] && edgeAllowed(e)) {
+                graph.referenceCount++;
+                const a = map[e[0]],
+                  b = map[e[1]];
+                if (a === b) {
+                  graph.internal++;
+                  continue;
+                }
+                const key = a * graph.nodes.length + b,
+                  old = aggregate.get(key);
+                if (old) {
+                  old.weight++;
+                  old.mask |= e[2];
+                } else aggregate.set(key, { a, b, weight: 1, mask: e[2] });
+              }
+            graph.edges = [...aggregate.values()];
+          } else {
+            for (let i = 0; i < nodes.length; i++)
+              if (included[i]) {
+                map[i] = graph.nodes.length;
+                graph.nodes.push({ ...nodes[i], key: "decl:" + i });
+              }
+            for (const e of edges)
+              if (included[e[0]] && included[e[1]] && edgeAllowed(e)) {
+                graph.referenceCount++;
+                graph.edges.push({
+                  a: map[e[0]],
+                  b: map[e[1]],
+                  weight: 1,
+                  mask: e[2],
+                });
+              }
+          }
+          matchedReferences = graph.referenceCount;
+          $("local-controls").hidden = mode !== "local";
+          $("view-title").textContent =
+            mode === "modules"
+              ? "Module overview"
+              : mode === "local"
+                ? "Declaration neighborhood"
+                : $("module").value
+                  ? "Declarations in " + $("module").value
+                  : "All declarations";
+          let subtitle =
+            mode === "modules"
+              ? "Each node is a Lean module; its size reflects its declaration count."
+              : mode === "local"
+                ? localCenter === null
+                  ? "Search for a declaration to choose a center."
+                  : "Centered on " + nodes[localCenter].name
+                : "Every matching declaration is a node, including isolated declarations.";
+          $("view-subtitle").textContent = subtitle + filterSummary();
+          $("empty").hidden = graph.nodes.length > 0;
+          $("empty").textContent =
+            mode === "local" && localCenter === null
+              ? "Search for a declaration to open its neighborhood."
+              : "No declarations match this view. Adjust filters or choose a different center.";
+          launchLayout();
+        }
+        function scheduleRebuild() {
+          if (filterPending) return;
+          filterPending = true;
+          $("status").textContent = "Updating graph…";
+          setTimeout(() => {
+            filterPending = false;
+            rebuild();
+          }, 15);
+        }
+        function draw() {
+          ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+          ctx.fillStyle = "#10191e";
+          ctx.fillRect(0, 0, width, height);
+          if (!positions.length) {
+            drawnEdges = 0;
+            updateStatus();
+            return;
+          }
+          const k = camera.k,
+            cx = camera.x,
+            cy = camera.y,
+            selectedIndex = selected ? nodeMap.get(selected) : undefined;
+          const selectedEdges = [];
+          const maxEdges = $("draw-all").checked ? Infinity : 18000;
+          const stride = Math.max(1, Math.ceil(graph.edges.length / maxEdges));
+          drawnEdges = 0;
+          ctx.beginPath();
+          for (let i = 0; i < graph.edges.length; i++) {
+            const e = graph.edges[i];
+            if (e.a === selectedIndex || e.b === selectedIndex) {
+              selectedEdges.push(e);
+              continue;
+            }
+            if (i % stride) continue;
+            const ax = positions[2 * e.a] * k + cx,
+              ay = positions[2 * e.a + 1] * k + cy,
+              bx = positions[2 * e.b] * k + cx,
+              by = positions[2 * e.b + 1] * k + cy;
+            if (e.a === e.b) {
+              ctx.moveTo(ax + 5, ay - 7);
+              ctx.arc(ax, ay - 7, 5, 0, Math.PI * 2);
+            } else {
+              ctx.moveTo(ax, ay);
+              ctx.lineTo(bx, by);
+            }
+            drawnEdges++;
+          }
+          ctx.lineWidth = graph.moduleMode ? 0.65 : 0.5;
+          ctx.strokeStyle =
+            graph.nodes.length > 8000 ? "#8ca5b917" : "#8ca5b929";
+          ctx.stroke();
+          for (const e of selectedEdges) {
+            const outgoing = e.a === selectedIndex;
+            ctx.beginPath();
+            const ax = positions[2 * e.a] * k + cx,
+              ay = positions[2 * e.a + 1] * k + cy,
+              bx = positions[2 * e.b] * k + cx,
+              by = positions[2 * e.b + 1] * k + cy;
+            if (e.a === e.b) {
+              ctx.moveTo(ax + 9, ay - 12);
+              ctx.arc(ax, ay - 12, 9, 0, Math.PI * 2);
+            } else {
+              ctx.moveTo(ax, ay);
+              ctx.lineTo(bx, by);
+            }
+            ctx.strokeStyle = outgoing ? "#91e1d0bb" : "#f0c66dbb";
+            ctx.lineWidth = 1.3;
+            ctx.stroke();
+            if (e.a === e.b)
+              drawArrow(ax + 9, ay - 18, ax + 9, ay - 9, 0, "#91e1d0");
+            else
+              drawArrow(
+                ax,
+                ay,
+                bx,
+                by,
+                Math.min(8, nodeRadius(graph.nodes[e.b]) * k) + 4,
+                outgoing ? "#91e1d0" : "#f0c66d",
+              );
+            drawnEdges++;
+          }
+          for (const group of groupNames) {
+            ctx.beginPath();
+            ctx.fillStyle = colors[group];
+            for (let i = 0; i < graph.nodes.length; i++) {
+              const n = graph.nodes[i];
+              if (n.group !== group) continue;
+              const x = positions[2 * i] * k + cx,
+                y = positions[2 * i + 1] * k + cy;
+              if (x < -20 || x > width + 20 || y < -20 || y > height + 20)
+                continue;
+              const r = Math.max(
+                graph.moduleMode || graph.nodes.length <= 1000 ? 2.4 : 0.75,
+                Math.min(18, nodeRadius(n) * k),
+              );
+              if (r < 1.6) ctx.rect(x - 0.65, y - 0.65, 1.3, 1.3);
+              else {
+                ctx.moveTo(x + r, y);
+                ctx.arc(x, y, r, 0, Math.PI * 2);
+              }
+            }
+            ctx.fill();
+          }
+          const labels = [];
+          if (graph.moduleMode && graph.nodes.length < 250) {
+            for (let i = 0; i < graph.nodes.length; i++)
+              if (k > 0.35 || graph.nodes[i].count > 400) labels.push(i);
+          } else if (
+            !graph.moduleMode &&
+            graph.nodes.length <= 55 &&
+            k > 0.35
+          ) {
+            for (let i = 0; i < graph.nodes.length; i++) labels.push(i);
+          }
+          if (selectedIndex !== undefined) labels.push(selectedIndex);
+          if (hover >= 0) labels.push(hover);
+          ctx.font = "11px system-ui";
+          ctx.textAlign = "center";
+          for (const i of new Set(labels)) {
+            const n = graph.nodes[i],
+              x = positions[2 * i] * k + cx,
+              y = positions[2 * i + 1] * k + cy,
+              r = Math.max(3, Math.min(18, nodeRadius(n) * k));
+            if (x < -100 || x > width + 100 || y < -25 || y > height + 25)
+              continue;
+            const active = i === selectedIndex || i === hover;
+            if (active) {
+              ctx.beginPath();
+              ctx.arc(x, y, r + 4, 0, Math.PI * 2);
+              ctx.strokeStyle = "#f7fafb";
+              ctx.lineWidth = 1.5;
+              ctx.stroke();
+            }
+            let label = active
+              ? n.name
+              : (n.label || n.name).split(".").slice(-2).join(".");
+            if (label.length > 90) label = label.slice(0, 87) + "…";
+            const tw = ctx.measureText(label).width;
+            ctx.fillStyle = "#10191edf";
+            ctx.fillRect(x - tw / 2 - 4, y + r + 6, tw + 8, 17);
+            ctx.fillStyle = active ? "#f5f9fa" : "#b9ced7";
+            ctx.fillText(label, x, y + r + 18);
+          }
+          updateStatus();
+        }
+        function drawArrow(ax, ay, bx, by, offset, c) {
+          const dx = bx - ax,
+            dy = by - ay,
+            d = Math.hypot(dx, dy);
+          if (d < offset + 8) return;
+          const ux = dx / d,
+            uy = dy / d,
+            x = bx - ux * offset,
+            y = by - uy * offset;
+          ctx.fillStyle = c;
+          ctx.beginPath();
+          ctx.moveTo(x, y);
+          ctx.lineTo(x - ux * 6 - uy * 3, y - uy * 6 + ux * 3);
+          ctx.lineTo(x - ux * 6 + uy * 3, y - uy * 6 - ux * 3);
+          ctx.closePath();
+          ctx.fill();
+        }
+        function nodeRadius(n) {
+          return n.moduleNode ? 3 + Math.sqrt(n.count) * 0.38 : 2.4;
+        }
+        function updateStatus() {
+          if (!data) return;
+          let s =
+            fmt(graph.nodes.length) +
+            (graph.moduleMode ? " modules" : " declarations") +
+            " · " +
+            fmt(graph.edges.length) +
+            (graph.moduleMode ? " module connections" : " direct references");
+          if (graph.moduleMode)
+            s +=
+              " from " +
+              fmt(graph.referenceCount) +
+              " declaration references (" +
+              fmt(graph.internal) +
+              " inside modules)";
+          if (drawnEdges < graph.edges.length)
+            s +=
+              " · drawing " +
+              fmt(drawnEdges) +
+              " of " +
+              fmt(graph.edges.length) +
+              " edges";
+          if (!graph.moduleMode)
+            s += " · " + fmt(nodes.length) + " total declarations loaded";
+          s +=
+            " · " +
+            (paused
+              ? "layout paused"
+              : layoutRunning
+                ? "spring layout running"
+                : "layout settled");
+          $("status").textContent = s;
+          $("pause").textContent =
+            paused || !layoutRunning ? "Resume" : "Pause";
+        }
+        function setPause(p) {
+          paused = p;
+          layoutRunning = !p;
+          worker.postMessage({ type: "pause", paused, epoch });
+          updateStatus();
+        }
+        function hit(x, y) {
+          let index = -1,
+            best = Infinity;
+          for (let i = 0; i < graph.nodes.length; i++) {
+            const dx = positions[2 * i] * camera.k + camera.x - x,
+              dy = positions[2 * i + 1] * camera.k + camera.y - y,
+              d = dx * dx + dy * dy,
+              r = Math.max(
+                6,
+                Math.min(20, nodeRadius(graph.nodes[i]) * camera.k + 4),
+              );
+            if (d <= r * r && d < best) {
+              best = d;
+              index = i;
+            }
+          }
+          return index;
+        }
+        function sourceLink(n) {
+          const base = (
+            data.meta.repositoryUrl ||
+            data.meta.repoUrl ||
+            "https://github.com/vaclavrozhon/dynamic-optimality"
+          ).replace(/\/$/, "");
+          const commit = data.meta.gitCommit || "main";
+          const file = n.file || n.module.replaceAll(".", "/") + ".lean";
+          return (
+            base +
+            "/blob/" +
+            encodeURIComponent(commit) +
+            "/" +
+            file.split("/").map(encodeURIComponent).join("/") +
+            (n.line ? "#L" + n.line : "")
+          );
+        }
+        function neighbors(id, direction) {
+          const key = id + ":" + direction;
+          if (neighborCache.has(key)) return neighborCache.get(key);
+          const start = direction === "out" ? outStart : inStart,
+            index = direction === "out" ? outEdges : inEdges,
+            seen = new Map();
+          for (let p = start[id]; p < start[id + 1]; p++) {
+            const e = edges[index[p]],
+              target = direction === "out" ? e[1] : e[0];
+            seen.set(target, (seen.get(target) || 0) | e[2]);
+          }
+          const list = [...seen].sort((a, b) =>
+            nodes[a[0]].name.localeCompare(nodes[b[0]].name),
+          );
+          neighborCache.set(key, list);
+          return list;
+        }
+        function neighborSection(title, list) {
+          const details = make("details", undefined, "neighbors");
+          const sum = make("summary", title + " (" + fmt(list.length) + ")");
+          details.append(sum);
+          const box = make("div", undefined, "neighbor-list");
+          let shown = 0;
+          function more() {
+            const end = Math.min(list.length, shown + 80);
+            for (let j = shown; j < end; j++) {
+              const [id, mask] = list[j],
+                b = make("button", nodes[id].name);
+              b.title =
+                mask === 0
+                  ? "Declaration in this module"
+                  : mask === 3
+                    ? "Referenced in both type and proof/body"
+                    : mask === 1
+                      ? "Referenced in type"
+                      : "Referenced in proof/body";
+              b.addEventListener("click", () => chooseDeclaration(id, true));
+              box.append(b);
+            }
+            shown = end;
+            if (shown < list.length) {
+              const b = make(
+                "button",
+                "Show the next " +
+                  Math.min(80, list.length - shown) +
+                  " of " +
+                  fmt(list.length - shown) +
+                  " remaining",
+                "more",
+              );
+              b.addEventListener("click", () => {
+                b.remove();
+                more();
+              });
+              box.append(b);
+            }
+          }
+          more();
+          details.append(box);
+          return details;
+        }
+        function inspect(n) {
+          selected = n.key;
+          const panel = $("details");
+          panel.replaceChildren(
+            make("div", "Inspect", "section-title"),
+            make("h2", n.name),
+          );
+          if (n.moduleNode) {
+            panel.append(make("span", fmt(n.count) + " declarations", "badge"));
+            const info = make(
+              "div",
+              "Module edges are aggregated direct references. Dependencies between declarations inside this module are retained in declaration views.",
+              "note",
+            );
+            panel.append(info);
+            const controls = make("div", undefined, "details-buttons");
+            const b = make("button", "Open this module");
+            b.className = "primary";
+            b.onclick = () => openModule(n.module);
+            controls.append(b);
+            panel.append(controls);
+            panel.append(
+              neighborSection(
+                "Declarations",
+                n.ids.map((id) => [id, 0]),
+              ),
+            );
+          } else {
+            panel.append(
+              make("span", n.kind, "badge"),
+              make("span", n.group, "badge"),
+            );
+            if (n.generated) panel.append(make("span", "generated", "badge"));
+            const a = make(
+              "a",
+              (n.file || n.module) + (n.line ? ":" + n.line : ""),
+              "source-link",
+            );
+            a.href = sourceLink(n);
+            a.target = "_blank";
+            a.rel = "noopener noreferrer";
+            a.title = "Open the source snapshot on GitHub";
+            panel.append(a);
+            const note = make(
+              "div",
+              "Direct neighbors below include all exported repository declarations, independently of view filters.",
+              "small",
+            );
+            const controls = make("div", undefined, "details-buttons");
+            for (const [label, direction] of [
+              ["Explore both", "both"],
+              ["Dependencies", "out"],
+              ["Used by", "in"],
+            ]) {
+              const b = make("button", label);
+              b.onclick = () => {
+                localCenter = n.id;
+                $("direction").value = direction;
+                $("view").value = "local";
+                $("module").value = "";
+                scheduleRebuild();
+              };
+              controls.append(b);
+            }
+            panel.append(
+              controls,
+              note,
+              neighborSection("Uses", neighbors(n.id, "out")),
+              neighborSection("Used by", neighbors(n.id, "in")),
+            );
+            panel.append(
+              make(
+                "div",
+                "Highlighted arrows: mint = uses; gold = used by.",
+                "legend-note",
+              ),
+            );
+          }
+          requestDraw();
+        }
+        function chooseDeclaration(id, resetFilters) {
+          const n = nodes[id];
+          localCenter = id;
+          $("view").value = "local";
+          $("module").value = "";
+          if (resetFilters) {
+            $("kind").value = "";
+            $("generated").checked = true;
+            groupEnabled.add(n.group);
+            syncGroups();
+          }
+          selected = "decl:" + id;
+          inspect({ ...n, key: selected });
+          $("search-results").hidden = true;
+          scheduleRebuild();
+        }
+        function openModule(module) {
+          $("module").value = module;
+          $("view").value = "all";
+          scheduleRebuild();
+        }
+        function syncGroups() {
+          for (const label of $("groups").children)
+            label.querySelector("input").checked = groupEnabled.has(
+              label.dataset.group,
+            );
+        }
+        function search() {
+          const q = $("search").value.trim().toLowerCase(),
+            box = $("search-results");
+          box.replaceChildren();
+          if (!q) {
+            box.hidden = true;
+            return;
+          }
+          const exact = [],
+            prefix = [],
+            other = [];
+          let total = 0;
+          for (const n of nodes) {
+            const lower = n.name.toLowerCase();
+            if (lower.includes(q)) {
+              total++;
+              if (lower === q) exact.push(n);
+              else if (
+                lower.startsWith(q) ||
+                lower.split(".").pop().startsWith(q)
+              ) {
+                if (prefix.length < 30) prefix.push(n);
+              } else if (other.length < 30) other.push(n);
+            }
+          }
+          const found = [...exact, ...prefix, ...other].slice(0, 30);
+          for (const n of found) {
+            const b = make("button", n.name);
+            b.append(make("span", n.kind + " · " + n.module, "small"));
+            b.onclick = () => chooseDeclaration(n.id, true);
+            box.append(b);
+          }
+          if (total > 30)
+            box.append(
+              make(
+                "div",
+                "Showing 30 of " +
+                  fmt(total) +
+                  " matches. Refine the name to narrow the search.",
+                "no-results",
+              ),
+            );
+          if (!found.length)
+            box.append(make("div", "No matching declaration.", "no-results"));
+          box.hidden = false;
+        }
+        function downloadPng() {
+          draw();
+          const image = document.createElement("canvas");
+          image.width = canvas.width;
+          image.height = canvas.height + Math.round(74 * dpr);
+          const c = image.getContext("2d");
+          c.fillStyle = "#10191e";
+          c.fillRect(0, 0, image.width, image.height);
+          c.drawImage(canvas, 0, 0);
+          c.scale(dpr, dpr);
+          c.fillStyle = "#edf3f4";
+          c.font = "16px system-ui";
+          c.fillText(
+            "Dynamic optimality · " + $("view-title").textContent,
+            20,
+            height + 26,
+          );
+          c.font = "10px system-ui";
+          c.fillStyle = "#a9bdc5";
+          c.fillText(
+            fmt(graph.nodes.length) +
+              " nodes · " +
+              fmt(graph.edges.length) +
+              " edges · " +
+              fmt(drawnEdges) +
+              " edges drawn · " +
+              (data.meta.gitCommit || "").slice(0, 10),
+            20,
+            height + 47,
+          );
+          image.toBlob((blob) => {
+            if (!blob) return;
+            const url = URL.createObjectURL(blob),
+              a = document.createElement("a");
+            a.href = url;
+            a.download = "lean-proof-atlas-" + $("view").value + ".png";
+            a.click();
+            setTimeout(() => URL.revokeObjectURL(url), 1000);
+          }, "image/png");
+        }
+        function buildAdjacency() {
+          const count = nodes.length;
+          outStart = new Uint32Array(count + 1);
+          inStart = new Uint32Array(count + 1);
+          for (const e of edges) {
+            outStart[e[0] + 1]++;
+            inStart[e[1] + 1]++;
+          }
+          for (let i = 1; i <= count; i++) {
+            outStart[i] += outStart[i - 1];
+            inStart[i] += inStart[i - 1];
+          }
+          outEdges = new Uint32Array(edges.length);
+          inEdges = new Uint32Array(edges.length);
+          const out = outStart.slice(),
+            into = inStart.slice();
+          for (let i = 0; i < edges.length; i++) {
+            const e = edges[i];
+            outEdges[out[e[0]]++] = i;
+            inEdges[into[e[1]]++] = i;
+          }
+        }
+        function setup() {
+          nodes = data.nodes;
+          edges = data.edges;
+          data.meta = data.meta || {};
+          for (let i = 0; i < nodes.length; i++) {
+            if (nodes[i].id !== i)
+              throw Error(
+                "Graph node IDs must be consecutive and match array positions.",
+              );
+            if (
+              nodes[i].group === "ChaCha" ||
+              nodes[i].group === "Cha-Cha" ||
+              nodes[i].group === "Cha-Cha / Tango²"
+            )
+              nodes[i].group = "Cha-Cha";
+            if (!colors[nodes[i].group]) nodes[i].group = "Other";
+          }
+          for (const e of edges)
+            if (
+              e[0] < 0 ||
+              e[1] < 0 ||
+              e[0] >= nodes.length ||
+              e[1] >= nodes.length
+            )
+              throw Error("A dependency edge has an invalid endpoint.");
+          modules = [...new Set(nodes.map((n) => n.module))].sort();
+          $("total-nodes").textContent = fmt(nodes.length);
+          $("total-edges").textContent = fmt(edges.length);
+          $("total-modules").textContent = fmt(modules.length);
+          for (const module of modules) {
+            const option = make("option", module);
+            option.value = module;
+            $("module").append(option);
+          }
+          for (const group of groupNames) {
+            const label = make("label");
+            label.dataset.group = group;
+            const check = document.createElement("input");
+            check.type = "checkbox";
+            check.checked = true;
+            check.onchange = () => {
+              check.checked
+                ? groupEnabled.add(group)
+                : groupEnabled.delete(group);
+              scheduleRebuild();
+            };
+            const dot = make("span", undefined, "dot");
+            dot.style.background = colors[group];
+            label.append(check, dot, document.createTextNode(group));
+            $("groups").append(label);
+          }
+          buildAdjacency();
+          const blob = new Blob([$("layout-worker").textContent], {
+              type: "text/javascript",
+            }),
+            url = URL.createObjectURL(blob);
+          worker = new Worker(url);
+          URL.revokeObjectURL(url);
+          worker.onmessage = (e) => {
+            const m = e.data;
+            if (m.type === "positions" && m.epoch === epoch) {
+              positions = m.positions;
+              layoutTicks = m.tick;
+              layoutRunning = m.running;
+              if (firstFit && m.tick > 8) {
+                firstFit = false;
+                fit();
+              }
+              requestDraw();
+            }
+          };
+          worker.onerror = (e) => {
+            setPause(true);
+            $("status").textContent =
+              "Layout worker failed: " +
+              e.message +
+              ". The graph and search remain available.";
+          };
+          const meta = $("metadata");
+          meta.replaceChildren(
+            make(
+              "div",
+              "Repository declarations only. Imported library constants are not graph nodes.",
+            ),
+          );
+          const metaCommit = data.meta.gitCommit;
+          if (metaCommit) {
+            const a = make("a", "Source snapshot " + metaCommit.slice(0, 10));
+            a.href =
+              (data.meta.repositoryUrl ||
+                data.meta.repoUrl ||
+                "https://github.com/vaclavrozhon/dynamic-optimality") +
+              "/commit/" +
+              encodeURIComponent(metaCommit);
+            a.target = "_blank";
+            a.rel = "noopener noreferrer";
+            meta.append(a);
+          }
+          if (data.meta.sourceMatchesCommit === false)
+            meta.append(
+              make(
+                "div",
+                "The graph includes uncommitted Lean changes. Source links show the last committed version.",
+              ),
+            );
+          if (
+            data.meta.exportedAtUtc ||
+            data.meta.generatedAt ||
+            data.meta.generatedAtUtc
+          )
+            meta.append(
+              make(
+                "div",
+                "Exported " +
+                  (data.meta.exportedAtUtc ||
+                    data.meta.generatedAt ||
+                    data.meta.generatedAtUtc),
+              ),
+            );
+          if (data.meta.moduleCount)
+            meta.append(
+              make(
+                "div",
+                fmt(modules.length) +
+                  " modules contain declarations; " +
+                  fmt(data.meta.moduleCount) +
+                  " modules registered.",
+              ),
+            );
+          if (data.meta.externalReferenceCount !== undefined)
+            meta.append(
+              make(
+                "div",
+                fmt(data.meta.externalReferenceCount) +
+                  " references to imported library declarations omitted.",
+              ),
+            );
+          meta.append(
+            make(
+              "div",
+              "Layout uses deterministic initialization and spring forces. Distance is visual, not a proof complexity measure.",
+            ),
+          );
+          for (const id of [
+            "view",
+            "module",
+            "radius",
+            "direction",
+            "kind",
+            "generated",
+            "type-edges",
+            "value-edges",
+          ])
+            $(id).addEventListener("change", scheduleRebuild);
+          $("draw-all").addEventListener("change", requestDraw);
+          $("groups-all").onclick = () => {
+            groupNames.forEach((g) => groupEnabled.add(g));
+            syncGroups();
+            scheduleRebuild();
+          };
+          $("pause").onclick = () => setPause(!paused && layoutRunning);
+          $("fit").onclick = fit;
+          $("reset").onclick = launchLayout;
+          $("png").onclick = downloadPng;
+          let searchTimer;
+          $("search").addEventListener("input", () => {
+            clearTimeout(searchTimer);
+            searchTimer = setTimeout(search, 90);
+          });
+          $("search").addEventListener("focus", () => {
+            if ($("search").value) search();
+          });
+          $("search").addEventListener("keydown", (e) => {
+            if (e.key === "Escape") $("search-results").hidden = true;
+            if (e.key === "Enter") {
+              search();
+              const first = $("search-results").querySelector("button");
+              if (first) first.click();
+            }
+            if (e.key === "ArrowDown") {
+              $("search-results").querySelector("button")?.focus();
+              e.preventDefault();
+            }
+          });
+          document.addEventListener("click", (e) => {
+            if (!e.target.closest(".search-wrap"))
+              $("search-results").hidden = true;
+          });
+          $("toggle-sidebar").onclick = () =>
+            $("app").classList.toggle("sidebar-open");
+          document.addEventListener("keydown", (e) => {
+            if (/INPUT|SELECT|TEXTAREA/.test(document.activeElement.tagName))
+              return;
+            if (e.key.toLowerCase() === "f") fit();
+            if (
+              e.code === "Space" &&
+              document.activeElement === document.body
+            ) {
+              e.preventDefault();
+              setPause(!paused && layoutRunning);
+            }
+          });
+          canvas.addEventListener(
+            "wheel",
+            (e) => {
+              e.preventDefault();
+              firstFit = false;
+              const rect = canvas.getBoundingClientRect(),
+                x = e.clientX - rect.left,
+                y = e.clientY - rect.top,
+                factor = Math.exp(-e.deltaY * 0.0012),
+                next = Math.max(0.0005, Math.min(30, camera.k * factor));
+              camera.x = x - ((x - camera.x) * next) / camera.k;
+              camera.y = y - ((y - camera.y) * next) / camera.k;
+              camera.k = next;
+              requestDraw();
+            },
+            { passive: false },
+          );
+          canvas.addEventListener("pointerdown", (e) => {
+            if (e.button !== 0) return;
+            const rect = canvas.getBoundingClientRect(),
+              x = e.clientX - rect.left,
+              y = e.clientY - rect.top,
+              index = hit(x, y);
+            drag = { x, y, startX: x, startY: y, index, moved: false };
+            canvas.setPointerCapture(e.pointerId);
+            firstFit = false;
+            $("tooltip").hidden = true;
+          });
+          canvas.addEventListener("pointermove", (e) => {
+            const rect = canvas.getBoundingClientRect(),
+              x = e.clientX - rect.left,
+              y = e.clientY - rect.top;
+            if (drag) {
+              if (Math.hypot(x - drag.startX, y - drag.startY) > 4)
+                drag.moved = true;
+              if (drag.index >= 0 && drag.moved) {
+                const wx = (x - camera.x) / camera.k,
+                  wy = (y - camera.y) / camera.k;
+                positions[2 * drag.index] = wx;
+                positions[2 * drag.index + 1] = wy;
+                worker.postMessage({
+                  type: "pin",
+                  epoch,
+                  index: drag.index,
+                  x: wx,
+                  y: wy,
+                });
+              } else if (drag.index < 0) {
+                camera.x += x - drag.x;
+                camera.y += y - drag.y;
+              }
+              drag.x = x;
+              drag.y = y;
+              requestDraw();
+              return;
+            }
+            if (performance.now() - lastHover < 35) return;
+            lastHover = performance.now();
+            const next = hit(x, y);
+            if (next !== hover) {
+              hover = next;
+              requestDraw();
+            }
+            canvas.style.cursor = next >= 0 ? "grab" : "default";
+            const tooltip = $("tooltip");
+            tooltip.hidden = next < 0;
+            if (next >= 0) {
+              const n = graph.nodes[next];
+              tooltip.textContent =
+                nodeTitle(n) +
+                (n.moduleNode
+                  ? " · " + fmt(n.count) + " declarations"
+                  : " · " + n.kind);
+              tooltip.style.left =
+                Math.max(8, Math.min(x + 13, width - 320)) + "px";
+              tooltip.style.top = Math.min(y + 16, height - 65) + "px";
+            }
+          });
+          function endDrag() {
+            if (!drag) return;
+            if (!drag.moved && drag.index >= 0)
+              inspect(graph.nodes[drag.index]);
+            worker.postMessage({ type: "pin", epoch, index: -1 });
+            drag = null;
+          }
+          canvas.addEventListener("pointerup", endDrag);
+          canvas.addEventListener("pointercancel", endDrag);
+          canvas.addEventListener("pointerleave", () => {
+            hover = -1;
+            $("tooltip").hidden = true;
+            requestDraw();
+          });
+          canvas.addEventListener("dblclick", (e) => {
+            const rect = canvas.getBoundingClientRect(),
+              i = hit(e.clientX - rect.left, e.clientY - rect.top);
+            if (i < 0) return;
+            const n = graph.nodes[i];
+            if (n.moduleNode) openModule(n.module);
+            else chooseDeclaration(n.id, true);
+          });
+          new ResizeObserver(resize).observe(canvas);
+          resize();
+          rebuild();
+          $("loading").hidden = true;
+          window.LEAN_GRAPH_VIEWER = {
+            get state() {
+              return {
+                view: $("view").value,
+                nodes: graph.nodes.length,
+                edges: graph.edges.length,
+                loadedNodes: nodes.length,
+                loadedEdges: edges.length,
+                paused,
+                epoch,
+              };
+            },
+            select: (name) => {
+              const n = nodes.find((n) => n.name === name);
+              if (n) chooseDeclaration(n.id, true);
+              return !!n;
+            },
+            fit,
+          };
+        }
+        async function boot() {
+          try {
+            if (window.LEAN_GRAPH_READY) data = await window.LEAN_GRAPH_READY;
+            else if (window.LEAN_GRAPH) data = window.LEAN_GRAPH;
+            else if ($("graph-data"))
+              data = JSON.parse($("graph-data").textContent);
+            else
+              throw Error(
+                "This is the viewer template. Generate the standalone graph artifact to embed the exported Lean declarations.",
+              );
+            if (
+              !data ||
+              !Array.isArray(data.nodes) ||
+              !Array.isArray(data.edges)
+            )
+              throw Error(
+                "Invalid graph data: expected nodes and edges arrays.",
+              );
+            $("loading-text").textContent =
+              "Indexing " + fmt(data.nodes.length) + " declarations…";
+            await new Promise((resolve) => setTimeout(resolve, 20));
+            setup();
+          } catch (error) {
+            $("loading").querySelector(".spinner").hidden = true;
+            $("loading-text").textContent =
+              "Could not open the graph. " + error.message;
+            console.error(error);
+          }
+        }
+        boot();
+      })();
+    </script>
+  </body>
+</html>
