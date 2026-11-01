@@ -1,0 +1,3 @@
+import FiniteExecution
+
+#print axioms GreedyForest.Execution.AccountingTrace.activity_le_quadratic

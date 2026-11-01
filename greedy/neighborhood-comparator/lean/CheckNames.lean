@@ -1,0 +1,14 @@
+import Mathlib
+#check Fin.sum_univ_eq_sum_range
+#check Fintype.card_le_of_injective
+#check Finset.sum_le_sum_of_subset_of_nonneg
+#check Finset.sum_bij
+#check Finset.sum_filter
+#check Finset.sum_boole
+#check Fintype.sum_prod_type
+#check List.sum_ofFn
+#check List.sum_toFinset
+#check Fintype.sum_sum_type
+#check Finset.sum_subtype
+#check Fintype.sum_equiv
+#check Equiv.sum_comp

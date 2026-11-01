@@ -1,0 +1,369 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[colorlinks=true,urlcolor=blue,linkcolor=blue]{hyperref}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{definition}[theorem]{Definition}
+\newcommand{\OPT}{\operatorname{OPT}}
+\newcommand{\MS}{\mathrm{MS}}
+\newcommand{\dep}{\operatorname{depth}}
+\title{The final switch of multi-splay: a two-copy embedding}
+\author{Research note; hand argument}
+\date{2 October 2026}
+\begin{document}
+\maketitle
+
+\noindent\textbf{Status.}
+This note isolates an endpoint issue in comparing standard multi-splay
+with the local Tango-squared lower bound. Its main theorem is a hand
+argument conditional on that manuscript's dynamic lower-bound theorem.
+The copy embedding, comparator lifting, and initialization calculation
+were independently hand-audited in this research session. The extension
+to arbitrary depth hierarchies is a hand extension of the manuscript;
+the existing Lean endpoint is stated for its midpoint hierarchy.
+It does not prove the desired multi-splay upper bound. In particular,
+the secondary counter below is an analytical ledger, not an assertion
+about the physical order of the multi-splay operations.
+
+\section{The counter to be bounded}
+
+Let $P$ be the perfect node-oriented reference BST on
+$n=2^h-1$ keys, whose node depths are $0,\ldots,h-1$.
+The initial preferred direction is right at every node. A query $x$
+performs the standard multi-splay switches at the ancestors whose
+preferences point away from $x$, followed by the final switch at $x$.
+The physical ancestor switches run from bottom to top. The analytical
+emission list $E_i$ instead lists their depths in increasing order and
+appends $\dep(x)$ for the final switch. Thus $E_i$ is strictly increasing.
+Write $S_{\MS}=\sum_i|E_i|$.
+
+For a leaf of $P$, the final operation still performs its splays although
+there are no children to mark. Give such a leaf a fictitious direction
+bit, toggled by this final operation. This bit has no effect on the
+physical algorithm; it only makes the encoding uniform.
+
+Let $B$ be any binary interval hierarchy on the depth labels
+$0,\ldots,h$. For an internal interval $I=[a,b]$ split at $c$, and a
+primary node $u$ of depth $a$, retain an analytical bit $b_{u,I}$,
+initially right. An emission $d\in E_i\cap I$ writes left when $d\le c$
+and right otherwise, to the bit owned by the depth-$a$ ancestor of
+$x_i$. Process $E_i$ in increasing order. Let $F_{\MS}$ count changes of
+these bits. There is no extra completion emission $h$ in $E_i$.
+
+\begin{theorem}\label{thm:endpoint}
+Assume the dynamic lower-bound theorem in the local Tango-squared
+manuscript. Then, for the perfect reference above,
+\[
+ |X|+S_{\MS}(X)+F_{\MS}(X)=O(\OPT(X)+n).
+\]
+The comparator may choose its initial BST freely. The constant is
+independent of $B$ and $h$.
+\end{theorem}
+
+The theorem avoids the invalid shortcut of charging every final primary
+switch only a constant number of secondary flips. A single extra
+emission can change several secondary bits. The proof instead embeds
+the entire endpoint-aware history into a legitimate leaf-query history.
+
+\section{The lower bound permits arbitrary interval hierarchies}
+
+The Tango-squared manuscript defines a midpoint hierarchy, but its
+dynamic lower-bound proof uses only the following properties of that
+hierarchy:
+\begin{enumerate}
+\item For two distinct depth labels, exactly one split separates them.
+This is their least common ancestor in the hierarchy.
+\item The two children of an interval $[a,b]$ are $[a,c]$ and
+$[c+1,b]$. The macro word of the parent is the first child's word;
+the micro words are the second child's words, over its different owners.
+\item Every nonroot fragment has exactly one parent, so the turn
+potentials telescope to the single-depth leaves.
+\end{enumerate}
+The subsequence-monotonicity proof and the injection of entry and delayed
+witnesses use the first property. The normalized MTR simulation and
+return property do not use secondary split positions. The turn identity
+and its finite occurrence accounting use interval partitions, and the
+final telescoping uses the last two properties. No comparison between
+the lengths of the two children occurs in these arguments.
+Consequently the same proof gives, for any binary interval hierarchy,
+\begin{equation}\label{eq:lower}
+ |Z|+P(Z)+D_B(Z)=O(\OPT(Z)).
+\end{equation}
+Balancing is relevant to the upper-bound implementation, but not to this
+lower-bound extension.
+
+\section{A perfect leaf reference with two copies of each key}
+
+Build a full binary primary reference $T$ of height $2h$. An original
+node $q$ at depth $d$ corresponds to a pivot $v(q)$ at depth $2d$.
+Its two children are connector nodes. Their ordered children are
+\[
+ \bigl(\text{recursive left subtree of }q,\ q^-\bigr),
+ \qquad
+ \bigl(q^+,\ \text{recursive right subtree of }q\bigr).
+\]
+Recursion enters the original children at depth $2d+2$. A copy $q^-$
+or $q^+$ denotes one active leaf in the indicated region: if this
+region begins above depth $2h$, take its all-right descendant leaf.
+Other leaves in that region are inactive. An empty original child
+also gives an inactive region. The $2n$ active copies have order
+\[
+ q_1^-<q_1^+<q_2^-<q_2^+<\cdots<q_n^-<q_n^+.
+\]
+The two copies of one key are adjacent in the active alphabet, though
+there can be inactive leaves between them in the full alphabet.
+
+Call the pivots and the two connectors per original node the
+\emph{core}. There are $3n$ core nodes. At depth $a$ the number of core
+nodes is at most
+\begin{equation}\label{eq:core-level}
+ 2^{\lfloor a/2\rfloor+1}.
+\end{equation}
+All primary bits of $T$, including the padding, initially point right.
+
+Encode a query to $q$ by the copy on the side opposite to $q$'s current
+multi-splay preferred direction. Equivalently, query $q^-$ if the final
+switch makes $q$ prefer left, and query $q^+$ if it makes $q$ prefer
+right. This defines a leaf-query sequence $Z$ of length $|X|$.
+
+\begin{lemma}\label{lem:core}
+Immediately before and after every query, the preferred direction of
+$v(q)$ equals the multi-splay direction at $q$. During a query the
+changes at even-depth core pivots are precisely the multi-splay ancestor
+switches and its final switch. Their depths are $2E_i$.
+\end{lemma}
+\begin{proof}
+At a proper ancestor $q$ of the requested original key, either active
+copy lies in the same side as that original key. Thus both processes
+make exactly the same ancestor preference changes. At the requested
+key itself, the chosen copy is on the opposite side of its pivot and
+forces exactly its final toggle. No other original pivot is on the
+copy's reference path. The initially equal directions therefore remain
+equal by induction. Leaf fictitious bits obey the same induction.
+\end{proof}
+
+All other noncompletion emissions in $Z$ are at connector nodes.
+Padding paths are all-right paths and are only queried at their
+all-right active leaf, so no padding preference ever changes.
+
+\section{The copies are cheap for every competitor}
+
+\begin{lemma}\label{lem:competitor}
+For the actual encoded sequence $Z$ on the complete leaf alphabet,
+\[
+ \OPT(Z)=O(\OPT(X)).
+\]
+\end{lemma}
+\begin{proof}
+Replace every node $q$ of an arbitrary competing BST for $X$ by a
+two-node gadget: $q^-$ has right child $q^+$, the original left subtree
+hangs from $q^-$'s left pointer, and the original right subtree hangs
+from $q^+$'s right pointer. A search visits at most two gadget nodes per
+original node, and can serve either requested copy.
+
+An original rotation changes only the two adjacent original nodes and
+their three hanging subtrees. Its expanded before and after shapes have
+at most four gadget nodes and the same ordered hanging subtrees. They
+are interconvertible by a constant number of pointer moves and rotations.
+The choice of copy may depend on the multi-splay history; the simulation
+serves either choice and imposes no restriction on that dependence.
+
+Finally attach the inactive full-alphabet keys as opaque subtrees in
+the inorder gaps of the active skeleton. Searches for active copies do
+not enter these gap subtrees, and active rotations preserve them. A
+comparator may choose this initial full-alphabet tree. Its cost is a
+constant multiple of the original execution, without a charge
+proportional to the much larger complete reference universe.
+\end{proof}
+
+\section{Embedding the secondary ledger and its initialization}
+
+Make a hierarchy $B'$ on $0,\ldots,2h$ by replacing each leaf $d<h$
+of $B$ by the two leaves $2d,2d+1$, and replacing leaf $h$ by the
+single leaf $2h$. An original internal interval $I=[a,b]$ maps to
+\[
+ J(I)=
+ \begin{cases}
+ [2a,2b+1],&b<h,\\
+ [2a,2h],&b=h.
+ \end{cases}
+\]
+Its split is at $2c+1$. At the corresponding core owner $v(u)$,
+an even emission $2d$ therefore writes exactly the same direction as
+the original depth $d$ to $b_{u,I}$.
+
+\begin{lemma}\label{lem:subsequence}
+With all-right initialization, $F_{\MS}(X)\le F_{B'}(Z)$.
+\end{lemma}
+\begin{proof}
+Fix one original owner and interval. In the corresponding $B'$ row,
+retain only the even core-pivot emissions. By Lemma~\ref{lem:core},
+the retained writes, with their chronological order, are precisely the
+writes of the original ledger. Removing letters cannot increase the
+number of changes in a binary word with a fixed initial letter. Sum
+over the injectively corresponding coarse rows of $B'$.
+\end{proof}
+
+The nominal complete universe has $2^{2h}$ leaves, so blindly applying
+an $O(2^{2h})$ initialization allowance would be useless. The following
+support calculation retains the original $O(n)$ allowance.
+
+\begin{lemma}\label{lem:initial}
+For the encoded history,
+\[
+ F_{B'}(Z)\le 2D_{B'}(Z)+2P(Z)+18n.
+\]
+\end{lemma}
+\begin{proof}
+The initialized-flip conversion in the Tango-squared manuscript gives
+the more precise intermediate estimate
+\begin{equation}\label{eq:precise}
+ F_{B'}(Z)\le 2D_{B'}(Z)+3Q_L+2(P(Z)+I_0),
+\end{equation}
+where $I_0$ counts initial primary changes beyond first-access-free
+alternations, and $Q_L$ may be restricted to fragments that ever
+receive a left write. Indeed a row receiving only right writes has no
+flips and needs no initial-head allowance. Terminal fragments are
+already bounded by twice their resets.
+
+Only core primary nodes change, hence $I_0\le3n$. If a fragment
+receives a left write, the responsible emission is not the completion
+$2h$. It is consequently at a core node. Its owner, at the interval's
+left endpoint $a$, is an ancestor of that core node and is itself core.
+For an interval split at $c$, $a\le c$, and
+\eqref{eq:core-level} bounds the number of such owners by
+$2^{\lfloor c/2\rfloor+1}$. Distinct internal intervals of a binary
+interval hierarchy have distinct split positions. Therefore
+\[
+ Q_L\le\sum_{c=0}^{2h-1}2^{\lfloor c/2\rfloor+1}
+ =4(2^h-1)=4n.
+\]
+Substituting these estimates in \eqref{eq:precise} gives the claim.
+\end{proof}
+
+\begin{proof}[Proof of Theorem~\ref{thm:endpoint}]
+The even core flips are included in all initialized primary flips, so
+$S_{\MS}\le P(Z)+3n$. Lemmas~\ref{lem:subsequence} and
+\ref{lem:initial} give
+\[
+ |X|+S_{\MS}+F_{\MS}
+ \le |Z|+2D_{B'}(Z)+3P(Z)+21n
+ \le3\bigl(|Z|+D_{B'}(Z)+P(Z)\bigr)+21n.
+\]
+Apply \eqref{eq:lower} and Lemma~\ref{lem:competitor}.
+\end{proof}
+
+\section{Scope and the remaining upper-bound question}
+
+\begin{lemma}[The actual switch order]\label{lem:order}
+Let $F_{\MS}^{\mathrm{actual}}$ be the same analytical ledger, now fed
+the standard multi-splay order. If
+$E_i=(d_1<\cdots<d_k)$, that order is
+$(d_{k-1},\ldots,d_1,d_k)$. Then
+\[
+ \bigl|F_{\MS}^{\mathrm{actual}}-F_{\MS}\bigr|
+ \le 2\sum_i\max(|E_i|-2,0)\le2S_{\MS}.
+\]
+Consequently Theorem~\ref{thm:endpoint} also holds with
+$F_{\MS}^{\mathrm{actual}}$ in place of $F_{\MS}$.
+\end{lemma}
+\begin{proof}
+Fix one query and restrict its distinct emitted depths to a secondary
+interval. A homogeneous left/right block is unchanged. A mixed block
+has the form $L^pR^q$ in increasing order. If the interval does not
+contain $d_k$, the new block is $R^qL^p$: its internal variation is
+unchanged, and each of its two boundary contributions changes by at
+most one. If the interval contains $d_k$ and $q=1$, the new block is
+still $L^pR$. If it contains $d_k$ and $q\ge2$, the new block is
+$R^{q-1}L^pR$: its internal variation increases by one, its last letter
+is unchanged, and its entry contribution changes by at most one.
+Thus replacing any changed mixed block changes the complete row's
+flip count by at most two, including the initialized letter and the
+following block if present.
+
+There are exactly $k-1$ secondary intervals meeting both sides of the
+emitted set: these are the branching vertices of its induced binary
+trie. For $k\ge2$, the parent of the maximum emitted leaf in the
+compressed induced trie has only that maximum in its right part.
+Its block has $q=1$ and is unchanged. Hence at most $k-2$ mixed blocks
+can change. For this query each interval has exactly one owner row;
+there is no extra multiplicity from owners. Replace the query blocks
+successively in the complete owner-row words and apply the triangle
+inequality. This argument does not require a common maximum depth
+across queries.
+\end{proof}
+
+The fixed-completion version of this order comparison is also recorded
+in the companion note \texttt{order-and-potential.tex}. The formulation
+above permits the variable final depth of an internal-node query.
+
+\begin{corollary}[Height-optimal references]
+Theorem~\ref{thm:endpoint}, including Lemma~\ref{lem:order}, holds for a
+node reference on any $n$ keys whose height in vertices is
+$h=\lceil\log_2(n+1)\rceil$.
+\end{corollary}
+\begin{proof}
+The copy construction permits absent original subtrees: the
+corresponding portions of the complete embedded reference contain only
+inactive leaves. There are still at most $3n$ core vertices. The same
+level-count estimate gives
+$Q_L\le4(2^h-1)<8n+4$, so the initialization allowance remains $O(n)$.
+All correspondence, comparator, and order arguments are unchanged.
+\end{proof}
+
+\begin{corollary}[Arbitrary initial primary preferences]
+The same bounds hold from any valid initial multi-splay preferred-path
+partition, with the same all-right initialization of the analytical
+secondary ledger.
+\end{corollary}
+\begin{proof}
+Initialize each embedded pivot $v(q)$ to the supplied initial primary
+direction at $q$. Keep the connectors and padding initialized right.
+The exact pivot correspondence then holds from the start. The
+initialized-primary-flip conversion allows an arbitrary initial
+direction, with at most one discrepancy per visited core vertex;
+thus $I_0\le3n$ still. Padding vertices remain unchanged. All secondary
+rows retain their original right initialization, so the subsequence,
+row-support, and order proofs apply verbatim.
+\end{proof}
+
+For an arbitrary balanced node reference of maximum depth $h-1$, the
+same copy embedding and comparator proof still work. The elementary
+initialization estimate is then $Q_L=O(n\operatorname{height}(B'))$,
+which is $O(n\log h)$ for a balanced depth hierarchy. The present proof
+claims the sharper $O(n)$ allowance for a perfect or height-optimal
+reference, including the usual recursively median-split reference.
+It does not
+silently identify $2^h$ with $n$ for a general balanced reference.
+
+The desired next statement would be a physical multi-splay upper bound
+of the form
+\[
+ \operatorname{cost}_{\MS}(X)
+ =O\!\left((|X|+S_{\MS}(X)+F_{\MS}(X)+n)
+       (1+\log\log(h+2))\right).
+\]
+This note does not prove that statement. Standard multi-splay uses
+bottom-up switches, each implemented by up to three splays and two
+root-mark changes. Its splay components split and join. The analytical
+top-down ledger above does not itself bound those physical operations.
+It only shows that final switches at internal requested nodes need not
+be an additional lower-bound obstacle.
+
+\begin{thebibliography}{9}
+\bibitem{MST}
+C.~C. Wang, J. Derryberry, and D.~D. Sleator.
+\emph{$O(\log\log n)$-Competitive Dynamic Binary Search Trees}.
+SODA 2006. Sections 2--4, including the final switch convention.
+\url{https://www.cs.cmu.edu/~chengwen/paper/MST.pdf}.
+
+\bibitem{TS}
+\emph{Tango Squared: An $O(\log\log\log n)$-Competitive Binary Search
+Tree}. Local research manuscript, October 2026.
+The dynamic lower-bound theorem, initialized flip conversion, and
+their proofs in
+\texttt{tango\_squared/research/tango-squared.tex}.
+\end{thebibliography}
+\end{document}

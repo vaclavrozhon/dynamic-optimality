@@ -1,0 +1,321 @@
+name = "DynamicOptimality"
+version = "0.1.0"
+defaultTargets = ["DynamicOptimality", "Splay", "TangoSquared", "TangoSquaredPaper20261030", "TangoSquaredAbstract", "TangoSquaredAll", "Greedy", "MultiSplay", "DynamicOptimalityResults"]
+
+[[require]]
+name = "mathlib"
+scope = "leanprover-community"
+rev = "v4.32.1"
+
+[[lean_lib]]
+name = "Splay"
+srcDir = "splay/formalization"
+
+[[lean_lib]]
+name = "TangoSquared"
+srcDir = "tango_squared/lean"
+
+[[lean_lib]]
+name = "TangoSquaredPaper20261030"
+srcDir = "tango_squared/lean"
+
+[[lean_lib]]
+name = "DynamicOptimality"
+
+[[lean_lib]]
+name = "DynamicOptimalityResults"
+
+[[lean_lib]]
+name = "TangoSquaredAbstract"
+
+[[lean_lib]]
+name = "TangoSquaredAll"
+
+# Existing Greedy research modules keep their source paths and import names.
+
+[[lean_lib]]
+name = "GreedyGeometry"
+srcDir = "greedy/root-refinements"
+roots = [
+  "AdminCutCensus",
+  "BoundaryPaths",
+  "CanonicalSurface",
+  "ComparatorHeapEdges",
+  "ComparatorJunction",
+  "GapExpansion",
+  "GapNeighborhoods",
+  "GeometricGreedy",
+  "GreedyHeapCost",
+  "HarmfulBoundary",
+  "HeapSubtreeGeometry",
+  "PlateauMinima",
+  "RectangleSurface",
+  "RefinementRotationHeap",
+  "RotationIntervalMin",
+  "RotationPorts",
+  "SingleJunction",
+  "SubtreeGap",
+  "SurfaceOwners",
+  "SurfaceTouchPaths",
+  "SurfaceUpdate",
+  "ValueNullRanks",
+]
+
+[[lean_lib]]
+name = "GreedyFringe"
+srcDir = "greedy/fresh-referee"
+roots = [
+  "ComparatorBirthJournal",
+  "ComparatorOuterSegments",
+  "ComparatorOwnerDichotomy",
+  "FreshComparatorExecution",
+  "FreshComparatorPreparation",
+  "FreshFullPreparation",
+  "FreshJunctionTransfer",
+  "FreshOuterTransfer",
+  "FreshPaidInsertion",
+  "FreshPortRestoration",
+  "FreshRestorationTrace",
+  "FringeProjection",
+  "FringeSchedule",
+  "OffsetAndSingleton",
+  "OrderedBaseInvariant",
+  "OrderedBlockCuts",
+  "OrderedBlockNumerics",
+  "OrderedBlockPrimitives",
+  "OrderedComparatorMacro",
+  "OrderedComparatorPreparation",
+  "OrderedGrowerPreparation",
+  "OrderedGrowerUniformity",
+  "OrderedIdSupport",
+  "OrderedJunctionTransfer",
+  "OrderedMacroBaseClosure",
+  "OrderedOuterTransfer",
+  "OrderedPaidInsertion",
+  "OrderedPersistentGrowers",
+  "OrderedPortDeletion",
+  "OrderedPortRestoration",
+  "OrderedRankMacro",
+  "OrderedRecanonicalization",
+  "OrderedRefinementMacro",
+  "OrderedUniversalComparator",
+]
+
+[[lean_lib]]
+name = "GreedyAccess"
+srcDir = "greedy/fresh-global"
+roots = [
+  "AccessConsolidation",
+  "AccessDegree",
+  "AccessExpansion",
+  "AccessFrontier",
+  "AccessInventory",
+  "AccessReady",
+  "AccessSurvivors",
+  "ActualAccessRun",
+  "ActualBlockPartition",
+  "ActualLinkRuns",
+  "ActualLinkState",
+  "AtomRotationMin",
+  "CanonicalAccessReturn",
+  "CanonicalBridge",
+  "ComparatorAtoms",
+  "ComparatorHistories",
+  "CutChronology",
+  "ExpandedFringe",
+  "ExpansionRotations",
+  "ExternalRealMin",
+  "HierarchyExistence",
+  "HierarchyLocality",
+  "InheritedGapEdges",
+  "IntervalRootOracle",
+  "MappedConsolidation",
+  "OrderedAtoms",
+  "PathPlateau",
+  "PlateauBridge",
+  "ProjectionRotation",
+  "RecanonicalizationHistories",
+  "SearchGaps",
+  "SharpProjection",
+  "SourceSideStates",
+  "SurfaceHierarchy",
+  "SurfaceNeighborhood",
+  "TypedAccessSchedule",
+]
+
+[[lean_lib]]
+name = "GreedyHistory"
+srcDir = "greedy/assembly"
+roots = [
+  "AccessSourceAccounting",
+  "ActualEntryCensus",
+  "ActualGrowthBook",
+  "ActualLifetimeWitnesses",
+  "ActualLinkLabels",
+  "ActualRunLabels",
+  "ActualSideGeometries",
+  "ActualSourceDeletion",
+  "BlockUpperBase",
+  "CanonicalAdministration",
+  "CanonicalRunLabels",
+  "ChronologicalJournal",
+  "ComparatorLabels",
+  "ComparatorTimeline",
+  "CompletedFamilyHistory",
+  "ConcreteDepartureLifetime",
+  "ConcreteHistoryEdits",
+  "ConcreteLifetimeAssembly",
+  "CutBirthJournal",
+  "FreshCutIds",
+  "FreshCutJournal",
+  "FreshCutProgram",
+  "FreshInventory",
+  "FrozenFamilyHistory",
+  "GrowthWindows",
+  "HeapBlockCoverage",
+  "HeapCutProgram",
+  "HeapFreshAllocation",
+  "InitialBlockState",
+  "InitialSnapshots",
+  "LinkGrowthBook",
+  "MembershipLedger",
+  "NatBaseTransport",
+  "OrderedFamilyProcess",
+  "ReparentLabels",
+  "SimultaneousSourceDeletion",
+  "SourceFamilyCollapse",
+  "StateLabels",
+  "StateRebase",
+  "StoredFamilyHistory",
+  "StoredSourceHistory",
+  "TaggedPreparation",
+  "TaggedRestoration",
+  "TaggedTransfer",
+  "UniformBlockRebase",
+  "UniversalComparatorLabels",
+]
+
+[[lean_lib]]
+name = "GreedyAccounting"
+srcDir = "greedy/neighborhood-comparator/lean"
+roots = [
+  "ActualBoundaryEvents",
+  "ActualFamilyCuts",
+  "ActualFringeCuts",
+  "ActualHarmfulEvents",
+  "ActualLinkClasses",
+  "ActualPhaseEvents",
+  "ActualSourceBlocks",
+  "AdministrationTimeline",
+  "AuditFiniteExecution",
+  "BlockDepartures",
+  "BlockLifetime",
+  "CheckNames",
+  "CutGeometry",
+  "CutPath",
+  "DepartureGeometry",
+  "ExecutionTrace",
+  "FiniteExecution",
+  "ForestLedger",
+  "HarmfulDepartureGeometry",
+  "HistoricalKeyCuts",
+  "LabelTimeline",
+  "MappedTimeline",
+  "PhaseBuckets",
+  "PhaseTimeline",
+  "SparseActiveTree",
+  "SparseCutGeometry",
+  "SparseHarmfulGeometry",
+  "TimelineBudget",
+  "WinnerGeometry",
+]
+
+[[lean_lib]]
+name = "GreedyPorts"
+srcDir = "greedy/hidden-minima"
+roots = [
+  "PortRotationCases",
+]
+
+[[lean_lib]]
+name = "Greedy"
+srcDir = "greedy/formalization"
+
+[[lean_lib]]
+name = "MultiSplay"
+srcDir = "multisplay/lean"
+
+# Verified coefficient providers; preserve the existing research module paths.
+[[lean_lib]]
+name = "SplayCompressionRecurrences"
+srcDir = "interface/black-box-interface-2026-09-30"
+roots = [
+  "SharperDyadicCompressionRecursion",
+]
+
+# Verified coefficient providers; preserve the existing research module paths.
+[[lean_lib]]
+name = "SplayCompressionLift"
+srcDir = "interface/black-box-interface-2026-09-30/lower"
+roots = [
+  "CappedHistoricalNumericHistoryLift",
+  "CappedHistoricalNumericStepLift",
+  "CappedHistoricalNumericTimedLift",
+  "CappedOriginalPassLift",
+  "CappedPrefixInsertion",
+  "SharperDyadicCompressionRealization",
+  "SharperDyadicCompressionRowBudget",
+  "TightDyadicCompressionInventory",
+  "TightDyadicCompressionRanks",
+]
+
+# Verified coefficient providers; preserve the existing research module paths.
+[[lean_lib]]
+name = "SplayCompressionNumerics"
+srcDir = "interface/black-box-interface-2026-09-30/upper"
+roots = [
+  "BinaryMemorylessPotential",
+  "BinarySeededCompressionRecursion",
+  "DyadicCompressionRowBudget",
+  "DyadicRankCompression",
+  "FirstWinBinary",
+]
+
+# Verified coefficient providers; preserve the existing research module paths.
+[[lean_lib]]
+name = "SplayCompressionHistory"
+srcDir = "splay/research/approximation-2026-09-11"
+roots = [
+  "ActualAbsoluteShiftBudget",
+  "ActualCompressionRowBudget",
+  "ActualHistoricalLabelInventory",
+  "ActualHistoricalLink",
+  "ActualLoserUpwardBudget",
+  "ActualRelabelRows",
+  "ActualTimedErrorBudget",
+  "ArbitrarySourceTail",
+  "CanonicalActiveCells",
+  "CanonicalActiveMinimum",
+  "CanonicalActivePairings",
+  "CanonicalActiveRepresentatives",
+  "CanonicalActiveSplay",
+  "HistoricalCompressionInterface",
+  "HistoricalCompressionNatEndpoint",
+  "HistoricalCompressionRange",
+  "HistoricalCompressionRealization",
+  "HistoricalCompressionRecursion",
+  "HistoricalCompressionTail",
+  "HistoricalNumericHistoryLift",
+  "HistoricalNumericStepLift",
+  "HistoricalNumericTimedLift",
+  "HistoricalRankCompression",
+  "VirtualFiniteRelabel",
+  "VirtualGrowingSlot",
+  "VirtualInterfaceAdmin",
+  "VirtualLoserPreparation",
+  "VirtualMonotoneNormalization",
+  "VirtualNumericInsertion",
+  "VirtualOriginalPassLift",
+  "VirtualPrefixInsertion",
+  "VirtualRetainedPass",
+]

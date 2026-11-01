@@ -1,0 +1,29 @@
+Source provenance
+=================
+
+This repository starts from the current shared dynamic-optimality Lean
+workspace on 1 November 2026. It is a source snapshot, not an export of
+the old splay Git HEAD. It includes the subsequently completed Greedy,
+Tango-squared, shared model, and MultiSplay intermediate developments.
+
+The original splay history remains separately available at:
+  https://github.com/vaclavrozhon/splay
+The local splay HEAD at snapshot time was:
+  9f49716
+  Prove global late-null invariant and actual active-source density in Lean
+The current workspace contained substantial later uncommitted work.
+Do not identify this snapshot with that upstream commit.
+
+The original working directory and its splay Git metadata were preserved.
+Registered Lean modules and their current root configuration were copied
+without changing proof contents. The initial content hashes are recorded
+in snapshots/2026-11-01.sources.sha256. That file is a historical baseline;
+later proof commits are expected to change these sources.
+
+The snapshot excludes dependency/build caches, experimental datasets,
+broken compatibility symlinks, local machine state, archived downloads,
+and external literature PDFs. The pinned Lake manifest retrieves external
+Lean dependencies from their upstream repositories.
+
+The source owners have not yet selected a license for this new repository.
+No license is inferred from Mathlib or another dependency.

@@ -1,0 +1,230 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,hyperref}
+\newtheorem{lemma}{Lemma}
+\newcommand{\OPT}{\operatorname{OPT}}
+\setlength{\emergencystretch}{3em}
+\title{A fixed-partition projection lemma and its remaining access gap}
+\author{Research note, 2 October 2026}
+\date{}
+\begin{document}
+\maketitle
+
+\noindent\textbf{Status.}
+This is a hand lemma about one fixed primary preferred-path partition.
+It does not supply a cheap comparator for the evolving multi-splay forest.
+Its purpose is to isolate the rotation part of that possible comparison
+from the access and split/join parts. In particular, it makes no claim
+that an arbitrary projection of a global search path is cheap.
+
+Let $P$ be a fixed full leaf-oriented reference tree. Its internal
+boundaries are the actual keys; its leaves are the external gaps.
+Fix one preferred child at each internal node. A nonempty component
+$C$ is a maximal preferred path, continued to its terminal external
+leaf $z_C$. Include empty terminal components at nonpreferred external
+children when discussing the component tree. Write $S_C$ for the
+reference subtree beginning at $C$'s first node; for an empty component
+this is its one external leaf.
+
+The exit blocks of $C$ are its terminal leaf and the reference subtrees
+at its nonpreferred children. Each latter subtree starts one child
+component $D$ in the component tree. Define
+\[
+ W_C=\{z_C\}\cup\{z_D:D\text{ is a child component of }C\}.
+\]
+There is exactly one representative in each exit block. If $C$ has
+$k$ internal nodes, then $W_C$ has $k+1$ leaves. Every external leaf
+belongs to the representative sets of at most two components: its own
+terminal component and that component's parent.
+
+For an arbitrary global routing tree $T$ on the external leaves, let
+$T\upharpoonright W_C$ be its induced tree: prune the other leaves and
+suppress unary nodes. Relabel the $k$ resulting internal boundaries
+by the actual primary separators of $C$ in increasing key order.
+This gives a BST on exactly the component's actual key set.
+
+\begin{lemma}[Two components meet three consecutive intervals]
+Let $A,B,D$ be nonempty disjoint leaf intervals in this order. At most
+two nonempty components $C$ satisfy
+\[
+ W_C\cap A\ne\varnothing,\qquad
+ W_C\cap B\ne\varnothing,\qquad
+ W_C\cap D\ne\varnothing.
+\]
+The intervals need not cover the whole reference universe.
+\end{lemma}
+
+\begin{proof}
+For any such component, its reference domain contains a leaf of $A$
+and a leaf of $D$, hence contains every leaf of $B$. Domains of distinct
+such components are therefore nested, and their components form a
+chain in the component tree.
+
+Suppose $C$ is above another such component $E$. Let $F$ be the
+immediate child component of $C$ whose domain contains $S_E$. All
+representatives of $C$ other than $z_F$ lie outside $S_F$, hence
+outside $S_E$. Because $B\subseteq S_E$ and $W_C$ meets $B$, it follows
+that $z_F\in B$. If $E$ were strictly below $F$, then $E$ would lie
+inside a nonpreferred child subtree off the preferred path from $F$
+to $z_F$. Its domain would exclude $z_F$, contradicting
+$z_F\in B\subseteq S_E$. Thus $E=F$ and its terminal leaf lies in $B$.
+
+No still lower component can have a domain containing all of $B$:
+each of its first nonpreferred edges below $E$ excludes $z_E\in B$.
+Consequently the chain has at most two members.
+\end{proof}
+
+\begin{lemma}[Constant total rotation congestion]
+For the fixed preferred partition above, one rotation of $T$ changes
+the collection $\{T\upharpoonright W_C\}_C$ by at most two rotations
+in total. Relabeling their boundaries by actual component keys does
+not change this conclusion.
+\end{lemma}
+
+\begin{proof}
+Write a routing rotation as $((A,B),D)\leftrightarrow(A,(B,D))$,
+where the three hanging subtrees have disjoint consecutive leaf
+intervals. If a representative set misses one of those three intervals,
+pruning and unary suppression give the same induced tree on both
+sides. If it meets all three, the two induced trees differ by one
+rotation. The previous lemma bounds the latter sets by two.
+
+The selected leaf sets are fixed during this operation, so the ordered
+component separator labels are fixed as well.
+\end{proof}
+
+Thus a fixed partition admits a projection of a comparator's entire
+rotation trace with at most twice as many rotations. No potential or
+component-lifetime initialization charge is involved in this statement.
+Initial projected trees may be installed in total linear cost because
+their disjoint actual key sets contain $n$ keys in total.
+For root or constant-depth global rotations the projected rotations
+also have constant rooted pointer cost, since pruning shortens ancestor
+paths. The rotation count alone does not assert this for an arbitrary
+source trace with a finger deep inside its current tree.
+
+\paragraph{Why this does not yet prove a comparator theorem.}
+An original query $q$ may lie in one exit block $E$ while the selected
+representative $z_E$ lies elsewhere in that block. The global search
+for $q$ can take a different branch from the search for $z_E$ at a
+global separator inside $E$. Relabeling the induced tree's boundaries
+does not identify these two searches.
+
+For example, take a nonextreme exit block whose neighboring component
+keys are $\ell<r$. Put the global root at a requested key $q\in E$,
+and choose $z_E>q$. Arrange the representative leaves to the right of
+$q$ so that their induced routing tree is a long left spine ending at
+$z_E$. After projection, the root boundary is $\ell$, while $r$ is
+deep on that left spine. The global search for $q$ costs one, but the
+component search into its $E$-gap, or exposure of its upper guard $r$,
+can have linear cost in the component size. A mirrored example gives
+the other direction. Such a component and gap can occur on a monotone
+primary preferred path, with $E$ one of its nonpreferred exits.
+
+This is a single-state obstruction to a pointwise access comparison,
+not a recurrent lower bound. A global amortized argument could still
+pay the exposure. Moreover, changing primary preferences changes the
+sets $W_C$. The rotation lemma does not pay for replacing representatives,
+separating an old tail, or attaching an incoming tail under the exact
+common-root split/join checkpoints. Those costs must be proved before
+one can infer a bound such as
+$C_{\mathrm{forest}}(W_{\mathrm{MS}})=O(\OPT+n)$.
+
+\paragraph{A separate priority-based observation.}
+There is another way to avoid arbitrary depth ties in a projection.
+Give a global BST distinct heap-ordered priorities. If a child $y$ is
+rotated above its parent $x$, decrease only the priority of $y$ to a
+value strictly between the priorities of $x$ and its former parent
+(or below the root priority if $x$ was the root). All other priorities
+may remain unchanged, and the new global tree is still its Cartesian
+tree. Thus Cartesian restrictions to a fixed key partition can change
+only in the component containing $y$.
+
+This last observation bounds the number of affected components, not
+the work in that component: $y$ may pass many projection ancestors that
+were in the opposite subtree of $x$. It is therefore not a substitute
+for the two-rotation leaf-projection lemma or for the missing amortized
+access argument.
+
+\section*{An endpoint refinement for fixed-partition accesses}
+
+The access obstruction above has a useful partial repair. For every
+exit block $E$ of a component $C$, select both its minimum and maximum
+external leaves, selecting a singleton only once. Call the resulting
+set $V_C$ and prune $T$ to $V_C$.
+
+\begin{lemma}[Endpoint congestion]
+A global routing rotation changes at most one of the induced trees
+$T\upharpoonright V_C$.
+\end{lemma}
+
+\begin{proof}
+Again a changing induced tree must have a selected leaf in each of
+the three consecutive rotation intervals $A,B,D$. Two changing
+components would have nested reference domains, each containing all
+of $B$. If $C$ is above $F$, its only selected points inside the child
+domain leading to $F$ are the two endpoints of that domain. Because
+this child domain contains a leaf of $A$ and a leaf of $D$, both of
+its endpoints lie outside $B$. The other representatives of $C$ are
+outside that whole domain. This contradicts $V_C\cap B\ne\varnothing$.
+\end{proof}
+
+The internal boundaries of $T\upharpoonright V_C$ alternate between
+real component separators and at most one additional, or ghost,
+separator inside each nonsingleton exit block $E$. The ghost node for
+$E$ is exactly the global lowest common ancestor of its two selected
+endpoints. Its global key lies inside $E$.
+
+Convert this induced tree to an alphabetic routing tree on the exit
+blocks as follows. A real separator supplies the usual two-way split.
+A ghost node for $E$ supplies a three-way ordered split into lower
+blocks, $E$, and upper blocks; refine this into two binary comparisons
+at $E$'s adjacent real component boundaries, omitting an absent side.
+An external selected leaf carries the query block only when that block
+was a singleton; otherwise its ghost node carries it. Suppress empty
+and unary refinements. Each original node contributes at most two
+physical routing nodes. Every block occurs once, so each real component
+separator occurs exactly once.
+
+This conversion has the same rooted-hull property as the no-copy
+unfolding: a fixed abstract frontier has fixed ordered block intervals,
+so a change of $k$ abstract hull nodes changes at most $2k$ physical
+nodes with exactly the same hanging components. In particular, a
+projected rotation costs $O(1)$ rotations after conversion. Together
+with endpoint congestion, root or constant-depth global rotations have
+$O(1)$ total rooted projection cost.
+
+If an actual query key $q$ lies in a nonsingleton exit block $E$, its
+global search visits the global lowest common ancestor of $E$'s two
+endpoint leaves. Therefore the converted component search to its
+$E$-gap has length at most twice the global search length. If $q$ is
+itself a component separator, its projected physical image is reached
+no later than the corresponding twice-length bound. This remedies the
+single-representative access obstruction for a fixed component.
+
+One can also sum the searches over the nested components encountered
+on a reference search for $q$. The projected route for component $C$
+uses global search nodes in $S_C\setminus E$, followed by the first
+global node inside $E$, where $E$ is the next encountered component's
+domain. The former sets are disjoint corridors. The latter contributes
+one additional node per component. Thus the total projected search
+length is $O(\operatorname{depth}_T(q)+b)$ for $b$ encountered components.
+
+\paragraph{The remaining opposite guard.}
+This endpoint refinement still does not prove the evolving-forest
+comparison. At a left-to-right primary switch, access to the incoming
+right gap exposes $y$ and its upper ancestor guard $r$. The lower
+ancestor guard $\ell$ lies beyond all keys of the old left tail and
+need not be exposed by this access. The exact common forest word
+also prescribes its split at $\ell$.
+
+Collapsing the whole old tail to one new exit block would expose the
+other gap's two boundaries $\ell,y$, but changes the selected endpoint
+set and the projection itself. The fixed-partition congestion lemma
+does not pay for that coarsening, nor for transporting the resulting
+projection states through the six prescribed split/join checkpoints.
+Proving an amortized bound for these changes remains necessary; a
+pointwise assertion that the incoming-gap search already supplies all
+three standard multi-splay guards would be false.
+
+\end{document}

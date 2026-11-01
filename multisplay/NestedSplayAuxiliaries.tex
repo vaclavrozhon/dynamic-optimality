@@ -1,0 +1,313 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=25mm]{geometry}
+\usepackage{amsmath,amssymb,amsthm,hyperref}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newcommand{\cost}{\operatorname{cost}}
+\newcommand{\OPT}{\operatorname{OPT}}
+\setlength{\emergencystretch}{3em}
+\title{Nested preferred paths with splay auxiliaries}
+\author{Research note, 2 October 2026}
+\date{}
+\begin{document}
+\maketitle
+
+\noindent\textbf{Scope and status.}
+This note proves a splay-backend version of the local Tango-squared
+construction. It retains the secondary reference, its preferred-path
+decomposition, its fixed-owner history, and the no-copy unfolding into
+actual keys. It is a different algorithm from standard multi-splay,
+which stores an entire primary preferred path in one auxiliary splay.
+The argument is a hand proof. Its physical realization uses the
+no-copy unfolding, rooted-hull transfer, and equal-frontier role-change
+lemmas in the existing Tango-squared upper manuscript. It has not been
+Lean checked, externally reviewed, or implemented as a data structure.
+
+\paragraph{Model.}
+Use the same model as that manuscript: ordinary key-ordered BST pointer
+moves and rotations are charged; every original query starts at the
+physical root; nodes have $O(\log n)$ auxiliary bits; computation on
+already read data is free; inaccessible saved pointers are not free
+jumps. No uniform word-RAM running-time bound is claimed.
+
+Let the primary reference have $n=2^H$ leaves, the actual ordered keys.
+The secondary reference $B$ is the midpoint routing tree on depth labels
+$0,\ldots,H$. Put
+\[
+ K=1+\operatorname{height}(B)=O(1+\log(H+2)),
+ \qquad \lambda=1+\log_2 K.
+\]
+All initial primary and genuine secondary preferences point right.
+Let $P$ be first-free primary alternations, $I_0\le n-1$ the primary
+initialization discrepancy, and $F$ the exact initialized fixed-owner
+secondary bit count. The outer emissions for a query are its wrong
+primary depths in increasing order, followed by $H$. Consequently
+there are $m+P+I_0$ emissions and $P+I_0$ nonfinal emissions.
+
+\begin{theorem}[Splay auxiliaries in the nested construction]\label{thm:main}
+In the stated physical realization and cost model, the algorithm below
+serves every sequence $X$ at cost
+\[
+ O\bigl((m+P(X)+F(X)+n)\lambda\bigr).
+\]
+Thus the established fixed-owner count conversion and Tango-squared
+dynamic lower bound give
+\[
+ O\bigl((\OPT(X)+n)(1+\log\log\log(n+4))\bigr).
+\]
+This theorem concerns the nested algorithm defined here, not unchanged
+standard multi-splay.
+\end{theorem}
+
+\section*{One persistent virtual forest}
+
+A primary preferred path beginning at depth $a$ has an exit alphabet
+$[a,H]$ and routing keys $a,\ldots,H-1$. Its full virtual routing tree
+is ordered by these depth labels. Genuine secondary preferred paths
+are represented by splay auxiliaries, with root marks separating them.
+The restriction to a nonroot suffix $[a,H]$ also contains the structural
+boundary spine $\beta_a$: the surviving secondary-reference intervals
+with left endpoint below $a$. Keep this whole spine in one splay
+auxiliary. It has at most $K$ nodes. All other surviving intervals are
+genuine canonical subtrees with their existing fixed-owner histories.
+No independent secondary preference bits are created for $\beta_a$.
+
+Every ordinary auxiliary is a secondary preferred path and therefore
+also has at most $K$ nodes. Splay rotations change its shape, not its
+node set or its genuine preference bits.
+
+For accounting, a virtual routing item at label $j$ on one primary
+path can be identified by that path's actual primary separator at
+depth $j$. This is an analytical identity; the no-copy unfolding may
+assign that separator to the image of a different abstract routing
+node. On a primary cut after depth $d$, the items with labels at most
+$d$ stay with the prefix, the deeper items stay with the old suffix,
+and the incoming suffix brings its own deeper items. Thus there are
+exactly $n-1$ virtual routing items globally at every checkpoint, and
+the same population persists through the intermediate cut and graft.
+
+Define
+\[
+ \Phi=\sum_{v\ \text{virtual routing item}}\log_2 s(v),
+\]
+where $s(v)$ counts descendants reachable through unmarked auxiliary
+edges. Structural boundary auxiliaries and genuine preferred-path
+auxiliaries use the same formula. The potential does not depend on
+which fixed owner supplies a secondary bit or on which physical node
+is an item's current unfolding image. At all intermediate states used
+below,
+\[
+ 0\le\Phi\le(n-1)\log_2 K.                    \tag{1}
+\]
+There is one global potential; no new initial potential is assigned
+when a suffix changes status or is reattached.
+
+\section*{Operations on the short auxiliaries}
+
+The ordinary access lemma bounds a splay inside an auxiliary of size
+at most $K$ by $O(1+\log K)$ amortized cost. This includes a splay
+stopped at a supplied auxiliary subtree root. Searches are paid by
+splaying their last auxiliary node; their pointer walk, return, and
+splay cost differ by only a constant factor. Use a fixed constant
+multiple of $\Phi$ to account for the chosen pointer convention.
+
+The usual preferred-child switch is available in this same virtual
+BST. Splay its reference vertex $y$ to its auxiliary root. Splay its
+nearest reference-ancestor predecessor and successor, when present
+in that auxiliary, below $y$. This exposes the old and incoming
+tails in the corresponding gaps. Mark the old tail before unmarking
+the incoming tail. These are the familiar three-splay switch operations.
+Marking cannot increase $\Phi$. Unmarking increases auxiliary sizes
+only at $y$ and at most one exposed boundary child, hence increases
+$\Phi$ by at most $2\log K$. The resulting component is precisely
+the new secondary preferred path, whose size is at most $K$.
+
+The switch bound is local and does not require the bottom-up scheduling
+used in standard multi-splay. Here use it top-down: search the current
+root auxiliary toward the requested depth leaf $d$. If the search
+enters a marked auxiliary or exits to a nonpreferred external reference
+leaf, splay the last node of the old root auxiliary to pay for that
+walk, then switch the first wrong secondary preference and repeat
+from the virtual root. The latter case matters when the incoming
+preferred path has no routing nodes and hence no marked root. The
+stored bottom leaf of the root reference path and the fixed $B$
+distinguish it from successful completion without a pointer jump.
+The switched reference
+vertex and its boundary keys are determined by the fixed reference
+and the encountered exit. Finding them is by ordinary paid searches
+and splays. The already read topology specifies whether a boundary
+key is present, so an unsuccessful full scan is not hidden.
+
+When the currently preferred depth leaf $d$ is reached, splay the last
+routing node to pay for the final walk. The whole root-to-$d$ reference path is now one
+auxiliary. If the inner request changes $f$ genuine bits, this procedure
+costs $O((f+1)\lambda)$ amortized. It writes exactly the genuine bits
+on the reference path to $d$ and leaves all other histories intact.
+Only the current root primary path is queried in this manner, so the
+secondary reference during each request is the full $B$.
+
+\section*{The primary splice and its exact potential account}
+
+Consider a nonfinal outer emission $d<H$ after the preceding inner
+request to depth leaf $d$. Write $A$ for the root auxiliary. It has
+at most $K$ items and contains the whole $B$-path to leaf $d$.
+In any full routing tree, the two boundaries adjacent to an interior
+leaf are its ancestors. Thus routing key $d$ belongs to $A$, and so
+does $d-1$ when $d>0$.
+
+\paragraph{1. Expose and detach.}
+Splay routing key $d$ to the root of $A$. Split off its right virtual
+subtree, retaining $d$ with the prefix. The root auxiliary's keys
+greater than $d$ are exactly $\beta_{d+1}$, by the suffix invariant.
+Their genuine hanging subtrees are unchanged. They become the old
+suffix's existing structural boundary auxiliary, rather than a newly
+initialized backend. If $\beta_{d+1}$ is empty, the suffix starts at
+an already marked genuine canonical subtree, or is a single leaf.
+
+The split only removes auxiliary descendants from the prefix root,
+so its potential change is nonpositive. The suffix items keep their
+internal auxiliary sizes. Splay $d-1$, when it exists, inside the left
+subtree of $d$. This costs $O(\lambda)$ amortized. Now the last two
+prefix depth leaves, $d$ and its terminal hole $d+1$, are incident
+to the rooted abstract hull consisting of $d$ and $d-1$ (only $d$
+when $d=0$).
+Visit the actual frontier root at exit $d$ and read the incoming
+primary-path header there. The exposed hull makes this an $O(1)$
+physical walk. If that block is one actual key, visit the key and
+use the empty suffix state instead. This is an actual pointer visit,
+not an access to a saved but inaccessible header.
+
+\paragraph{2. Exchange exit roles.}
+Exchange the roles of the old depth-$d$ off-path block and the terminal
+hole. These are adjacent actual-key intervals separated by the actual
+primary separator at depth $d$. Their physical key order is unchanged.
+Every other frontier component is unchanged. The exposed abstract hull
+has at most two nodes, so its unfolding has constant size; the
+equal-frontier role-change lemma realizes the exchange in $O(1)$
+physical pointer operations and rotations. The virtual prefix topology,
+auxiliary marks, and auxiliary sizes are unchanged. Consequently
+\[
+ \Delta\Phi_{\mathrm{role\ exchange}}=0.            \tag{2}
+\]
+This is why exposing $d-1$ was necessary: merely knowing the two exit
+labels would not supply their physical interface in an arbitrary
+splay shape.
+
+\paragraph{3. Graft and concatenate.}
+Graft the incoming primary suffix into the new terminal hole. Its
+stored $\beta_{d+1}$ and all genuine hanging subtrees are preserved.
+Since $d$ is the maximum routing key of the prefix and is its root,
+the incoming virtual routing tree is attached at its right gap.
+If the incoming boundary auxiliary is nonempty, clear that boundary
+root's auxiliary mark. This concatenates its keys, all greater than
+$d$, with the prefix auxiliary. No traversal down the incoming
+boundary spine is required and no additional splay is necessary.
+Only $d$'s auxiliary size increases. If the old prefix size is $p$
+and the incoming boundary size is $b$, then
+\[
+ \Delta\Phi_{\mathrm{concatenate}}
+ =\log_2\frac{p+b}{p}\le\log_2 K.                \tag{3}
+\]
+Here $p+b\le K$: the resulting auxiliary is exactly the full reference
+path toward leaf $d$. If the incoming boundary is empty, the genuine
+root mark remains and (3) is zero.
+
+Outer primary root marks are distinct from these inner auxiliary marks.
+Clearing the incoming outer mark and marking the parked old tail does
+not change $\Phi$. Their physical roots are frontier roots of the
+supplied exposed hull and can be visited at constant additional cost.
+A leaf tail requires no root or topology header.
+
+\paragraph{Which histories survived?}
+Every genuine interval whose owner depth exceeds $d$ travels with its
+incoming or parked suffix. An interval whose owner depth is at most
+$d$ retains the prefix owner's bit. Any interval crossing the splice
+contains $d$, and its bit was just set toward $d$ by the inner request.
+In particular, the incoming boundary nodes have split greater than
+$d$ and become genuine members of the root auxiliary with their
+prefix-owned bit set left, exactly as required. The physical boundary
+items did not carry an independently reset history. Reclassifying them
+as genuine does not change their ranks in $\Phi$; their only potential
+change is the explicitly charged unmarking in (3). The old suffix's
+deeper-owner bits are preserved and none is reset.
+
+Thus the splice costs $O(\lambda)$ amortized with respect to the same
+global potential. There is no size-of-suffix startup payment.
+
+\section*{Physical simulation, accounting, and the distinction from multi-splay}
+
+The virtual operations above use actual depth-key comparisons. Their
+physical realization is the no-copy unfolding: each abstract interval
+has at most two actual-key components, each separator occurs physically
+once, and a rooted touched hull of $q$ abstract nodes can be reconfigured
+in $O(q)$ physical BST cost while preserving its frontier components.
+Splay rotations, searches, and the supplied split hulls meet that
+contract. A whole root-starting virtual transaction is rendered from
+its touched hull, so one does not restart a physical root search for
+each abstract rotation. The role exchange separately uses the constant
+hull already exposed above.
+
+Read the current root primary-path header, which includes its bottom
+leaf $z$. Before the inner request, compute the outer exit from these
+already read data: $d=H$ if $x=z$, and otherwise
+$d=\operatorname{depth}(\operatorname{LCA}_T(x,z))$. This is allowed
+computation on the query and the fixed reference; it does not read an
+unvisited incoming header. The inner request and, for $d<H$, the two
+boundary splays above then expose the actual exit. Its constant-length
+physical walk reads the incoming header as specified in step 1.
+
+For the final exit $d=H$, finish the inner request, then splay routing
+key $H-1$ to its auxiliary root, at $O(\lambda)$ amortized cost.
+It belongs to the exposed full reference path. Its right abstract
+frontier is leaf $H$, so the constant-size unfolding hull gives an
+$O(1)$ physical walk to the requested actual key $x=z$; perform this
+walk before finishing. For an empty routing universe, visit the sole
+actual key directly. Thus the procedure really visits every requested
+key and does not end after only a header computation.
+
+Incoming and parked primary headers are read or
+installed only at actually reached physical frontier roots. All
+virtual topology, marks, and owner bits of a primary path require
+$O(H)$ bits, so fit in a constant number of $O(\log n)$-bit words.
+This supplies the bounded augmentation in the stated free-computation
+model, not a claim that decoding runs in constant word-RAM time.
+
+The outer procedure fixes the first wrong primary preference before
+continuing deeper. Hence its emissions are exactly the prescribed
+increasing-depth stream. During an inner access to $d$, every visited
+secondary interval starts at a depth $a\le d$, where the current root
+primary path agrees with the requested key. Its owner is therefore
+the fixed primary ancestor at depth $a$. The total number of genuine
+secondary changes is exactly $F$, independent of splay shapes.
+
+Summing the inner-request and splice bounds, with one fixed constant
+multiple of $\Phi$, gives
+\[
+ \cost(X)+c\bigl(\Phi_{\mathrm{final}}-\Phi_{\mathrm{initial}}\bigr)
+ \le C\lambda\bigl(m+P+I_0+F\bigr).
+\]
+By (1), the potential telescope contributes at most $O(n\lambda)$.
+The initial legal physical shape and its headers can be installed in
+$O(n)$ cost from any prescribed starting BST. Using $I_0\le n-1$
+proves the first bound in Theorem~\ref{thm:main}. The separate count
+inequalities $F=O(D+P+n)$ and $m+P+D=O(\OPT)$ give its competitive
+corollary.
+
+The extra secondary decomposition is essential to this proof: it caps
+every splay auxiliary at $K=O(\log H)$ instead of $H$. Standard
+multi-splay supplies only the latter cap. Neither the per-switch
+access-lemma calculation nor the splice telescope just proved bounds
+standard multi-splay by this nested algorithm's cost.
+
+\paragraph{Adopted sources.}
+The physical unfolding, suffix invariant, and exact-owner construction
+are Sections 3--6 of the sibling Tango-squared upper-bound manuscript,
+\path{research/tango-squared-upper-bound.tex}.
+The three-splay preferred-child switch and its sum-log-size accounting
+are described in Wang's thesis, Sections 3.2--3.4.1,
+\url{https://www.csd.cmu.edu/sites/default/files/phd-thesis/CMU-CS-06-140.pdf}.
+The proof here supplies the additional amortized boundary exposure,
+exact unchanged-potential role exchange, and single global splice
+potential needed for the splay-backend substitution.
+
+\end{document}

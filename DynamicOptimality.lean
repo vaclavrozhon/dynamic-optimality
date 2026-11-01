@@ -1,0 +1,22 @@
+import DynamicOptimality.LocalVineSpace
+import DynamicOptimality.LocalSnapshotSpace
+import DynamicOptimality.LocalCommandList
+import DynamicOptimality.LocalProgramComposition
+import DynamicOptimality.LocalProgram
+import DynamicOptimality.MetadataExecution
+import DynamicOptimality.Basic
+import DynamicOptimality.Cost
+import DynamicOptimality.OnlineBST
+import DynamicOptimality.SearchRotationEquivalence
+import DynamicOptimality.PointerOptimum
+import DynamicOptimality.ModelEquivalence
+import DynamicOptimality.SplayBound
+import DynamicOptimality.SplayBlackBoxBound
+import DynamicOptimality.VisitedAncestors
+import DynamicOptimality.PointerInitialization
+import DynamicOptimality.HullPriorityUpdate
+import DynamicOptimality.HullSeparation
+import DynamicOptimality.PointerRelabel
+/-! Shared definitions and representation bridges for the splay and Tango²
+formalizations. The algorithm libraries remain separate build targets in
+the same project. -/

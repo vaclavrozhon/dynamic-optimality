@@ -1,0 +1,139 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=27mm]{geometry}
+\usepackage{amsmath,amssymb,amsthm,hyperref}
+\newtheorem{proposition}{Proposition}
+\newtheorem{lemma}[proposition]{Lemma}
+\title{Why the classical multi-splay potential does not certify the proposed third logarithm}
+\author{Research note, 2 October 2026}
+\date{}
+\begin{document}
+\maketitle
+
+This is a hand proof about one legal initialized multi-splay state. It
+rules out a particular per-request potential inequality. It is not a
+lower bound against multi-splay competitiveness, does not establish a
+recurring bad sequence, and does not assert reachability of the initial
+state from a separately prescribed canonical initialization.
+
+Write $\Phi=\sum_v\log_2 s(v)$ for the classical potential, where
+$s(v)$ counts descendants inside $v$'s current auxiliary splay tree.
+Let $\mathcal P$ denote the primary preferred-path partition. For a
+perfect primary node BST with $n=2^H-1$ keys, use depth labels
+$0,\ldots,H$ and the midpoint secondary reference on those labels.
+The standard final switch emits the accessed node's depth, including
+when it is a reference leaf; it splays the node and its existing
+reference-ancestor predecessor and successor inside the appropriate
+auxiliary subtrees.
+
+\begin{proposition}\label{prop:failure}
+Fix any $\alpha\ge0$ and any function $G$ of the primary path partition.
+For arbitrarily large $H$ there is a legal initialized multi-splay state
+and a single access satisfying:
+\begin{enumerate}
+\item the primary partition does not change;
+\item there is exactly one mandatory final switch, no ancestor switch,
+and one initialized secondary bit change;
+\item the access performs $\Omega(\log H)$ rotations and
+$\Delta\Phi=\Omega(\log H)>0$.
+\end{enumerate}
+Consequently no universal constant $C$ can make the per-request bound
+\[
+ \operatorname{cost}(t)+\alpha\Delta\Phi+\Delta G(\mathcal P)
+ \le C(1+\log\log(H+2))(1+p_t+f_t)
+\]
+hold for every legal initialized state, where $p_t$ counts either the
+ancestor switches alone or all mandatory switches, and $f_t$ is the
+fixed-owner secondary write count just described.
+\end{proposition}
+
+\paragraph{Construction.}
+Choose $k=2s+1\ge3$ and $H=2^k-1$. Initialize all primary preferences
+rightward. The root preferred path has $H$ nodes and ends at the
+maximum key $x$. Store its nodes in a perfectly balanced auxiliary BST;
+all other auxiliary shapes can be arbitrary. This is a legal
+path-compatible physical BST. Query $x$. There are no wrong ancestor
+preferences. The only operation is the final switch at the reference
+leaf $x$: splay $x$ to the root, then splay its reference predecessor
+below it. Its reference successor does not exist. There are no root
+mark changes, so $\mathcal P$ is unchanged.
+
+Only depth $H-1$ is emitted. The secondary reference has $2^k$ leaves,
+and label $H-1=2^k-2$ has address $11\cdots110$. Thus all-right
+initialized secondary bits incur exactly one change. The ancestor
+switch count is zero and the mandatory-switch count is one.
+
+\paragraph{First splay.}
+The right spine of the balanced auxiliary consists of
+$v_0,v_1,\ldots,v_{2s}=x$. Splaying $x$ uses exactly $s$ right-right
+double steps, hence $2s$ rotations. In one such double step write $a,b,c$
+for the left-subtree sizes at the grandparent, parent, and target.
+The target is the maximum, so it has no right subtree. Cancellation
+of the unchanged total-subtree rank gives
+\[
+ \Delta\Phi_{\mathrm{double}}
+ =\log_2\frac{(a+b+1)(a+b+c+2)}{(b+c+2)(c+1)}.
+\]
+For this balanced initial tree, at the $j$th bottom-up double step,
+\[
+ b=2^{2j-1}-1,\qquad a=2b+1,\qquad c=b-1.
+\]
+The equality for $c$ remains true after earlier doubles: they preserve
+the size of the original right subtree below the as-yet untouched
+parent. Therefore
+\[
+ \Delta\Phi_{\max}
+ =\sum_{j=1}^s\log_2\left(6+\frac4{2^{2j-1}-1}\right)
+ >s\log_2 6.
+\]
+
+\paragraph{Predecessor splay.}
+After the first splay, $x$'s left subtree has right spine
+$v_1,v_3,\ldots,v_{2s-1}$. At its $j$th spine node, indexed from zero,
+the left subtree and the remaining right subtree have sizes
+\[
+ A_j=6\cdot4^{s-j-1}-1,
+ \qquad R_j=2(4^{s-j-1}-1),\qquad 0\le j<s.
+\]
+In particular $A_j\ge R_j$. The predecessor is the maximum of this
+subtree, at depth $s-1$, so its splay uses $s-1$ rotations.
+
+For completeness, splaying the maximum in a tree whose right-spine
+nodes have left-subtree size at least right-subtree size cannot decrease
+$\Phi$. Before a double step its as-yet untouched grandparent has
+$a\ge b+c+2$, since the lower rotations preserved its right-subtree
+size. The displayed double-step ratio is therefore at least one.
+A final single left rotation has potential change
+\[
+ \log_2\frac{a+b+1}{b+1}\ge0,
+\]
+where $a$ and $b$ are the parent's and target's left-subtree sizes.
+These observations apply to the predecessor splay above. Hence
+\[
+ \operatorname{rotations}=3s-1,\qquad
+ \Delta\Phi\ge\Delta\Phi_{\max}>s\log_2 6.
+\]
+As $\log H=\Theta(s)$ whereas
+$1+\log\log(H+2)=\Theta(1+\log(s+1))$, the proposition follows.
+
+\paragraph{Interpretation and limitations.}
+The example isolates a cold access that the classical potential does
+not pay by decreasing: that potential increases substantially. A
+different potential involving the secondary history could store the
+needed credit. In particular this one-access family is absorbed by an
+$O(n)$ startup allowance in a global competitive inequality, and it
+does not disprove the proposed $O(\log^{(3)}n)$ competitive factor.
+Its scope is the classical potential, multiplied by any nonnegative
+coefficient, plus an arbitrary function of the unchanged primary
+partition. A function that also depends on secondary bits or on the
+physical auxiliary shape is outside this obstruction.
+
+\paragraph{Deterministic check.}
+The companion \texttt{potential-check.py} constructs only the $H$-node
+auxiliary and performs the two literal bottom-up splays. For odd
+$3\le k\le15$, it checks the exact rotation counts, the first-splay
+formula, and nonnegativity of the second-splay potential change. It
+does not construct the exponentially larger primary reference and
+performs no random search. The asymptotic statement above is a hand
+proof, not an inference from these finite checks and not Lean checked.
+
+\end{document}

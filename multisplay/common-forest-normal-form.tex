@@ -1,0 +1,478 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[colorlinks=true,urlcolor=blue,linkcolor=blue]{hyperref}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newcommand{\cost}{\operatorname{cost}}
+\newcommand{\OPT}{\operatorname{OPT}}
+\newcommand{\MS}{\mathrm{MS}}
+\newcommand{\polylog}{\operatorname{polylog}}
+\setlength{\emergencystretch}{4em}
+\title{A common forest interface for the splay comparison proof}
+\author{Research note; hand extension of existing interfaces}
+\date{2 October 2026}
+\begin{document}
+\maketitle
+
+\noindent\textbf{Status.}
+This note records a positive extension suggested by the existing Lean
+normal-form interfaces. The forest composition is a hand argument, not
+an additional machine-checked theorem. The final splay comparison is
+conditional on the accounting argument of the current splay manuscript.
+No bound on the cost of an appropriate multi-splay comparator is assumed
+or proved here.
+
+\section{The interface and its cost model}
+
+At every time there is a forest of disjoint ordered key sets. Each set
+has one BST and a root handle. An operation may select a component at
+unit cost; this convention is shared by the splay algorithm and its
+comparator. It does not grant a free move to an interior node. The
+operation word specifies common component domains for both algorithms.
+The allowed operations are:
+\begin{enumerate}
+\item \emph{Search}$(x)$: serve $x$ in its specified current component.
+The splay algorithm splays $x$ to that component's root.
+\item \emph{Split}$(x)$: serve and move $x$ to the root, then remove
+$x$, returning the two ordered child domains as separate components.
+The splay algorithm splays $x$ before this root deletion.
+\item \emph{Join}$(L,x,R)$: take two components whose keys are all
+below and above the supplied inactive pivot $x$, and replace them by
+the tree $x(L,R)$. The comparator performs the same common root join;
+it may subsequently rotate its tree. The splay algorithm initially
+uses exactly the displayed root join, without rebuilding the children.
+\end{enumerate}
+Empty children are permitted. A removed pivot can be supplied again
+later. Let $N$ be the number of initially active keys, $q$ the number of
+structural operations, and $K$ an upper bound on every live component
+size, including immediately after a join. Let $C$ be a comparator's
+total search, pointer, and rotation cost; charging the structural
+operations separately as $q$ avoids any ambiguity about their unit
+cost convention.
+
+The main distinction from independently restarting an analysis is that
+the actual representation and accounting state of each surviving child
+travel with that child. A join combines the existing states; it does
+not initialize a new analysis on all keys in the new component.
+
+\section{Existing local normal-form interfaces}
+
+Write $L_K=1+\lceil\log_2(K+1)\rceil$. The repository has two
+representation layers with exactly the required root operations.
+
+\paragraph{The heavy-path layer.}
+\texttt{OfflineHeavyJoin.lean} proves
+\texttt{HeavyRepresentation.exists\_join};
+\texttt{OfflineHeavySplit.lean} proves
+\texttt{exists\_split\_node}. For either operation there is an exposed
+supported path of cost $c_H$ satisfying
+\[
+ c_H\le 16L_K^2+3,
+ \qquad
+ c_H+\Phi_H(\text{after})
+ \le\Phi_H(\text{before})+115.
+\]
+Before and after potentials are summed over the participating children
+when the state is a forest. Every represented tree has height at most
+$6\lceil\log_2(K+1)\rceil^2$. The potential bound
+\texttt{OfflineHeavyPotential.lean} is
+\[
+ 0\le\Phi_H(T)\le64|T|.
+\]
+The split theorem expressly returns the child representation histories.
+
+\paragraph{The rib layer.}
+\texttt{OfflineRibRootOperations.lean} proves a root join and root
+split with
+\[
+ c_R\le64L_K^2,
+ \qquad
+ c_R+\Phi_R(\text{after})
+ \le\Phi_R(\text{before})+448.
+\]
+A join requests a left representation with orientation \texttt{true}
+and a right representation with orientation \texttt{false}.
+The same file proves \texttt{exists\_reorient} for either desired
+orientation, with
+\[
+ c_{\mathrm{orient}}\le128L_K^2,
+ \qquad
+ c_{\mathrm{orient}}+\Phi_R(\text{after})
+ \le\Phi_R(\text{before})+896.
+\]
+This operation preserves the represented source tree. It consists of
+two root stack operations, rather than a reconstruction of the component.
+\texttt{OfflineRibPotential.lean} gives
+$0\le\Phi_R(T)\le256|T|$.
+
+Rib representations have bounded minor ribs, with slack nineteen, and
+increase source height by at most a factor
+$5\lceil\log_2(K+1)\rceil$.
+The supported-path conversion in
+\texttt{OfflineRestrictedMacros.lean} and
+\texttt{OfflineRibbedTrace.lean} replaces each supported macro by
+root or grandchild rotations at constant overhead in its support size.
+It preserves a height bound equal to the endpoint height plus the
+support size, and a constant minor-rib bound (slack twenty for the
+ribbed construction).
+
+The underlying representation, rotation, split and join statements are
+parameterized by a \emph{capacity}. It is therefore legitimate to use the
+same fixed capacity $K$ throughout an evolving forest. Changing a
+component's size does not require changing its representation parameter.
+The exported \texttt{exists\_boundedService} and
+\texttt{exists\_boundedRotation} corollaries specialize that capacity to
+the dense alphabet size. Here their proofs are applied with arbitrary
+capacity $K$: the displayed support and potential inequalities come from
+the underlying capacity-parameterized interfaces, and their conversion
+to shallow traces is unchanged. This lifting is part of the present
+hand argument, not an existing forest theorem in Lean.
+
+A live component's possibly nonconsecutive keys can be relabeled by
+their inorder positions for these local statements. Splitting or joining
+changes this order isomorphism but changes no physical tree shape,
+rotation, stack digit, supported frontier, or potential. Transport the
+existing representation witnesses through the new order isomorphism;
+do not choose fresh representations. Thus alphabet relabeling itself
+performs no pointer operations and grants no access to an interior node.
+
+\section{The forest normal form}
+
+\begin{theorem}[Common forest normalization]\label{thm:normal}
+Every comparator execution of the interface above has a common-domain
+comparison forest with total cost
+\[
+ O(C+N+q),
+\]
+height $O(L_K^3)$ in every physical intermediate tree, a constant bound
+on minor ribs, and all rotations at constant depth within the component
+being processed. Immediately before a split and immediately after the
+common raw join, the relevant pivot is the root. All surviving child
+representation histories are retained across the structural operations.
+\end{theorem}
+
+\begin{proof}
+First replace each root-starting comparator transaction by shallow
+rotations of its touched rooted hull, retaining the same hanging
+subtrees. This is the usual constant-cost restricted-rotation conversion,
+applied inside the selected component. A split first exposes its
+requested pivot as a root; a join is a raw common root insertion followed
+by any further comparator work. This gives $O(C+q)$ root services,
+shallow rotations, root deletions and root insertions.
+
+Maintain a heavy representation of each component at fixed capacity
+$K$. The supported rotation and service interfaces already used in
+\texttt{OfflineHeavyBoundedSteps.lean} handle the fixed-domain work.
+Use the explicit heavy split and join interfaces for the structural
+operations. The raw join $x(A,B)$ has height at most one more than the
+maximum child height, so it also satisfies an $O(L_K^2)$ bound.
+The supported paths have size $O(L_K^2)$; conversion to shallow rotations
+therefore keeps all intermediate heights $O(L_K^2)$.
+
+Sum the heavy potential over all live components. A split replaces one
+summand by its two surviving child summands, and a join performs the
+reverse accounting operation with a new pivot. The initial potential is
+at most $64N$. Each primitive supplies only its stated constant
+amortized allowance. Nonnegativity of the final global potential gives
+$O(C+q+N)$ total work in this first representation layer. There is no
+component-lifetime initialization sum.
+
+Apply the rib representation to the resulting shallow trace, again
+retaining its histories at fixed capacity $K$. Before a raw root join,
+reorient the two child representations as necessary. There are at most
+two such reorientations. Insert the common pivot above the children,
+then apply the rib join interface. Its source has bounded minor ribs
+because of the chosen child orientations; this is the same exposed-root
+geometry used by \texttt{exists\_boundedService} in
+\texttt{OfflineRibBoundedSteps.lean}. Its height is one more than the
+maximum child height. A root split is handled by exposing the source
+root with \texttt{exists\_split\_node}, deleting that root, and retaining
+the two returned child representations. Their returned orientations may
+be kept until a later join requires a change.
+
+The rib height is $O(L_K)$ times the first layer's $O(L_K^2)$ height;
+the $O(L_K^2)$ supported-path allowance is smaller. Supported-path
+conversion keeps this $O(L_K^3)$ height and constant minor-rib bound
+throughout every macro. Its rotations stay at constant depth.
+
+Finally sum the rib potential over live components. Its initial sum is
+at most $256N$. A root join costs at most two reorientation allowances
+and one join allowance; a split costs one split allowance. The existing
+rotation and service allowances charge the rest of the first-layer
+trace. The potentials telescope with the actual child histories.
+Thus the second layer costs $O(C+q+N)$ as well.
+
+For synchronization, expose the comparison pivot before the algorithm's
+splay for a split, and delete the common root only afterwards. At a
+join, perform any orientation changes while the children are still
+separate; then both forests receive the same raw root $x$. Subsequent
+comparison normalization rotations are ordinary paid comparator changes.
+This establishes the stated common-root checkpoints.
+\end{proof}
+
+This proof is an application of the local existing interfaces. A Lean
+formalization would additionally need a forest trace type, the global
+sum of component potentials, and order-isomorphism transport between
+component alphabets. These are not supplied by the existing fixed-domain
+\texttt{RibbedTrace} datatype.
+
+\section{Root joins in the splay accounting state}
+
+\begin{lemma}[Common root join accounting]\label{lem:heap-join}
+Suppose the splay and comparison forests join the same two domains
+under a new common root $x$. The lazy-interval accounting state of the
+splay manuscript can retain all old states and perform only $O(1)$ new
+interface and potential events for this operation.
+\end{lemma}
+
+\begin{proof}
+Immediately before the join, ranks in each child are measured from
+the root of its own comparison component. After the common raw join,
+increase all old ranks in each child by one and give $x$ rank zero.
+All differences between old ranks within a child are unchanged.
+Consequently all internal gaps, point gaps, heavy paths and lazy
+intervals of that child retain their previous state.
+
+The new minimum $x$ becomes the root heavy path. The previous root
+heavy path of each nonempty child becomes one left or right heap child
+of $x$. Its minimum comparison rank used to be zero and is now one,
+so its new gap is one. Create the two possible growing singleton
+intervals at $x$ and their constant-size records. This introduces only
+$O(1)$ point-gap contributions and boundary events, and only $O(1)$
+new bends. All records internal to the children remain in place.
+
+More explicitly, the old child-root has interface value $f=1$ from
+its root point gap zero. Its new singleton gap one has contracted
+value $f=2$. Apply one \texttt{ValueIncrease} to this child root,
+\texttt{Create} the corresponding growing parent slot at value one,
+and \texttt{Insert} the child at value two. The insertion inequality
+is $2\ge1+1$, and there are at most two such children. The inverse
+root deletion first \texttt{Convert}s these root singletons, returning
+the child's value from two to one, and then deletes them. Empty
+growing slots of the removed pivot are converted and retired. On
+reinsertion its newly created slots again start at value one.
+Child intervals, pass counts, and creator histories are retained.
+
+This is the reverse of the common root deletion in
+\texttt{app-split-conjecture.tex}, except that insertion is charged its
+constant number of new records. Reinserting a formerly deleted pivot
+creates those records again and is paid again as one of the $q$
+structural operations. It does not recreate the children's records.
+One can place every key that will occur into the interface universe
+in advance, giving an inactive key the neutral value $f=1$ and
+charging the initial excess $\sum(f-1)$. Alternatively, its size is
+at most the $N$ initially active keys plus the $q$ insertion events.
+Either convention charges future pivot lifetimes by $O(N+q)$ and
+does not reset a live child's potential.
+Subsequent comparison normalization rotations are handled by the
+ordinary paid-rotation part of the original proof.
+\end{proof}
+
+\begin{theorem}[Conditional common-forest splay comparison]
+Assuming the core lazy-interval and pairing-accounting argument of the
+current splay manuscript, its comparison extends to the interface above
+with
+\[
+ \cost_{\mathrm{splay\ forest}}
+ =O\!\left((C+N+q)\,
+   (1+\log\log(K+4))
+   (1+\log\log\log(K+16))^2\right).
+\]
+\end{theorem}
+
+\begin{proof}
+Use Theorem~\ref{thm:normal} as the comparison forest. Its ranks lie in
+$O(L_K^3)$, so the maximum contracted rank gap is $O(1+\log\log(K+4))$.
+The two logarithmic losses from the existing lazy-interval accounting
+are $O(1+\log\log\log(K+16))$ each.
+
+The original forest has $O(N)$ initial records. Ordinary splays and
+paid comparison rotations create the already established constant
+number of records per event. Common root deletion uses the unchanged
+split argument; Lemma~\ref{lem:heap-join} handles common root insertion.
+Thus all record and boundary budgets are $O(C+N+q)$, and the original
+global pairing and bend estimates sum over the live components.
+No potential is restarted at a split or join.
+
+Here is the global accounting explicitly. Set $B_0=N+C+q$ and let
+$G\ge2$ bound the contracted gaps. Let $\ell$ count created lazy
+intervals, $p$ paid interface operations, $u$ unimportant boundary
+pairings, $g$ good internal pairings, and $A$ all internal pairings.
+The retained-history construction and the local splay estimates give
+\[
+ \ell=O(B_0),\qquad
+ p\le u+O(B_0\log G),\qquad
+ g\le uG+O(B_0G\log G).
+\]
+Root joins add only $O(q)$ inserts and value increases. Thus the
+interface totals satisfy
+\[
+ \#\texttt{Insert}=O(p+N+q),\qquad
+ \#\texttt{ValueChange}=O\bigl(g+(p+N+q)G\bigr).
+\]
+The original pairing inequality consequently remains
+$A\le\alpha(pG\log G+O(B_0G\log^2G))+O(1)$ for its fixed constant
+$\alpha$. The same definition of unimportance supplies
+$\alpha uG\log G\le A/2$. Absorbing this term gives
+$A=O(B_0G\log^2G)$. Important boundary pairings contribute
+$O(B_0\log G)$, and unimportant ones are absorbed as before. Joins
+and splits add $O(q)$ bends, so the zig-zag count has the same bound.
+Taking $G=O(1+\log\log(K+4))$ gives the displayed theorem.
+\end{proof}
+
+\section{Optional historical compression}
+
+The same forest construction can be fed into the later strict-interface
+compression argument in
+\texttt{research/approximation-2026-09-11/}.
+This is an optional hand corollary of the forest realization above;
+it is not a separately formalized forest theorem. In the notation of
+that argument, let $B$ now denote all boundary pairings and retain
+$B_0=N+C+q$. The unchanged global estimates are
+\[
+ I=O(B_0+B),\qquad V=O(G(B_0+B)),\qquad
+ B\le O(B_0(1+\log\kappa))+O(A/\kappa)
+\]
+for every boundary cutoff $\kappa$. Root joins contribute only $O(q)$
+inserts and value changes; neither their retained child records nor
+root splits reset source pass counters. Thus the historical-rank
+compression theorem applies to this same single strict trace.
+
+Write $L_j(t)$ for stabilized $j$-fold iterated logarithms. One
+compression, as in \texttt{HistoricalCompressionIteratedLog.lean},
+replaces the displayed forest factor by
+\[
+ g_1(K)=O\bigl(L_2(K)L_3(K)L_4(K)^2\bigr).
+\]
+Two applications of the literal coefficient transfer in
+\texttt{HistoricalCompressionRecursion.lean} and its concrete boundary
+absorption give the fixed-depth hand asymptotic simplification
+\[
+ g_2(K)=O\bigl(L_2(K)L_3(K)L_4(K)L_5(K)^2\bigr).
+\]
+The recursion's constants must remain attached to its chosen depth;
+these statements use a fixed depth of one or two, not a depth growing
+with $K$. For example, combining the two-compression version with a
+forest comparator of factor $\lambda=O(L_2(H))$, where
+$H=\Theta(\log n)$, yields
+\[
+ O\bigl((\OPT(X)+n)L_3(n)^2L_4(n)L_5(n)L_6(n)^2\bigr).
+\]
+The leading squared $L_3(n)$ remains. This refinement therefore does
+not resolve the exact $O(L_3(n))$ multi-splay question.
+
+\section{An exact common forest word for multi-splay}
+
+Consider a left-to-right primary switch at $y$. Its current splay
+component contains $U\cup\{y\}\cup L$, where $U$ is the preferred
+prefix above $y$ and $L$ is the old preferred tail in the left child of
+$y$. The incoming right tail $R$ is a separate splay component. Let
+$\ell<y<r$ be the closest lower and upper ancestors in $U$, when
+present. These are the two guards used by standard multi-splay.
+
+Assume first that both guards are present. The exact operation word is
+\[
+ \operatorname{Split}(y),\quad
+ \operatorname{Split}(\ell),\quad
+ \operatorname{Split}(r),\quad
+ \operatorname{Join}(A,\ell,\varnothing),\quad
+ \operatorname{Join}(R,r,B),\quad
+ \operatorname{Join}(A',y,B').
+\]
+The second split selects the left daughter of the first split, and the
+third selects its right daughter. Here $A$ is the part of $U$ below
+$\ell$, $B$ is the part above $r$, and $A',B'$ are the outputs of the
+two preceding joins. The right daughter of the $\ell$ split is $L$;
+it remains parked. The left daughter of the $r$ split is empty because
+the current owned tail lies to the left of $y$.
+
+Splitting at $y$ performs its full splay. The guard splits perform
+exactly the splays stopped at the corresponding child of $y$; removing
+$y$ analytically makes those stopped splays ordinary root splays of
+the daughter components. The three raw joins restore the guards and
+$y$ in exactly the shape produced by the standard switch. Marking the
+old tail and unmarking the incoming tail are precisely the corresponding
+changes of component membership. Foreign components in the inorder
+gaps remain opaque throughout.
+
+If $\ell$ is absent, the first split's entire left daughter is the
+parked tail $L$ and the new left daughter is empty. If $r$ is absent,
+the new right daughter is simply $R$. Omit the absent guard's split and
+join. Right-to-left switches use the reflected operation word. The
+same construction applies to the final switch at the requested key;
+missing children merely give empty tails.
+
+Consequently there is one fixed mixed forest word $W_{\MS}(X)$,
+determined by the reference tree, preferred directions and original
+request sequence, with at most six structural operations per switch.
+It is independent of the shapes of the auxiliary splay trees. Every
+intermediate component has at most $H$ keys, where $H$ is the maximum
+preferred-path length. The actual forest splay execution of this word
+has exactly the three possible switch splays and their resulting
+auxiliary shapes. The original multi-splay search traversal is charged
+to these splays by the standard traversal argument; thus its physical
+cost is at most a constant times their cost plus $|X|+S_{\MS}$.
+
+For completeness, this traversal charge is pointwise. In each initial
+auxiliary exited by the original search, both neighboring keys of the
+exit gap lie on its search path. One is the subsequent switch pivot
+and the other is one of its ancestor guards. Bottom-up work in deeper
+components changes only the incoming opaque payload, so this auxiliary
+has not changed before its switch. If the pivot is the deeper of the
+two gap neighbors, its first splay already pays the entire old gap
+search. Otherwise the first splay pays the path to the pivot, and the
+stopped guard splay pays the surviving path below it to the other
+neighbor. The final initial auxiliary contains the requested key.
+Ancestor switches attach it as an opaque payload, preserving its
+internal root-to-query path until the mandatory final query splay.
+That last splay pays the remaining initial search segment. Constant
+cost per auxiliary boundary is included in $|X|+S_{\MS}$.
+
+Let $C_{\mathrm{forest}}(W_{\MS}(X))$ be the cost of a comparator for
+this same complete mixed word. The conditional common-forest theorem
+therefore gives the concrete reduction
+\[
+ \cost_{\MS}(X)
+ =O\!\left((C_{\mathrm{forest}}(W_{\MS}(X))+n+S_{\MS})\,g(H)\right),
+\]
+where
+\[
+ g(H)=(1+\log\log(H+4))
+      (1+\log\log\log(H+16))^2.
+\]
+The inherited child histories in the normal-form proof are essential
+for this reduction: a new analysis is not started after each of the
+six forest operations.
+
+\section{The remaining comparator transport}
+
+Using $K=O(\log n)$ would give the factor
+\[
+ O(\log\log\log n\;(\log\log\log\log n)^2).
+\]
+The exact word above leaves the following substantive task: exhibit a
+comparator for that same word of cost
+$O(\OPT(X)+n)$, or a suitably explicit weaker bound.
+
+Neither an independently optimal tree for each path lifetime nor the
+query-only cost of a secondary Tango instance supplies this comparator.
+The forest word prescribes its splits and joins as well as its searches.
+Conversely, the normal-form and initialization problems for the precise
+common root split/join interface need not be treated as an unexplained
+additional conjecture: the existing representation inequalities above
+give a concrete route to their solution.
+
+For example, a compatible comparator with cost
+$O((\OPT(X)+n)(1+\log\log H))$ would yield, through this reduction,
+the weaker factor
+\[
+ O\!\left((\log\log\log n)^2
+          (\log\log\log\log n)^2\right).
+\]
+Such a comparator must support the prescribed guard exposures and
+root interfaces; the ordinary query-only Tango-squared bound does not
+by itself certify that property. This note does not assert the
+existence of either comparator bound.
+
+\end{document}

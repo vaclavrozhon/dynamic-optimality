@@ -1,0 +1,339 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage[colorlinks=true,urlcolor=blue,linkcolor=blue]{hyperref}
+\newtheorem{lemma}{Lemma}
+\newtheorem{proposition}[lemma]{Proposition}
+\newtheorem{corollary}[lemma]{Corollary}
+\newcommand{\lgx}{\log_2}
+\newcommand{\MS}{\operatorname{MS}}
+\newcommand{\OPT}{\operatorname{OPT}}
+\newcommand{\phiu}{\Phi_{\mathrm{unif}}}
+\title{Multisplay versus Tango squared:\\emission order and potential obstructions}
+\author{Research notes, 2 October 2026}
+\date{}
+\begin{document}
+\maketitle
+
+\noindent\textbf{Status.} These are proved elementary partial statements and
+explicit obstructions to particular amortization schemes. They neither prove
+nor disprove a third-iterated-logarithm competitive ratio for standard
+multisplay. The bit-count statements refer to precisely specified words;
+they do not identify those words with the searches performed by multisplay.
+
+\section{Changing the order of a fixed set of emissions}
+
+Fix a full binary hierarchy $B$ on the ordered depth labels
+$0,\ldots,H$. An internal interval $I=[a,b]$ has a left and right child.
+For each original request $x_t$, let
+\[
+ E_t=\{d_{t,1}<\cdots<d_{t,k_t}=H\}
+\]
+be a nonempty set of distinct emitted depths. A write of $d\in E_t\cap I$
+goes to the fixed indexed bit $(I,\operatorname{anc}_a(x_t))$ and writes
+the side of $I$ containing $d$. All indexed bits start at R.
+All three schedules below use the same $E_t$, owners, and original-request
+order. Within a request, the schedules are
+\[
+ \uparrow=(d_1,\ldots,d_k),\qquad
+ \downarrow=(d_k,\ldots,d_1),\qquad
+ \operatorname{rev}H=(d_{k-1},\ldots,d_1,H).
+\]
+Their total initialized bit-change counts are $F^\uparrow$, $F^\downarrow$,
+and $F^{\operatorname{rev}H}$. Call an interval mixed for request $t$
+if $E_t$ meets both its children. Let $M_t$ count all mixed intervals and
+$M_t^{\mathrm{nt}}$ count the mixed intervals not containing $H$.
+
+\begin{lemma}[Order perturbation]
+For the fixed owner-indexed words above,
+\[
+ |F^\downarrow-F^\uparrow|\le 2\sum_t M_t
+       =2\sum_t(k_t-1),
+\]
+and
+\[
+ |F^{\operatorname{rev}H}-F^\uparrow|
+   \le 2\sum_t M_t^{\mathrm{nt}}
+   \le 2\sum_t\max\{k_t-2,0\}.
+\]
+Moreover, every terminal indexed bit, meaning $H\in I$, has exactly the
+same change count under $\uparrow$ and $\operatorname{rev}H$.
+\end{lemma}
+\begin{proof}
+Consider one fixed indexed bit and divide its word into nonempty request
+blocks. A pure block is unchanged. A mixed increasing block is
+$L^pR^q$ with $p,q>0$. Full reversal replaces it by $R^qL^p$.
+Both have one internal change. Only the incoming and outgoing block
+boundaries can change their contribution, by at most one each. Replacing
+the mixed blocks one at a time proves the first inequality. This argument
+includes the initial R as the incoming boundary of the first block;
+there is no outgoing boundary after the final block.
+
+For a nonterminal interval, keeping $H$ last makes no difference from
+full reversal on its filtered word, so the same argument applies.
+For a terminal interval, every nonempty block in this indexed row contains
+the completion $H$. Indeed, any request to this owner writes its completion
+to this interval. Thus both schedules end every block in R and the row
+begins in R. An all-R block contributes zero. A block with any L contributes
+exactly two changes: under $\uparrow$ its form is $L^pR^q$; under
+$\operatorname{rev}H$ it is $R^{q-1}L^pR$, with a possibly empty initial
+R run. The two contributions are identical, block by block.
+
+The mixed intervals are exactly the branching nodes in the minimal
+subtree of $B$ spanning $E_t$. Suppressing unary vertices yields a full
+binary tree on $k_t$ leaves, so $M_t=k_t-1$. If $k_t\ge2$, at least one
+branching node is an ancestor of $H$. Therefore
+$M_t^{\mathrm{nt}}\le k_t-2$. If $k_t=1$, both quantities vanish.
+\end{proof}
+
+For the canonical Tango-squared emissions,
+$\sum_t(k_t-1)=P+I_0$ with $I_0\le n-1$ in the complete-universe
+convention. The lemma therefore preserves an $O(m+P+D+n)$ initialized
+secondary budget. In particular, on a normalized request word with at
+most one noncompletion emission per request,
+$F^{\operatorname{rev}H}=F^\uparrow$ exactly.
+
+\paragraph{Scope.}
+Standard multisplay also splays reference-ancestor boundary keys, and its
+internal-node requests have a final switch convention. Neither operation
+is identified with a completion at depth $H$ by this lemma. A physical
+implementation and a word-identification theorem remain necessary.
+
+\section{The global range of the uniform multisplay potential}
+
+Here use the standard node-storing reference: a perfect binary tree of
+height $h$, with $n=2^{h+1}-1$ nodes. Every internal vertex selects one
+preferred child. Its preferred paths are represented by auxiliary splay
+trees. For $v$ in auxiliary $A$, let $s_A(v)$ count the nodes in its splay
+subtree, excluding marked child components. Set
+\[
+ \phiu=\sum_A\sum_{v\in A}\lgx s_A(v).
+\]
+
+\begin{lemma}[Uniform potential has linear global range]
+For every valid preferred-path decomposition and every choice of auxiliary
+BST shapes, $0\le\phiu=O(n)$. The multiset of auxiliary sizes is independent
+of the preferred-child choices.
+\end{lemma}
+\begin{proof}
+The root path has $h+1$ nodes. At each depth $a\ge1$, precisely
+$2^{a-1}$ vertices are nonpreferred children, hence are path heads.
+Every such path has $h-a+1$ nodes. Thus the size multiset is fixed.
+An auxiliary of size $\ell$ contributes at most $\ell\lgx\ell$.
+Consequently
+\[
+ \phiu\le(h+1)\lgx(h+1)+
+       \sum_{\ell=1}^{h}2^{h-\ell}\ell\lgx\ell=O(2^h)=O(n),
+\]
+because $\sum_{\ell\ge1}2^{-\ell}\ell\lgx\ell$ converges.
+\end{proof}
+
+Thus this potential needs only an $O(n)$ initialization allowance.
+This observation does not improve its per-request amortized estimate.
+It also means that adding any term $\sum_A g(|A|)$ is just a constant
+normalization in this perfect-reference setting.
+
+\section{The exact marking increment of a switch}
+
+Consider a left-to-right switch at reference vertex $y$, after its at most
+three splays have exposed $y$ as auxiliary root and, when present,
+$x=\operatorname{refLeftParent}(y)$ and
+$z=\operatorname{refRightParent}(y)$ as its left and right children.
+Let $a$ and $b$ be the numbers of strict ancestors of $y$ in its current
+preferred path lying respectively to its left and right in key order.
+Both old and incoming suffixes have the same size $t$ in a perfect
+reference tree. For $s>0$ define $f_t(s)=\lgx(1+t/s)$, and define
+$f_t(0)=0$ to express the absence of that boundary node.
+
+\begin{lemma}[Marking cross-ratio]
+The change in $\phiu$ due solely to marking the old suffix and unmarking
+the incoming suffix, after the exposing splays, is
+\[
+ J_{L\to R}=f_t(b)-f_t(a).
+\]
+For a right-to-left switch it is $J_{R\to L}=f_t(a)-f_t(b)$.
+\end{lemma}
+\begin{proof}
+If $x$ exists, its size decreases from $a+t$ to $a$. If $z$ exists,
+its size increases from $b$ to $b+t$. The size of $y$ returns to its
+original value because the exchanged suffixes have equal sizes.
+No other node's auxiliary-subtree size changes. Summing these logarithmic
+changes proves the formula. Reflecting key order proves the other case.
+\end{proof}
+
+For example $a=t,b=1$ gives
+$J_{L\to R}=\lgx(t+1)-1$. Once the frame is exposed, the physical
+marking work is constant even though its potential increase is
+$\Theta(\lgx t)$. A normalizer depending only on auxiliary sizes cannot
+alter this increment.
+
+\section{A full-request oscillation on two leaves}
+
+The same issue occurs for whole requests, not just isolated mark changes.
+Take $h\ge2$. Let $r$ be the reference root, $x$ its globally leftmost
+leaf, and $y$ the leftmost leaf of its right reference subtree. The two
+root-child suffix paths each contain $h$ keys. Let $p_x,p_y$ be the
+reference parents of the leaves; let $A_L,A_R$ hold the other $h-2$ keys
+on the respective suffix paths. Keep all hanging off-path auxiliaries
+opaque. Write $v(L,R)$ for an auxiliary node, omitting marked children.
+The following two states form a period for requests $x,y$:
+\[
+\begin{array}{c|c|c}
+ &\text{root auxiliary}&\text{other displayed auxiliary}\\ \hline
+ X\ (\text{after }x)&
+ x(\varnothing,p_x(\varnothing,r(A_L,\varnothing)))&
+ y(\varnothing,p_y(\varnothing,A_R))\\[2pt]
+ Y\ (\text{after }y)&
+ y(r,p_y(\varnothing,A_R))&p_x(x,A_L).
+\end{array}
+\]
+All omitted attachments stay in their actual ordered gaps.
+
+\begin{proposition}
+Standard bottom-up multisplay changes $X$ to $Y$ on request $y$, and
+$Y$ to $X$ on request $x$, using three rotations per request and constant
+navigation and marking work. Yet
+\[
+ \phiu(X)-\phiu(Y)=\lgx h+\lgx(h-1).
+\]
+\end{proposition}
+\begin{proof}
+In $X$, the route to $y$ goes through $x,p_x,r$ and the marked right
+suffix. Splaying $r$ uses one zig-zig, leaving the old left suffix
+$p_x(x,A_L)$. Mark it, unmark the right suffix, and splay $y$ by one
+zig. Its two reference-ancestor boundaries are already $r$ and $p_y$,
+so its final leaf switch needs no further rotations.
+
+In $Y$, the route to $x$ goes through $y,r,p_x$. Splay $r$ by one zig,
+mark the right suffix, and unmark the left one. Splaying $x$ then uses
+one zig-zig; its sole reference-ancestor boundary $p_x$ is already its
+right child. This gives precisely $X$.
+
+The two active-root contributions are $\lgx(h+1)$ and cancel. The
+contributions of $p_x$ and $p_y$ are respectively $\lgx h$ and
+$\lgx(h-1)$ in both states. The opaque subtrees also cancel. The extra
+contributions in $X$ are $\lgx(h-1)$ at $r$ and $\lgx h$ at the dormant
+root $y$; their counterparts $r,x$ in $Y$ have size one.
+\end{proof}
+
+After a finite warmup, the canonical leaf-reference histories of these
+two keys have one primary change per request, at their fixed LCA.
+Their depth emissions are its fixed depth and $H$. Thus their initialized
+secondary count is $O(1)$ per request after warmup. In particular, placing
+the two keys in different halves of the complete leaf reference gives
+the emissions $(0,H)$ and exactly two secondary changes per request.
+The node-storing reference used for multisplay and the leaf reference
+used for this count are explicitly different descriptions; only this
+two-key history claim is used here.
+
+It follows that the proposed \emph{pointwise} estimate
+\[
+ \operatorname{cost}_{\MS}(t)+\Delta\phiu(t)
+ \le C(1+\lgx\lgx(H+2))(1+p_t+f_t)
+\]
+cannot hold with a universal $C$. The actual algorithm is cheap on this
+example: the negative potential jump on the opposite request cancels the
+positive one. This is an obstruction to this potential inequality, not
+an algorithmic lower bound.
+
+\section{A preference-only correction cannot absorb marking separately}
+
+\begin{proposition}[Nonzero circulation of marking increments]
+There is no state function $G$ of the preferred-edge assignment alone
+whose change cancels $J$ on every switch. More strongly, raw marking
+increments plus a telescoping such $G$ cannot be charged
+$O((m+P+F)(1+\lgx\lgx(H+2)))$ on every repeated request period.
+\end{proposition}
+\begin{proof}
+In a perfect node reference of height $h\ge2$, let $u$ be the root and
+$v$ its left child. Start with both preferring left. Perform the cycle
+\[
+ (v:L\to R),\quad(u:L\to R),\quad
+ (v:R\to L),\quad(u:R\to L).
+\]
+For the first switch $a=0,b=1,t=h-1$, so $J=\lgx h$.
+Both root switches have no strict reference ancestors in their auxiliary,
+so their marking increments are zero. During the third switch $v$ is
+the head of a detached path, so its marking increment is also zero.
+The preference assignment returns to its initial state, but
+\[
+ \sum_{\mathrm{cycle}}J=\lgx h.
+\]
+Therefore no such exact state correction exists.
+
+This is a realizable query schedule, not merely a formal switch cycle.
+Choose leaves $a,b,c$ respectively in $v$'s left subtree, $v$'s right
+subtree, and $u$'s right subtree. Fix all lower preferences toward these
+leaves and repeat the requests $(b,c,a)$ starting after $a$. Their wrong
+switches are $(v)$, $(u)$, and $(v,u)$ in bottom-up order. Final switches
+at leaves change no preferred edges or root markings.
+
+For example choose the leftmost leaf in each of the three regions.
+The node reference has keys $1,\ldots,2^{h+1}-1$; these three queried
+keys have zero-based ranks $0,2^{h-1},2^h$. Embed those ranks in the
+complete leaf reference with $2^{h+1}$ leaves, height $H=h+1$, and
+leave its final leaf unused. The steady emitted sets are
+$\{1,H\},\{0,H\},\{0,1,H\}$. There are four primary flips
+per period. Only the secondary separation of $\{0,1\}$ and the terminal
+separation from $H$ can alternate, giving a bounded secondary count
+(eight per period for the midpoint hierarchy with $H\ge3$).
+Every $G$ telescopes to zero on a period, while the marking charge remains
+$\lgx h$. Since $\lgx h/(1+\lgx\lgx(h+2))$ is unbounded, the stronger
+claim follows. Repeating sufficiently many periods absorbs any allowed
+one-time $O(n)$ or $O(n(1+\lgx\lgx(H+2)))$ initialization term.
+Auxiliary shapes can change across the period; this does
+not change $J$, which depends only on the reference-path configuration.
+\end{proof}
+
+The multisplay rotations must therefore participate in any successful
+amortization. Charging all splays by a nonnegative bound and then seeking
+a separate preference-only correction for the marking bill loses essential
+cancellation. The proposition permits a correction depending also on
+physical shapes, or a joint inequality for rotations and markings.
+
+\section{The missing upper statement}
+
+The Tango-squared count theorems give
+$m+P+D=O(\OPT)$ and $F=O(D+P+n)$. A sufficient new upper theorem would be
+\[
+ \MS(X)=O\bigl((m+P(X)+F(X)+n)
+                    (1+\lgx\lgx(H+2))\bigr),
+ \qquad H=\Theta(\lgx n).
+\]
+One possible proof would give a single global potential coupling the
+actual multisplay forest to the fixed-owner depth histories, of bounded
+initial deficit, and an amortized inequality for complete requests.
+The companion note \path{endpoint-embedding.tex} gives a closer lower-side
+target by representing each standard multisplay request with one of two
+adjacent copies in a full leaf reference. Let $S$ be its actual switch count
+and let $F_{\MS}$ count the fixed-owner writes in actual bottom-up ancestor
+switch order followed by the final switch at the requested node. That final
+switch has the largest depth in its block; it is not a global depth-$H$
+completion. The endpoint theorem and the analogous order lemma supply
+the order lemma above supply
+\[
+ m+S+F_{\MS}=O(\OPT(X)+n).
+\]
+The corresponding unproved physical upper target is
+\[
+ \MS(X)=O\bigl((m+S+F_{\MS}+n)
+                    (1+\lgx\lgx(H+2))\bigr).
+\]
+This endpoint count is an analytical statistic; multisplay does not
+literally maintain its secondary bits.
+The uniform potential and preference-only marking correction above do not
+give this theorem. The order lemma removes one purely chronological
+obstacle, while preserving the need to identify actual auxiliary boundary
+searches, retained histories, and physical split/join work.
+
+\paragraph{Sources and conventions.}
+The standard switch and uniform potential are from Wang's dissertation,
+\emph{Multi-Splay Trees}, Sections 3.2--3.4.1:
+\url{https://www.csd.cmu.edu/sites/default/files/phd-thesis/CMU-CS-06-140.pdf}.
+The fixed-owner count conventions and the established Tango-squared
+implementation are in the unified manuscript of the neighboring
+\texttt{tango\_squared} repository (1 October 2026), in
+\path{research/tango-squared.tex}.
+The latter upper construction has its own exposed splice; it does not
+state this upper bound for standard multisplay.
+\end{document}

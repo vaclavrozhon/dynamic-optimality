@@ -1,0 +1,124 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,hyperref}
+\newtheorem{proposition}{Proposition}
+\setlength{\emergencystretch}{3em}
+\title{A recurring obstruction to canonical endpoint projection}
+\author{Research note, 2 October 2026}
+\date{}
+\begin{document}
+\maketitle
+
+\noindent\textbf{Scope.}
+This note concerns the particular endpoint projection in
+\path{FixedPartitionProjection.tex}, when its exact canonical shape is
+required at every primary-switch checkpoint. It does not lower-bound
+the optimal common-forest comparator, standard multi-splay's competitive
+ratio, or every possible projection. The construction was proposed by
+the multi-splay theory audit and independently checked against the
+node-storing reference and the exact guard split word.
+
+Let the primary reference be the perfect node BST on
+$\{1,\ldots,2^h-1\}$, with $h\ge4$. Set
+\[
+ r=2^{h-1},\qquad y=2^{h-2},\qquad
+ q=y-1,\qquad z=y+1.
+\]
+Thus $r$ is the reference root, $y$ its left child, $q$ the maximum
+leaf of $y$'s left subtree, and $z$ the minimum leaf of $y$'s right
+subtree. Let $Q$ be the all-right reference path from $y$'s left child
+to $q$. Let
+\[
+ R=(a_1>a_2>\cdots>a_k=z),\qquad k=h-2,
+\]
+be the all-left reference path from $y$'s right child to $z$.
+The proper-ancestor preferences on $Q$ and $R$ point toward their
+respective endpoints, and $r$ prefers left. Only $y$'s preference
+changes when the requests alternate between $q$ and $z$.
+The final switches at the requested reference leaves change no
+nonempty auxiliary membership; their external directions can be
+included as a two-period harmless bit state.
+
+Choose a global comparator BST in which $q$ is the root and $z$ is
+its right child. Key $y$, the only key strictly between $q$ and $z$,
+is the left child of $z$. Put
+\[
+ a_{k-1}<a_{k-2}<\cdots<a_1<r
+\]
+on an increasing right spine below $z$. All remaining actual keys
+can be placed in the opaque inorder gaps of this displayed skeleton;
+in particular the keys of $Q$ other than $q$ are below $q$'s left
+subtree. Root rotations between $q$ and $z$ serve the alternating
+sequence with constant cost per access and preserve the displayed
+cold right spine. No cold key is requested.
+
+\begin{proposition}
+Requiring the exact canonical endpoint-projection shape for this
+global comparator and the current preferred partition makes the
+prescribed common-forest switch word cost $\Omega(h)$ per two original
+requests, although the global comparator cost and the number of
+primary switches are both $O(1)$ per two requests.
+\end{proposition}
+
+\begin{proof}
+Immediately before a request to $q$, the root primary component has
+actual key set
+\[
+ C_R=\{r,y\}\cup R.
+\]
+The incoming left reference subtree of $y$ is one exit block of this
+component. Its two selected external endpoints have global lowest
+common ancestor $q$, so their ghost node is the global root. In the
+conversion to actual component separators, this leftmost exit block
+has only the upper neighbor $y$. The projected component therefore
+has $y$ at its root. Its right subtree contains $z$ followed by the
+displayed right spine through $a_{k-1},\ldots,a_1,r$.
+
+These are real component separators, not removable ghost nodes. There
+are no selected interior exit-block representatives between consecutive
+nodes of this spine that could suppress a displayed separator: all
+displayed actual keys belong to $C_R$. The optional ghost images in
+their inorder gaps preserve the displayed root-to-$r$ ancestor chain.
+In particular, $r$ has depth at least $k$ in the right daughter of $y$.
+
+The standard right-to-left switch at $y$ has no lower ancestor guard,
+and has upper ancestor guard $r$. Its exact forest word begins with
+$\operatorname{Split}(y)$ and then $\operatorname{Split}(r)$ in the
+right daughter. The first pivot is already exposed, but the latter
+requires a root-to-$r$ traversal and hence $\Omega(k)$ pointer cost.
+Preparing $r$ before the first split cannot avoid this cost: its
+initial depth is $\Omega(k)$, and a rooted execution must reach it.
+
+After the switch the root component is
+$C_Q=\{r,y\}\cup Q$, while $R$ is parked. In its canonical projection,
+the entire old right reference subtree is now one exit block. Its
+endpoint ghost is rooted at $z$, which is at depth one in the chosen
+global comparator. The conversion exposes its two boundary keys
+$y,r$ at constant depth. Thus the coarser projection puts $r$ shallow.
+
+On the next request to $z$, one global root rotation again suffices.
+The primary switch attaches $R$ again. Requiring the exact canonical
+projection of $C_R$ restores the long real-separator chain ending at
+$r$. If this restoration itself costs linear work, that work is
+already charged to the same two-request period; otherwise the next
+$q$ request encounters the linear-depth guard just proved. Either
+way every period has $\Omega(k)=\Omega(h)$ cost.
+\end{proof}
+
+The global tree, preferred membership partition, and canonical
+projected shapes return after two original requests. If the analytic
+external leaf directions are also tracked, use four requests. Hence
+no potential depending only on this complete canonical checkpoint
+state can amortize its recurrent linear seam cost against the constant
+source work and constant switch count. A one-time initialization term
+does not pay arbitrarily many repetitions.
+
+An unrestricted forest comparator can instead retain $r$ near the root
+when $R$ is attached again. This is legal and avoids restoring the bad
+canonical shape. Likewise one could choose a different, guard-aware
+global comparator for the same request sequence. These possibilities
+are why this proposition refutes the specific canonical transport,
+not a bound of the form
+$C_{\mathrm{forest}}(W_{\mathrm{MS}})=O(\mathrm{OPT}+n)$.
+
+\end{document}

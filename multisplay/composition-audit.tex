@@ -1,0 +1,122 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,booktabs}
+\usepackage[colorlinks=true,urlcolor=blue]{hyperref}
+\title{Independent audit of the multi-splay composition}
+\author{Second composition audit, 2 October 2026}
+\date{}
+\begin{document}
+\maketitle
+
+\paragraph{Conclusion.}
+The proposed bound
+\[
+ \operatorname{cost}_{\rm MS}(X)
+ =O\!\left((\operatorname{OPT}(X)+n)
+       (1+\log^{(3)}n)^2(1+\log^{(4)}n)^2\right)
+\]
+passes this independent hand audit as a composition of the stated local
+Splay and Tango-squared proof dependencies. This audit did not
+independently reprove the two core manuscripts and does not establish
+a new Lean theorem. In particular the mixed-forest comparison must be
+proved from the accounting interfaces; it is not a black-box consequence
+of the fixed-universe Splay theorem.
+
+\paragraph{The precise reduction.}
+With $H=\lceil\log_2(n+1)\rceil$, put
+$\lambda=\Theta(1+\log\log H)$ and
+$g(H)=O((1+\log\log H)(1+\log\log\log H)^2)$.
+The four required statements have matching domains and conventions:
+\begin{enumerate}
+\item The endpoint embedding bounds $m+S+F_{\rm act}$ by
+      $O(\operatorname{OPT}(X)+n)$ for the actual final-switch convention.
+\item The mixed word $W_{\rm MS}(X)$ uses at most $6S$ structural
+      operations, starts on exactly $n$ original keys, and every
+      intermediate component has at most $H$ keys.
+\item Its balanced Tango-squared comparator has cost
+      $C=O(n+\lambda(S+F_{\rm act}))$ and obeys exactly that word's
+      pivot deletions and raw root joins.
+\item The persistent forest Splay comparison costs
+      $O((C+n+6S)g(H))$. Its global initialization is charged once.
+\end{enumerate}
+Substitution gives $O((\operatorname{OPT}+n)\lambda g(H))$.
+The factors multiply; none of these statements alone permits cancellation
+of either leading $\log\log H$ factor.
+
+\paragraph{Normal-form interfaces checked directly.}
+The audit read the actual statements and proofs in the following modules:
+\begin{itemize}
+\item \texttt{OfflineHeavyJoin.lean} and \texttt{OfflineHeavySplit.lean};
+\item \texttt{OfflineRibRootOperations.lean};
+\item \texttt{OfflineRibBoundedSteps.lean};
+\item \texttt{OfflineRestrictedMacros.lean} and \texttt{OfflineRibbedTrace.lean}.
+\end{itemize}
+The heavy root operations retain the two child representations and
+have support $O(\log^2H)$ with constant amortized allowance $115$.
+Rib root operations have allowance $448$; reorientation to either side
+has allowance $896$ and retains the represented source tree.
+The raw join geometry needed between those interfaces is explicitly
+present in the proof of \texttt{exists\_boundedService}: a left child
+oriented \texttt{true} and right child oriented \texttt{false} give
+minor-rib slack $19$. Supported-path conversion raises this to at most
+$20$, preserves height within the support allowance, and uses rotations
+at depth at most one. These facts support a single fixed capacity $H$
+over all forest components. The additional forest datatype, potential
+sum, and transport through order isomorphisms remain hand composition.
+
+\paragraph{Accounting at a raw join.}
+Giving the new common pivot rank zero and increasing both old child
+rank functions by one preserves every internal rank difference, heavy
+path, interval history, and pass counter. Each old component has exactly
+one root heavy path. It becomes one new heap child of rank gap one.
+At most two constant-size interval insertions and value adjustments
+are required. The disappearing pivot's growing slots must be converted
+and retired at deletion; otherwise reinsertion could violate the
+per-creator bound. The detailed forest note includes this retirement
+and retains all surviving child histories. A sum of per-lifetime
+initialization terms is neither used nor justified.
+
+\paragraph{The exact common word.}
+After splitting the switched key $y$, the two guard splays are precisely
+ordinary root splays in its daughter components. The nearest lower and
+upper reference ancestors are determined by the path prefix, independent
+of auxiliary shapes. The raw joins reconstruct exactly the three-splay
+multi-splay result. Missing guards and physically empty tails are valid
+empty-component cases. The initial physical search can be charged to
+these splays: its two exit-gap neighbors are the pivot and an ancestor
+guard, and bottom-up work below an initial auxiliary leaves that
+auxiliary unchanged until its switch.
+
+\paragraph{The comparator transport.}
+The suffix representation needs one administrative seam: its all-left
+boundary spine is initially separate from the leftmost genuine
+subtree. Removing and restoring this seam uses constant many balanced
+operations, and a suffix request changes at most one boundary preference.
+Only genuine owner bits enter the flip ledger. For a fixed owner row,
+the genuine writes are obtained from the analytical actual-order word
+by deleting writes made while that owner lies above the selected
+component. All histories travel through the splice. Initialized binary
+variation therefore bounds the comparator's genuine flips.
+
+The guard exposure uses actual external gaps, not the names of abstract
+routing labels. After exposing the last two prefix gaps, their physical
+search paths contain $\ell,y,r$ whenever these guards exist. This is
+why the bounded hull contains the pivots mandated by the common word.
+The old tail remains inside its original common component throughout
+preparation. The incoming component is prepared through its own root
+handle. Reconfiguring the two rooted skeletons to the exact split/join
+checkpoints preserves the opaque frontier intervals, after which each
+resulting skeleton is separately reconfigured to the prescribed
+Tango-squared state. No rotation crosses a current component boundary.
+
+\paragraph{Scope that must remain explicit.}
+The reference is height-optimal; this gives $2^H=O(n)$ in the endpoint
+initialization estimate. Padding adds only virtual routing nodes and
+retains all original external gaps as distinct active atoms, including
+the two null gaps beside a real leaf. Thus there are no physical dummy
+keys or extra prescribed splits. The comparator uses the augmented
+pointer-BST model of the local Tango-squared proof, with free computation
+from read headers. No word-RAM running-time claim follows. The exact
+$O(\log^{(3)}n)$ bound for standard multi-splay is not established.
+
+\end{document}

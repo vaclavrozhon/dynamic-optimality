@@ -1,0 +1,95 @@
+Verification note — 1 November 2026
+==================================
+
+Public Tango² theorem
+---------------------
+
+File: TangoSquaredAll.lean (relative to the repository root)
+Namespace: DynamicOptimality.Tango2.All
+
+For every finite key universe, every supplied initial BST, and every finite
+request word X, a fixed deterministic mathematical online strategy has an
+actual search-and-rotation execution. Its cost satisfies
+
+  cost(initial, X) <= 3237120000456 * (OPT(X) + n) * iteratedLog 3 n.
+
+Here n is the number of keys, OPT is the shared attained offline optimum,
+and iteratedLog is the shared stabilized base-two iterated logarithm.
+The public endpoint is
+
+  third_log_competitive :
+    DynamicOptimality.Competitive cost (Splay.Analysis.iteratedLog 3).
+
+Each request costs its depth in the actual tree before the request, plus
+one, plus the number of actual ordinary rotations. All other computation
+is free. The transition depends only on the present state and request.
+Classical choice is accepted for this abstract theorem; an executable
+implementation or a bound on computation is not asserted.
+
+The strategy, initial_tree, execution, online, cost_bound,
+third_log_cost_bound, third_log_competitive, and competitor_bound results
+record the strategy and its legality, exact initialization, prefix
+consistency, cost bound, and comparison with every actual competitor.
+
+The arbitrary-size extension uses a larger virtual universe only in the
+internal state and projects its execution to the original keys. The
+physical tree contains exactly those original keys, starts at the supplied
+BST, and does not reinitialize between requests. Empty input costs zero.
+
+Guide and MultiSplay status
+--------------------------
+
+The first twenty pages were written before the final Tango² assembly.
+Their remaining-work descriptions refer to that earlier snapshot.
+The twenty-first page records the completed arbitrary-universe extension.
+The repository README and this note describe the final checked status.
+
+Classical MultiSplay has checked intermediate common-forest splay and
+actual switch/secondary-counter bounds. The exact common event-word
+comparator and the bridge to the physical global search cost remain open.
+No complete MultiSplay competitiveness theorem is claimed.
+
+Completed source validation
+---------------------------
+
+The source workspace passed the following checks on 1 November 2026:
+
+  lake build:                         10675 jobs, successful.
+  lake env lean AuditAll.lean:         58099 declarations, exit 0.
+  lake env lean AuditDynamicOptimality.lean:
+                                      44565 declarations, exit 0.
+
+Both audits reported: Declarations using nonstandard axioms: [].
+All nine explicitly printed Tango² endpoints, including the unrestricted
+third_log_competitive, depend only on propext, Classical.choice, and
+Quot.sound. The audits inspect public and private declarations with
+Lean.collectAxioms and reject every other axiom, including sorryAx.
+
+The final guide has 21 pages; its build had no overfull boxes or undefined
+references. Run `make guide` to regenerate the PDF.
+
+This repository copies the verified Lean files and root Lake configuration
+byte for byte. Their snapshot hashes are recorded in
+docs/snapshots/2026-11-01.sources.sha256. No Lean proof was changed when
+preparing this repository. This is a historical baseline, not a constraint
+on subsequent proof development.
+
+Reproduce the full build and both audits with `make audit` at the repository
+root after installing the pinned dependencies as described in README.md.
+
+Repository preparation checks
+-----------------------------
+
+On 1 November 2026, `make audit` also passed from the new independent
+repository directory: 10675 build jobs, 58099 declarations in AuditAll,
+and 44565 declarations in AuditDynamicOptimality, with no nonstandard
+axioms in either audit. The local run reused copies of the existing pinned
+dependency and build caches; it was not a fresh uncached compilation.
+Those caches are ignored by Git and are not part of the published sources.
+
+The 2088 Lean files have 5258 parsed imports, all resolved by the registered
+local modules or the pinned external dependencies. All 2091 baseline
+source/configuration hashes match. The initial Git payload contains no
+symlinks, gitlinks, caches, or dependencies on original-workspace paths.
+The guide was regenerated in this directory: 21 pages, no overfull boxes
+or undefined references in the final LaTeX pass.

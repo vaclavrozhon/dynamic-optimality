@@ -1,0 +1,388 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[colorlinks=true,urlcolor=blue,linkcolor=blue]{hyperref}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newcommand{\cost}{\operatorname{cost}}
+\newcommand{\OPT}{\operatorname{OPT}}
+\newcommand{\MS}{\mathrm{MS}}
+\setlength{\emergencystretch}{4em}
+\title{A Tango-squared comparator for the exact multi-splay forest word}
+\author{Research note; hand argument under audit}
+\date{2 October 2026}
+\begin{document}
+\maketitle
+
+\noindent\textbf{Status and dependencies.}
+This note attempts the comparator transport left open in
+\texttt{common-forest-normal-form.tex}. It uses the balanced-auxiliary
+unfolding and exposed-splice lemmas of the local Tango-squared manuscript.
+It is a hand proof, not a Lean theorem. Its endpoint count is supplied
+by \texttt{endpoint-embedding.tex}; its eventual implication for standard
+multi-splay additionally depends on the conditional forest extension
+of the current splay manuscript. In particular it does not prove the
+exact $O(\log\log\log n)$ competitive ratio for standard multi-splay.
+
+\section{The same keys and the same operation word}
+
+Let $P$ be a perfect node-storing reference BST on $n=2^H-1$ keys.
+View it as a routing tree on its $n+1$ external gaps. Its internal
+routing keys are exactly the original keys, at depths $0,\ldots,H-1$.
+This view introduces neither a second copy of a key nor additional
+connector keys. In particular, no fixed maximum-key root from the
+leaf-key reduction is added: the physical universe here is directly
+the $n$ separators and their $n+1$ external gaps.
+
+For a primary preferred path starting at depth $a$, retain the
+depth-exit alphabet $[a,H]$. Its virtual routing labels are
+$a,\ldots,H-1$; after unfolding its physical key set is precisely the
+set of original nodes on that preferred path. All other primary paths
+are separate components. Their positions in its search gaps can be
+remembered analytically, but no such component is entered for free.
+
+The common forest interface permits unit-cost selection of a named
+component root, but no jump to an interior node. Each standard
+multi-splay switch at $y$ has the exact three-split, three-join word
+from \texttt{common-forest-normal-form.tex}. For a left-to-right switch,
+write $U$ for the preferred prefix above $y$, $L$ for the old left
+tail, $R$ for the incoming right tail, and $\ell,r$ for the closest
+lower and upper ancestor keys in $U$. When both guards exist, the word is
+\begin{align*}
+ &\operatorname{Split}(y),\quad
+   \operatorname{Split}(\ell),\quad
+   \operatorname{Split}(r),\\
+ &\operatorname{Join}(A,\ell,\varnothing),\quad
+   \operatorname{Join}(R,r,B),\quad
+   \operatorname{Join}(A',y,B').                 \tag{1}
+\end{align*}
+Here the second and third splits select the left and right daughters
+of the first; the old tail $L$ is the second split's right daughter.
+The omitted-guard and reflected cases use the corresponding shortened
+word. The word is determined by $P$, the initial preferences, and the
+original request sequence, independently of all auxiliary tree shapes.
+
+Process this word in its actual order: wrong proper ancestors in
+decreasing depth, followed by the final switch at the requested node.
+For each switch at depth $d$, the comparator selects its named path
+component and performs one local depth request to $d$. It does not
+perform a depth-$H$ completion. The final split at the requested node
+itself serves that original key. At a primary leaf the final switch
+may be represented by toggling the analytical preference between its
+two empty external gaps. This changes no actual auxiliary membership,
+but its guard splays and its final depth emission are retained.
+
+Let $S$ count all these switches, including the mandatory final
+switches. Let $F_{\mathrm{act}}$ be the all-right-initialized fixed-owner
+secondary variation of exactly this emission stream, in the actual
+order, on a fixed balanced interval tree $B$ over $0,\ldots,H$. Put
+\[
+ K=1+\operatorname{height}(B)=O(1+\log(H+2)),\qquad
+ \lambda=1+\log_2 K.
+\]
+
+\section{Local suffix accesses and the histories they really write}
+
+The representation of a path starting at $a$ consists of genuine
+canonical intervals $I=[s,t]$ with $s\ge a$, together with a structural
+boundary spine $\beta_a$. The latter consists of surviving ancestors
+of leaf $a-1$ with split $c\ge a$. It is an all-left chain in the
+induced suffix tree, stored in its own balanced auxiliary. Genuine
+canonical subtrees hang in its gaps. The seam between its final left
+child and the leftmost genuine canonical subtree is administrative:
+these are stored in separate auxiliaries even though the boundary
+direction is left. Every auxiliary has at most $K$ keys.
+
+\begin{lemma}[A local suffix transaction]\label{lem:suffix}
+A depth request $d\ge a$, followed by a primary splice at depth $d$,
+can be performed on this suffix representation in
+$O((1+f)\lambda)$ pointer and rotation cost, where $f$ counts changes
+only at genuine secondary intervals visited by this request. It restores
+the same suffix convention at the unchanged starting depth $a$ and
+preserves all deeper-owner histories. The old and incoming tails use
+the suffix convention at $d+1$.
+\end{lemma}
+
+\begin{proof}
+First concatenate $\beta_a$ with the root auxiliary of the genuine
+subtree at its final left gap, if both exist. This removes the one
+administrative seam and gives an ordinary Tango representation of the
+induced suffix reference, with all boundary preferences left. This
+concatenated auxiliary is a reference path and still has at most $K$
+keys. One balanced split/join interface costs $O(\lambda)$.
+
+Apply the ordinary Tango access to $d$ in this induced reference. Its
+search path leaves the boundary chain through a right edge at most
+once. Thus at most one boundary preference changes, in addition to
+the $f$ genuine changes. The access costs $O((1+f)\lambda)$ and exposes
+the entire induced reference path to leaf $d$ in the root auxiliary.
+
+Apply the exposed splice to this root auxiliary. Its labels greater
+than $d$ are exactly the structural boundary of the suffix $[d+1,H]$;
+the usual proof by surviving ancestors of leaf $d$ is unchanged by
+the restriction to $[a,H]$. Split them off, expose the final two prefix
+exit gaps, exchange their roles, and concatenate the incoming
+$\beta_{d+1}$. These are constantly many balanced auxiliary operations,
+of total cost $O(\lambda)$.
+
+Every crossing genuine interval has owner depth $s\ge a$, contains
+$d$, and was just written toward $d$. Its preference therefore agrees
+with the new exposed path. Intervals with $s<a$ are structural boundary
+nodes, not genuine histories. Intervals with $s>d$ travel with their
+respective tails and retain their bits.
+
+Finally restore the unique boundary preference that may have changed
+to right. Its split $c$ satisfies $c<d$, so this boundary node survived
+in the prefix and its old left continuation was not affected by the
+primary splice. One ordinary Tango switch makes it left again. All
+boundary preferences are now left and their full chain belongs to the
+root auxiliary. Separate its final genuine continuation at the
+administrative seam. These two final operations cost $O(\lambda)$,
+do not write any genuine bit, and restore the required representation.
+If a spine, continuation, or tail is empty the corresponding operation
+is omitted.
+\end{proof}
+
+\begin{lemma}[Deleted writes, not fictional history updates]\label{lem:deletion}
+Across all actual switches, the number $G$ of genuine secondary
+changes made by these local suffix accesses satisfies
+\[
+ G\le F_{\mathrm{act}}.
+\]
+\end{lemma}
+
+\begin{proof}
+Fix one owner row $(I,u)$, where $I=[s,t]$. Delete from its full
+$F_{\mathrm{act}}$ write word every event whose selected primary path
+starts strictly below $s$. All remaining writes are exactly the
+comparator's genuine writes in this row.
+
+Indeed, on a switch at depth $d$ the current preferred path agrees
+with the original requested node between its starting depth $a$ and
+$d$. Thus whenever $s\ge a$ and $I$ contains $d$, its actual owner is
+the fixed primary ancestor at depth $s$ of that request. Whenever
+$s<a$, the surviving reference node is structural and supplies no
+independent history. A genuine owner bit exists in the component
+containing its owner, travels with that owner, and changes only on
+these genuine accesses. Lemma~\ref{lem:suffix} shows that a splice
+neither resets it nor introduces an unrecorded genuine write.
+
+Both words start from the same initial right bit. Deleting entries
+from a binary word cannot increase its variation, by the triangle
+inequality between the surviving consecutive bits. Apply this fact
+to each fixed owner row and sum. The deletion rule may depend on the
+preceding primary states; variation monotonicity needs no independence.
+\end{proof}
+
+\section{Exposing the original node guards}
+
+The nontrivial transport issue is that a virtual depth label and its
+physical unfolding image need not be the same primary separator.
+Consequently the presence of routing labels $d-1,d$ in the root
+auxiliary alone does not identify the standard multi-splay guards.
+The following argument uses actual external gaps instead.
+
+\begin{lemma}[Guard exposure with the same node alphabet]\label{lem:guards}
+After the local inner access to depth $d$, an additional $O(\lambda)$
+rooted preparation exposes a physical hull containing the switched
+key $y$ and both existing nearest-ancestor guards $\ell,r$. This can
+be done without changing the common forest domains. It holds even
+when one or both primary tails have no internal keys.
+\end{lemma}
+
+\begin{proof}
+For notation consider a left-to-right switch. In the virtual depth
+tree, cut after routing label $d$ as in the exposed-splice lemma,
+retaining $d$ with the prefix. Treat the old tail as one opaque
+terminal hole. This is a representation of the same current component
+$U\cup\{y\}\cup L$: its keys in $L$ remain attached at that hole.
+The preparation consists of rotations inside the current component;
+it does not execute an early common-forest split.
+
+The last two prefix depth leaves are the off-path exit $E_d$ and the
+terminal hole at $d+1$. Routing keys $d$ and, if $d>a$, $d-1$ lie in
+the exposed balanced auxiliary. Their two prefix search paths therefore
+have $O(\lambda)$ nodes. Rooted-hull unfolding gives physical paths
+of that same order. Explicitly walk both paths in the prefix skeleton,
+stopping at their gap or at the first root of the opaque attached
+subtree. This statement includes null external gaps; it does not
+depend on the presence of a header to read.
+
+In the actual prefix alphabet $U\cup\{y\}$, the old left-tail gap
+has neighboring keys $\ell,y$, omitting $\ell$ if it does not exist.
+The incoming right-tail gap has neighbors $y,r$, with the analogous
+omission. Both neighbors of an external BST gap lie on its search path:
+the lower neighbor is the last lower bound and the upper neighbor the
+last upper bound. Consequently the two explicitly traversed physical
+paths contain $y,\ell,r$ whenever present. The same argument applies
+when the tails are empty, and reflection handles the opposite switch.
+
+All rotations in the virtual preparation have a rooted physical hull
+of size $O(\lambda)$; the two walks add only $O(\lambda)$ nodes.
+The rooted touched-hull argument pulls this set back to a rooted hull
+in the original component with the same keys and frontier subtrees.
+At no point has the old tail ceased to belong to that component.
+\end{proof}
+
+\section{Inserting the prescribed split and join checkpoints}
+
+\begin{lemma}[Checkpoint insertion]\label{lem:checkpoints}
+The suffix transaction of Lemma~\ref{lem:suffix} admits a comparator
+execution of precisely the word (1), or its omitted-guard or reflected
+version, with cost $O((1+f)\lambda)$. Between consecutive operations
+every rotation takes place inside a current common component.
+\end{lemma}
+
+\begin{proof}
+Carry out the local access and guard preparation inside the selected
+component. The incoming tail is selected through its own root handle.
+The balanced boundary concatenations may inspect $O(\lambda)$ nodes
+of that second component. Keep its inspected set as a second rooted
+hull, rather than treating this root selection as an interior jump.
+The common interface permits such paid selections and preparation of
+another live component between prescribed operations; they do not
+change its domain. Equivalently, any preparation entirely inside the
+incoming component can be postponed until immediately before the join
+that consumes it.
+
+The exposed-splice construction supplies a bounded frontier certificate:
+before and after the splice, all untouched physical frontier subtrees
+are the same ordered key intervals; the union of touched hull keys
+has size $O((1+f)\lambda)$. The old and incoming tail roots are included
+when nonempty. This also follows by the usual touched-skeleton tracking:
+a move or rotation exposes only its new gap root, and detaching or
+attaching a tail exposes its root. Thus each resulting component has
+a rooted after-skeleton and the unchanged frontier components.
+
+Use the guard-containing skeleton to prepare the original component
+in the form
+\[
+ y\bigl(\ell(A,L),\ r(\varnothing,B)\bigr).
+                                                        \tag{2}
+\]
+Only skeleton keys are rotated. No opaque frontier subtree straddles
+one of $y,\ell,r$, since all these keys are in the skeleton. Hence
+they can all be preserved while the skeleton is put in (2), in time
+linear in its size. The subtrees displayed in (2) include all their
+opaque hanging components. The desired internal skeleton shapes
+inside $A,L,B$ can be arbitrary at this stage.
+
+Now execute the three specified splits. Their pivots are already
+component roots, so each is a legal common root deletion. The old
+tail $L$ becomes a separate component exactly at its specified split,
+and no earlier. Perform the three raw root joins of (1), with the
+prescribed domains and pivots. They give
+\[
+ y\bigl(\ell(A,\varnothing),\ r(R,B)\bigr)
+                                                        \tag{3}
+\]
+and the parked component $L$.
+
+Finally reconfigure the portions of the skeleton in these resulting
+components to the valid after-representations prescribed by the
+exposed splice and by boundary restoration. Each is a rooted skeleton
+with the same ordered frontier intervals; linear-cost BST reconfiguration
+therefore applies separately inside each component. No rotation crosses
+a component boundary. An absent guard simply removes its split, join,
+and displayed skeleton node. If both tails are empty, the same
+guard preparation and checkpoints are performed; the argument never
+relied on a nonempty tail.
+
+The preparation, six checkpoints, and final reconfigurations cost
+$O((1+f)\lambda)$ in total. They end with the required persistent owner
+histories, because those histories were specified by the ideal local
+suffix transaction and have not been initialized again.
+\end{proof}
+
+\begin{theorem}[The proposed common-word comparator]\label{thm:comparator}
+The exact multi-splay forest word has a comparator of cost
+\[
+ C_{\mathrm{forest}}(W_{\MS}(X))
+   =O\bigl(n+\lambda(S+F_{\mathrm{act}})\bigr).
+                                                        \tag{4}
+\]
+The endpoint count theorem consequently gives
+\[
+ C_{\mathrm{forest}}(W_{\MS}(X))
+   =O\bigl(\lambda(\OPT(X)+n)\bigr).
+                                                        \tag{5}
+\]
+\end{theorem}
+
+\begin{proof}
+Initialize every path's balanced suffix representation with the
+all-right genuine histories, in total $O(n)$ work. A component with
+$k$ keys can be changed to its prescribed initial shape in $O(k)$
+rooted rotations and moves. Sum Lemma~\ref{lem:checkpoints} over the
+$S$ switches, and use Lemma~\ref{lem:deletion}. This gives (4) with
+no lifetime initialization charge and no persistent splay potential:
+the comparator's auxiliaries are balanced.
+
+The separately audited endpoint embedding and actual-order lemma give
+$S+F_{\mathrm{act}}=O(\OPT(X)+n)$ for this exact emission stream.
+Substitution yields (5).
+\end{proof}
+
+\section{Padding the reference without adding physical keys}
+
+The comparator construction also applies to the customary minimum-height
+balanced reference on an arbitrary number $n$ of keys. Put
+$H=\lceil\log_2(n+1)\rceil$. Complete its routing reference to depth
+$H$ by adding conceptual dummy routing nodes below each original
+external gap. Within each such padded gap region, retain only its
+all-right depth-$H$ descendant as an \emph{active} gap representative.
+Every other padded leaf is inactive. There are still exactly $n+1$
+active external gaps, in their original order.
+
+Give every dummy primary vertex the fixed right preference. It has
+at most one active child, whereas every original vertex has two active
+children. Suppressing the inactive pieces and unary refinements
+therefore yields exactly the original node-storing reference, with
+each original separator once and no physical dummy key. Complete the
+secondary virtual alphabet to $0,\ldots,H$ as before.
+
+The unfolding proof continues to hold with empty components suppressed:
+a depth interval has at most two active interval components, an
+abstract routing node has at most two physical images, and the same
+rooted-hull and equal-frontier proofs apply. Here an active external
+gap is retained as an ordered atom even when it contains no stored
+key. Thus the two null child gaps at a real primary leaf remain
+different active atoms separated by that leaf's real key. In
+particular the two-gap guard argument does not disappear when both
+tails are physically empty.
+
+Every emitted depth belongs to a real switched node. Every owner
+ancestor at an earlier or equal depth is therefore real as well.
+No genuine row whose owner is dummy ever receives a write; all such
+bits stay right. A physically empty tail lies entirely in a dummy
+region, so all its genuine histories and its structural boundary can
+be reconstructed from its starting depth and region. Its auxiliary
+shape can be chosen canonically without physical work. This introduces
+no potential reset, because the comparator uses balanced auxiliaries
+and has no shape potential. A nonempty component stores all its
+nonconstant virtual histories in the same $O(H)$-bit header as before.
+
+Consequently the proof of (4) holds unchanged for arbitrary $n$ and
+the exact original forest word. No split or join at a dummy pivot is
+inserted. The completed reference has fewer than $2n+1$ internal
+vertices, so any linear reference-count initialization allowance also
+remains $O(n)$. The active-padding endpoint corollary in
+\texttt{endpoint-embedding.tex} supplies (5) for this reference too.
+
+Every intermediate component in the word has at most $H$ keys.
+Combining (5) with the conditional common-forest splay comparison
+would give
+\[
+ \cost_{\MS}(X)=
+ O\!\left((\OPT(X)+n)
+     (1+\log\log H)^2
+     (1+\log\log\log H)^2\right).
+\]
+For $H=\Theta(\log n)$ this is the weaker factor
+$O((1+\log\log\log n)^2
+    (1+\log\log\log\log n)^2)$.
+The local comparator proof and the forest extension require their
+own audit; neither the known Tango-squared theorem nor the endpoint
+lower bound alone establishes this conclusion.
+
+\end{document}

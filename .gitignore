@@ -1,0 +1,30 @@
+# Lean and Lake build products
+**/.lake/
+*.olean
+*.olean.private
+*.olean.server
+*.ilean
+*.trace
+*.o
+*.a
+*.so
+*.dylib
+*.dll
+
+# TeX build products; selected PDF documents remain versioned
+*.aux
+*.log
+*.out
+*.toc
+*.bbl
+*.blg
+*.bcf
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+*.run.xml
+
+# Editor and Python caches
+.DS_Store
+__pycache__/
+*.pyc

@@ -1,0 +1,229 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[colorlinks=true,urlcolor=blue]{hyperref}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newcommand{\cost}{\operatorname{cost}}
+\setlength{\emergencystretch}{4em}
+\title{What the dynamic reweighting lemma does and does not supply}
+\author{Research note; hand argument}
+\date{2 October 2026}
+\begin{document}
+\maketitle
+
+\noindent\textbf{Scope.}
+This note isolates a failed candidate for obtaining the exact
+$O(\log\log\log n)$ multi-splay bound from secondary preferred bits.
+It does not refute that competitive ratio, a different weight assignment,
+or a potential involving the actual splay shapes.
+
+\section{The reweighting theorem uses a lazy accounting state}
+
+Georgakopoulos's reweighting theorem is stated, and its informal proof
+reproduced, in Wang's 2006 thesis, Section 1.1.1, pages 3--5.
+For a sequence of splays and analytical weight changes, a splay at $x$
+can be charged
+\[
+ c_s\log\frac{W}{w(x)}+O(1),
+\]
+and increasing $w(x)$ to $w'(x)$ can be charged
+\[
+ (c_s+1)\log\frac{w'(x)}{w(x)}.
+                                                        \tag{1}
+\]
+Decreases require no positive charge. This is a bound on the total
+ledger; it is not the pointwise potential change for eagerly changing
+all weights in the ordinary sum-of-log-subtree-masses potential.
+
+For example, give the bottom vertex of an $N$-node chain weight one,
+and every other vertex weight $\varepsilon\ll1/N$. Doubling the bottom
+weight nearly doubles every ancestor subtree mass. The eager change
+of the ordinary potential approaches $N$, although the logarithmic
+weight ratio is only one.
+
+The theorem remains valid because its proof keeps a second, lazy weight
+assignment. Decreases happen immediately, but an increase is deferred
+until the node is next splayed to the root. The eager total mass is an
+upper bound on the lazy total mass. Only the first splay of that node
+can be undercharged by the eager denominator, and the discrepancy
+together with increasing its weight at the root costs at most (1).
+Surviving lazy weights and pending increases are accounting state;
+they cannot simply be discarded when an auxiliary component is split.
+
+\section{A natural secondary-preference weight assignment}
+
+Let $B$ be a perfect reference on $2^b$ depth leaves
+$0,\ldots,H$, where $H=2^b-1$. A primary path has $H$ original
+separator keys at depths $0,\ldots,H-1$. For any choice of secondary
+preferences, let $a_B(j)$ be the number of nonpreferred edges on the
+$B$-path to depth leaf $j$. Fix $\rho=2b$ and assign its separator
+at depth $j$ the weight
+\[
+ w(j)=\rho^{-a_B(j)},\qquad
+ \widehat w(j)=\frac{w(j)}{\sum_{i=0}^{H-1}w(i)}.
+                                                        \tag{2}
+\]
+Weights depend on the actual fixed-owner secondary histories of this
+path, not on its splay shape. This resembles the interleave-based
+weight proposed in Lucier's 2005 project report, applied at the
+secondary scale. Its appeal is that a request needing $f$ secondary
+changes has a small logarithmic access ratio.
+
+\begin{lemma}[Uniform normalization bounds]\label{lem:norm}
+For every assignment of the preferences of a perfect $B$,
+\[
+ \sum_{j=0}^{H}\rho^{-a_B(j)}=(1+1/\rho)^b.
+\]
+Consequently the normalizer $W$ in (2) satisfies
+\[
+ \frac12\le (1+1/\rho)^b-1\le W
+       \le(1+1/\rho)^b<2.
+                                                        \tag{3}
+\]
+The ratio of the normalizers of any two path states is less than four.
+\end{lemma}
+
+\begin{proof}
+At each reference node, one child's generating polynomial is multiplied
+by $1$ and the other by $z$. Both subtrees have the same remaining
+height. Induction therefore gives $(1+z)^b$, independently of which
+child is preferred. Substitute $z=1/\rho$. The routing-key alphabet
+omits only depth leaf $H$, whose weight is at most one. Bernoulli's
+inequality and $(1+1/(2b))^b\le e^{1/2}<2$ prove (3).
+\end{proof}
+
+\begin{theorem}[Recurrent bulk reweighting cost]\label{thm:bulk}
+For the normalized weights (2), the sum of positive logarithmic
+weight increases on surviving primary-path keys cannot be bounded by
+$O((m+S+F)\log b+n\log b)$ over all request sequences.
+There is a two-key periodic sequence with $m=2$, $S=3$, and $F=2$
+per steady period, whose positive reweighting ledger is
+$\Omega(H\log b)$ per period.
+\end{theorem}
+
+\begin{proof}
+Use a perfect primary node reference of height $H$, initially all right.
+Let $r$ be its maximum key, at depth $H-1$. Let $q$ be the node of
+the all-right primary spine at depth
+\[
+ d=2^{b-1}-1.
+\]
+Alternate the original requests $q,r,q,r,\ldots$. Every proper
+ancestor direction other than $q$ stays right. In steady state a
+request to $q$ has just its final switch, and a request to $r$ first
+switches $q$ back toward the right and then performs its final switch
+at the leaf $r$. Thus the actual depth-emission blocks are
+\[
+ (d),\qquad(d,H-1).                            \tag{4}
+\]
+There are three switches per period. A leaf's final preference toggle
+has no effect on the physical primary-path key partition.
+
+In $B$, leaf $d$ is the rightmost leaf of the left half. Its request
+writes left at the root and right at every node below that root.
+Leaf $H-1$ is in the right half and writes right at the root. Every
+nonroot owner row visited by (4) is always written with the same bit.
+After the finite initial writes, the root row therefore contributes
+exactly two changes per period and all other rows contribute zero.
+In particular $F=2$ in each steady period.
+
+Immediately before a request to $q$, the root bit of $B$ is right.
+Immediately afterwards it is left. For each $j\le d$, all its other
+secondary path bits are unchanged: those intervals lie in the left
+half, and their owner depths lie on the common unchanged primary
+prefix through $q$. Hence
+\[
+ a_B^{\mathrm{after}}(j)=a_B^{\mathrm{before}}(j)-1.
+\]
+These $d+1=2^{b-1}$ separator keys survive the primary splice; none is
+an incoming or deleted tail key. Their raw weight increases by exactly
+$\rho$. By Lemma~\ref{lem:norm}, each normalized weight increases by
+at least $\rho/4=b/2$. For $b\ge4$, their positive logarithmic
+increase is at least
+\[
+ 2^{b-1}\log_2(b/2)=\Omega(H\log b).          \tag{5}
+\]
+This happens on every request to $q$. The fixed initialization allowance
+can be exceeded by repeating the period. Equations (4)--(5) prove the
+claimed failure of this particular positive-increase ledger.
+\end{proof}
+
+The example is compatible with efficient actual multi-splay behavior:
+only two original keys are queried, so its working-set theorem gives
+constant amortized cost after initialization. Thus (5) measures wasted
+accounting in (2), not a costly multi-splay execution. The obstruction
+also survives any treatment that freely rescales an entire component:
+the normalized ratios used above already remove that common scale.
+
+The missing ingredient in this route would have to exploit cancellations
+between the two halves, actual splay geometry, or a different persistent
+weight scheme. Applying the positive-only reweight theorem directly
+to the bad-edge weights does not supply those cancellations.
+In particular, Theorem~\ref{thm:bulk} does \emph{not} rule out a refined
+lazy implementation of the same desired weights. An increase at a cold
+prefix key may be cancelled by a later decrease before that key is
+splayed. The displayed lower bound concerns the sufficient accounting
+rule that charges every eager positive increase. A successful lazy
+refinement must separately control the access charges made with its
+possibly smaller retained weights, as well as pending state transported
+through the primary splits and joins.
+
+\section{A fixed-component limitation of the simplest lazy repair}
+
+The following observation concerns an ordinary fixed component; it is
+not an embedding of that component's word into standard multi-splay.
+It explains why cancelling cold increases alone does not complete the
+argument.
+
+Take a perfect secondary reference $B$ on $N=2^b$ stored keys
+$0,\ldots,N-1$, with desired weights $w(x)=\rho^{-a_B(x)}$.
+Maintain a lazy weight $\ell(x)$ by applying every desired decrease
+immediately, ignoring desired increases until $x$ is accessed, and
+then setting $\ell(x)$ to its desired post-access value one. This is
+the direct lazy realization suggested by the reweighting proof.
+
+Consider repeated increasing scans $0,1,\ldots,N-1$. Before an access
+to $x$, its retained weight is bounded above by the smallest desired
+weight it had since its previous access. At some time in that interval
+the scan is in the opposite half of $B$. All preferences inside $x$'s
+half are then right: that half was completed in the current or the
+previous scan. If $z(x)$ counts zero bits in the lower $b-1$ bits of
+$x$, it follows that
+\[
+ \ell(x)\le\rho^{-(1+z(x))}.                  \tag{6}
+\]
+Immediately before $x$ is accessed, the preceding requested key has
+lazy weight one, so the current lazy total mass $W_{\ell}$ is at least
+one. The sum of the logarithmic access charges in one steady scan is
+therefore at least
+\[
+ \sum_{x=0}^{N-1}\log\frac{W_{\ell}}{\ell(x)}
+ \ge \log\rho\sum_{x=0}^{N-1}(1+z(x))
+ =\frac{N(b+1)}2\log\rho.                    \tag{7}
+\]
+On the other hand each secondary reference vertex changes preference
+exactly twice per cyclic scan, so $F=2(N-1)$. For $\rho=2b$, the
+charge in (7) is $\Omega(Nb\log b)$ although
+$(N+F)\log b=O(N\log b)$. Ordinary splay itself has linear scan cost.
+
+Thus the direct per-node lazy minimum can badly overcharge accesses
+after it has saved the eager reweight charges. A multi-splay-specific
+repair would have to exploit its component cuts, rescaling, or additional
+state; the fixed-component calculation does not rule out such a repair.
+
+\paragraph{Sources.}
+The reweighting statement and lazy proof are in
+\href{https://www.csd.cmu.edu/sites/default/files/phd-thesis/CMU-CS-06-140.pdf}
+{Chengwen Chris Wang, \emph{Multi-Splay Trees} (2006)},
+Section 1.1.1; the working-set result follows from its remassing lemma
+in Section 3.4.3. The original reweighting source is
+\href{https://doi.org/10.1016/j.jalgor.2003.09.004}
+{G. F. Georgakopoulos, \emph{Splay trees: a reweighing lemma and a proof
+of competitiveness vs. dynamic balanced trees} (2004)}.
+The related secondary-depth weight idea is motivated by Brendan Lucier,
+\emph{Applying the Interleave Bound to Splay Trees}, project report,
+version 0.1, 13 April 2005; the present obstruction concerns (2), not
+all conclusions or conjectures of that report.
+
+\end{document}
