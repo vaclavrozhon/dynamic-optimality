@@ -8,9 +8,23 @@ This document describes the current exported statements and their remaining boun
 
 [DynamicOptimality.Cost](DynamicOptimality/Cost.lean) reuses the attained offline optimum from the splay development. `OPT requests` minimizes one unit per request plus the number of ordinary rotations in executions that bring each requested key to the root. The initial tree is freely chosen by the optimum. `Competitive cost factor` quantifies one positive constant uniformly over all nonempty universes, all supplied initial indexed trees, and all finite request words, with bound `C * (OPT requests + n) * factor n`.
 
-[SearchRotationModel](DynamicOptimality/SearchRotationModel.lean) defines the Tango² cost model. An access first searches its current tree, paying depth plus one, and then performs a finite sequence of ordinary rotations, paying one per rotation. Rotations may occur at any subtree; navigation and other computation are free. An execution continues from the exact preceding output tree. [SearchRotationEquivalence](DynamicOptimality/SearchRotationEquivalence.lean) compares this model with the same shared `OPT` within a factor of two in either direction.
+[SearchRotationModel](DynamicOptimality/SearchRotationModel.lean) defines the Cha-Cha cost model. An access first searches its current tree, paying depth plus one, and then performs a finite sequence of ordinary rotations, paying one per rotation. Rotations may occur at any subtree; navigation and other computation are free. An execution continues from the exact preceding output tree. [SearchRotationEquivalence](DynamicOptimality/SearchRotationEquivalence.lean) compares this model with the same shared `OPT` within a factor of two in either direction.
 
 [OnlineBST](DynamicOptimality/OnlineBST.lean) packages a state, its one actual tree, a successor function, and an access cost. Its legality field certifies an actual search-and-rotation access between those trees. The successor and cost depend only on the current state and request. `run_append` establishes exact prefix consistency. The state may contain arbitrary mathematical bookkeeping; classical choice is allowed, and effectiveness of evaluation is not asserted.
+
+## Equivalent BST models
+
+[BSTModels](DynamicOptimality/BSTModels.lean) compares five models on the same original keys: root service charged by requests plus rotations; initial search depth plus one followed by rotations; an adjacent pointer charged for moves, local rotations, and service; replacement of a connected root-containing part of the tree, charged by its number of nodes; and geometric touches. The connected replacement preserves every untouched hanging subtree. In geometry, a point `(key,time)` records a touched key. A point set is *arborally satisfied* when every closed axis-aligned rectangle determined by two points in different rows and columns contains a third point, possibly on its boundary. [GeometricModel](DynamicOptimality/GeometricModel.lean), particularly `Geometry.execution_iff_points`, proves that this ordinary point condition defines the geometric model without an assumed BST realization.
+
+`BSTModel.transfer` converts finite executions between every ordered pair of models. `BSTModel.all_five_equivalent` gives one common factor of 481, uniformly over all universes and request sequences, including empty cases. Initial trees are freely chosen and reconstruction may depend on the complete sequence. The more precise comparison factors and definitions are in [ModelCostEquivalence](DynamicOptimality/ModelCostEquivalence.lean) and [GeometricCost](DynamicOptimality/GeometricCost.lean). The latter's `ModelCosts.geometry_iff_hull` proves exact equality of attainable hull and geometric costs; its reverse uses the backwards reconstruction in [GeometricToBST](DynamicOptimality/GeometricToBST.lean). `BSTModel.competitive_iff` permits any of the five models for the competitor while retaining the existing algorithm cost and shared `OPT`.
+
+[ModelInitialization](DynamicOptimality/ModelInitialization.lean) supplies executions from any prescribed initial BST, with costs at most `OPT+6n`, `2*OPT+12n`, `OPT+6n`, and `37*OPT+222n` in the root, search, hull, and pointer models respectively. Here `n` is the number of keys. The startup allowance is paid once, the first search is charged in the supplied tree, and the empty word performs no setup.
+
+There are also online conversions between the four tree models in [ModelOnline](DynamicOptimality/ModelOnline.lean) and [ModelOnlineNormalization](DynamicOptimality/ModelOnlineNormalization.lean). An arbitrary `OnlineBST` is simulated by root, hull, and pointer strategies with factors 2, 2, and 74 on every finite prefix, preserving its initial physical tree. The simulator may postpone remote rotations and have a different later physical tree, related to the source by an explicit pending rotation sequence. [GeometricOnline](DynamicOptimality/GeometricOnline.lean) gives a pure online geometric interface, an exact-cost hull-to-geometry conversion, and a factor-two search-to-geometry conversion. [GeometricOnlineGreedy](DynamicOptimality/GeometricOnlineGreedy.lean) places the actual existing Greedy algorithm in that interface with unchanged rows and cost.
+
+The arbitrary **online geometry-to-BST conversion is deferred**. The finite backwards reconstruction does not establish it, and the current results do not export a physical online Greedy BST. See [the model guide](docs/BST_MODELS.txt) for exact constants, theorem names, and the distinction between finite cost equivalence and online simulation.
+
+The full build and both namespace audits passed with these modules imported on 1 November 2026. The [verification record](docs/verification-bst-models.txt) records the commands, declaration counts, and public endpoints.
 
 ## Exported results
 
@@ -28,9 +42,9 @@ Splay's cost counts requests and its actual standard rotations. Greedy's cost co
 
 The detailed splay and Greedy proof maps are [COMPLETED_PROOF.md](splay/formalization/COMPLETED_PROOF.md) and [README.txt](greedy/formalization/README.txt). The shared files [SplayBound](DynamicOptimality/SplayBound.lean) and [SplayBlackBoxBound](DynamicOptimality/SplayBlackBoxBound.lean) export existing results with the common optimum rather than introducing another one.
 
-## Tango²: actual online BST accesses on every universe
+## Cha-Cha: actual online BST accesses on every universe
 
-The final interface is [TangoSquaredAll.lean](TangoSquaredAll.lean), in namespace `DynamicOptimality.Tango2.All`:
+The current manuscript calls the structure Cha-Cha; the Lean sources retain its earlier Tango² names. The final interface is [TangoSquaredAll.lean](TangoSquaredAll.lean), in namespace `DynamicOptimality.Tango2.All`:
 
 - `strategy` is an `OnlineBST n`; its tree contains exactly `0,...,n-1`.
 - `initial_tree` identifies its initial physical tree with any supplied `BST 0 n`.

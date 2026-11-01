@@ -6,6 +6,7 @@ import Greedy.Competitive
 import TangoSquaredAll
 import DynamicOptimality.MultiSplayBound
 import MultiSplay.CompetitiveLogHeight
+import DynamicOptimality.BSTModels
 
 /-!
 # Results in the common BST/OPT framework
@@ -40,5 +41,12 @@ theorem tango2 : Competitive Tango2.All.cost (Splay.Analysis.iteratedLog 3) :=
 theorem multisplay : Competitive MultiSplay.Online.cost
     (MultiSplay.logarithmicFactor Splay.Analysis.egTargetFactor) :=
   MultiSplay.Online.competitive_logarithmic
+
+/-- Finite execution costs in all five models agree up to a universal factor.
+The geometric-to-tree reconstruction in this theorem is offline. -/
+theorem bst_models_equivalent (source target : BSTModel) {n cost : Nat}
+    {requests : List (Fin n)} (run : source.costs requests cost) :
+    ∃ targetCost, target.costs requests targetCost ∧ targetCost ≤ 481 * cost :=
+  source.all_five_equivalent target run
 
 end DynamicOptimality.Results

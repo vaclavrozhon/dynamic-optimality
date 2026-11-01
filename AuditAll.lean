@@ -40,6 +40,13 @@ run_cmd do
 #print axioms MultiSplay.Online.competitive_generic_logarithmic
 #print axioms MultiSplay.Online.competitive_generic_shifted
 #print axioms DynamicOptimality.Results.multisplay
+#print axioms DynamicOptimality.Results.bst_models_equivalent
+#print axioms DynamicOptimality.BSTModel.competitive_iff
+#print axioms DynamicOptimality.ModelCosts.geometry_iff_hull
+#print axioms DynamicOptimality.Geometry.to_hullExecution
+#print axioms DynamicOptimality.OnlineModel.Normalization.pointer_cost_le_from_state
+#print axioms DynamicOptimality.Geometry.OnlineSearch.run_cost_le
+#print axioms DynamicOptimality.Geometry.greedy_cost_geometric
 
 open Lean in
 run_cmd do

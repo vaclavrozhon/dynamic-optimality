@@ -1,0 +1,149 @@
+Five BST models: definitions, comparisons, and online scope
+
+The entry point is DynamicOptimality/BSTModels.lean. Unless qualified
+otherwise, theorem names below belong to namespace DynamicOptimality.
+Let n be the number of keys, X a finite sequence of successful requests
+in {0,...,n-1}, and m its length. All actual trees use precisely these
+keys. Computation and mathematical bookkeeping are free. A rotation
+means one ordinary left or right BST rotation. Depth counts edges from
+the root, so the root has depth zero.
+
+The shared OPT X is the attained minimum of m plus the rotation count
+among root-serving executions, with a freely chosen initial tree.
+The new comparisons reuse this OPT; they introduce no replacement optimum.
+See DynamicOptimality/Cost.lean and ModelCostEquivalence.lean.
+
+The five models
+
+1. Root service. Before each request, perform ordinary rotations until
+   its key is at the root. Charge one per rotation and one for service.
+   Rotations may occur at any subtree. The execution interface ends at
+   the last service; trailing rotations are unnecessary for its cost
+   comparison. Definition: ModelCosts.root in ModelCostEquivalence.lean.
+
+2. Search followed by rotations. Search the tree as it stands before
+   this access, paying depth + 1. Then perform any finite rotation
+   sequence, paying its actual length. That final tree is the next
+   access's initial tree. Definition: SearchRotation.Access in
+   DynamicOptimality/SearchRotationModel.lean; ModelCosts.search.
+
+3. Adjacent pointer. Start each access with a pointer at the current
+   root. Each move to a parent or child, each rotation at the pointer,
+   and serving the requested key costs one. The pointer must be at the
+   requested key when serving it. Its final position is unrestricted;
+   the next access starts at the resulting tree's root. This counts
+   actual operations, including repeated movements. Definition:
+   TangoSquared.MTR.Pointer.Access in
+   tango_squared/lean/TangoSquared/PointerModel.lean; ModelCosts.pointer.
+
+4. Rooted hull. Select a connected collection of nodes containing the
+   root and the requested key. Replace their tree by any BST on those
+   same keys, preserving every untouched hanging subtree in its inorder
+   gap. Here a gap is a position between consecutive selected keys, or
+   before the first or after the last key. Charge the number of selected
+   nodes. The final root is unrestricted. Definition:
+   TangoSquared.MTR.HullAccess in
+   tango_squared/lean/TangoSquared/BSTExecution.lean; ModelCosts.hull.
+
+5. Geometry. Positive-time row t contains the t-th request and any other
+   touched keys.
+   A touch is the point (key,t), and the cost is the number of points
+   in positive-time rows. The point set is arborally satisfied: every
+   closed axis-aligned rectangle whose opposite corners are two points
+   in different rows and columns contains a third point, possibly on
+   its boundary. The definition contains no assumed BST realization.
+   Definitions and the exact finite-point characterization are in
+   DynamicOptimality/GeometricModel.lean: Geometry.ArborallySatisfied,
+   Geometry.Execution, and Geometry.execution_iff_points.
+
+The geometric proofs also use a last-touch surface: height(key) is the
+most recent row containing that key. An uncharged horizontal row at
+time zero supplies a surface for previously untouched keys. The theorem
+Geometry.baseline_union_iff proves that adding this row imposes no extra
+rectangle constraint on positive-time points. It does not prescribe a
+physical initial BST. Geometry.execution_iff_surface connects the local
+surface condition to the ordinary point-set definition.
+
+Finite cost equivalence
+
+For a model M, let a and b mean the following two statements:
+every M-execution of cost c satisfies OPT X <= a*c; and some M-execution
+of X has cost at most b*OPT X. Constants are uniform in n and X.
+
+    Model          a     b
+    Root           1     1
+    Search         2     2
+    Pointer       13    37
+    Hull          13     1
+    Geometry      13     1
+
+ModelCosts.{root,search,pointer,hull}Comparison are in
+DynamicOptimality/ModelCostEquivalence.lean; geometryComparison is in
+DynamicOptimality/GeometricCost.lean. BSTModel.transfer gives factor
+b(target)*a(source) for each ordered pair. BSTModel.all_five_equivalent
+gives the convenient common factor 481 for all 25 pairs. These finite
+existence statements permit freely chosen initial trees and dependence
+on the complete request sequence; they do not preserve final trees.
+They include the empty universe and empty request sequence.
+
+Hull and geometry have exactly the same attainable costs, not merely
+comparable minima: ModelCosts.geometry_iff_hull in GeometricCost.lean.
+The forward proof records the selected hull keys in each row. The reverse
+proof reconstructs trees backwards, repairing the selected part of a
+max-heap: a tree whose parent's last-touch time is at least every
+descendant's. These choices may depend on later rows. See
+Geometry.of_hullExecution in GeometricFromBST.lean and
+Geometry.to_hullExecution in GeometricToBST.lean.
+
+BSTModel.competitive_iff replaces the competitor's model in any shared
+Competitive statement. It preserves the algorithm's stated cost and
+competitive factor, changing only the universal constant.
+
+Prescribed initial tree
+
+DynamicOptimality/ModelInitialization.lean proves actual initialization
+using at most 6*n rotations and gives these witnesses from any supplied
+BST, with a single startup allowance:
+
+    root_from_initial       OPT X + 6*n
+    search_from_initial   2*OPT X + 12*n
+    hull_from_initial       OPT X + 6*n
+    pointer_from_initial 37*OPT X + 222*n
+
+The first search in the search model is charged in the supplied tree,
+before initialization rotations. The empty word performs no setup.
+
+Online conversions
+
+An online strategy fixes its successor state and operations from the
+current state and request, before future requests are supplied.
+DynamicOptimality/ModelOnline.lean packages the three additional tree
+strategies and proves prefix consistency with OnlineModel.run_append.
+Its local conversions preserve both boundary trees: root-to-search has
+factor 2, hull-to-pointer 37, pointer-to-hull 1, and hull/pointer-to-search
+25. Their theorem names are root_to_search, hull_to_pointer,
+pointer_to_hull, hull_to_search, and pointer_to_search in OnlineModel.
+
+ModelOnlineNormalization.lean converts any OnlineBST to root, hull, and
+pointer strategies with factors 2, 2, and 74 on every finite prefix.
+The source's initial physical tree is preserved, with no startup charge.
+Later physical trees may differ: a stored sequence of pending rotations
+relates the simulator's tree to the source's virtual tree. Its length is
+a nonnegative potential, discharged by root_run_potential. Public bounds
+are OnlineModel.Normalization.{root,hull,pointer}_cost_le_from_state.
+All choices depend only on the current state and request.
+
+DynamicOptimality/GeometricOnline.lean defines the pure geometric
+OnlineStrategy. Geometry.OnlineHull.run_cost preserves hull cost exactly;
+Geometry.OnlineSearch.run_cost_le gives factor 2 from any OnlineBST.
+The actual Greedy algorithm is Geometry.OnlineGreedy.strategy in
+GeometricOnlineGreedy.lean. Its run_rows and initialized_cost theorems
+retain the existing Greedy rows and cost. Clamping negative initial
+heights to zero proves feasibility without changing those chosen rows.
+
+Deferred: an arbitrary online geometric strategy has not yet been
+converted to an online BST at constant overhead. The backwards offline
+reconstruction cannot supply that stronger quantifier order. An online
+proof must select each physical transition before later request rows are
+known. The current results therefore do not export a physical online
+Greedy BST.

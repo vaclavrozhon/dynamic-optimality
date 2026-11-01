@@ -1,0 +1,55 @@
+Five BST models: verification
+============================
+
+Completed: 2026-11-01, 19:48 UTC.
+Toolchain: leanprover/lean4:v4.32.1, with the pinned root Lake manifest.
+
+Command, from the repository root:
+
+  flock /tmp/dynamic-optimality-lean-build.lock make audit
+
+Result: exit status 0.
+
+  lake build
+    Build completed successfully (10814 jobs).
+
+  lake env lean AuditAll.lean
+    Audited shared, splay, Greedy, Tango-squared and MultiSplay declarations:
+      61003
+    Declarations using nonstandard axioms: []
+
+  lake env lean AuditDynamicOptimality.lean
+    Audited shared, splay and Tango declarations:
+      45185
+    Declarations using nonstandard axioms: []
+
+The counts belong to separate, overlapping audits; they must not be added.
+Both scans include private declarations. Their accepted logical axioms are
+propext, Classical.choice, and Quot.sound. Existing linter warnings did not
+prevent the successful build or either audit.
+
+The public and aggregate imports now include DynamicOptimality.BSTModels,
+so both scans include the new model proofs. AuditAll also prints the axiom
+dependencies of these specific endpoints:
+
+  DynamicOptimality.Results.bst_models_equivalent
+  DynamicOptimality.BSTModel.competitive_iff
+  DynamicOptimality.ModelCosts.geometry_iff_hull
+  DynamicOptimality.Geometry.to_hullExecution
+  DynamicOptimality.OnlineModel.Normalization.pointer_cost_le_from_state
+  DynamicOptimality.Geometry.OnlineSearch.run_cost_le
+  DynamicOptimality.Geometry.greedy_cost_geometric
+
+All depend only on the three accepted axioms.
+
+The finite comparison covers all 25 ordered pairs of root service,
+search-and-rotation, adjacent-pointer, rooted-hull, and geometric models,
+with common factor 481. It permits freely chosen initial trees and
+offline reconstruction. The hull/geometric cost relation is exact.
+Online conversions among the four tree models and from trees to geometry
+are included. The arbitrary reverse online geometric conversion remains
+outside this result. See BST_MODELS.txt for definitions and constants.
+
+Documentation checks also passed: all local Markdown targets in README.md
+and FORMALIZATION.md exist; BibTeX 0.99d processed every entry in
+references.bib using plain.bst without errors or warnings.
