@@ -27,6 +27,19 @@ run_cmd do
 #print axioms DynamicOptimality.Tango2.All.competitive
 #print axioms DynamicOptimality.Tango2.All.competitor_bound
 #print axioms DynamicOptimality.Tango2.All.third_log_competitive
+#print axioms MultiSplay.Online.execution
+#print axioms MultiSplay.Online.online
+#print axioms MultiSplay.Online.first_cost_eq_classical
+#print axioms MultiSplay.Online.first_classical_transcript
+#print axioms MultiSplay.Online.run_classical
+#print axioms MultiSplay.Online.comparator_estimate
+#print axioms MultiSplay.Online.composed_bound
+#print axioms MultiSplay.Online.competitive
+#print axioms MultiSplay.Online.competitive_expanded
+#print axioms MultiSplay.Online.competitive_logarithmic
+#print axioms MultiSplay.Online.competitive_generic_logarithmic
+#print axioms MultiSplay.Online.competitive_generic_shifted
+#print axioms DynamicOptimality.Results.multisplay
 
 open Lean in
 run_cmd do

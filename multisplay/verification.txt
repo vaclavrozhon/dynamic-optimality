@@ -1,0 +1,73 @@
+Classical MultiSplay composed bound: verification
+================================================
+
+Completed: 2026-11-01, 17:41 UTC.
+Toolchain: leanprover/lean4:v4.32.1, with the pinned root Lake manifest.
+
+Command, from the repository root:
+
+  flock /tmp/dynamic-optimality-lean-build.lock make audit
+
+Result: exit status 0.
+
+  lake build
+    Build completed successfully (10797 jobs).
+
+  lake env lean AuditAll.lean
+    Audited shared, splay, Greedy, Tango-squared and MultiSplay declarations:
+      60379
+    Declarations using nonstandard axioms: []
+
+  lake env lean AuditDynamicOptimality.lean
+    Audited shared, splay and Tango declarations:
+      44565
+    Declarations using nonstandard axioms: []
+
+The counts belong to separate, overlapping audits; they must not be added.
+Both scans include private declarations. Their accepted logical axioms are
+propext, Classical.choice, and Quot.sound. Existing linter warnings did not
+prevent the successful build or either audit.
+
+The public concrete result is DynamicOptimality.Results.multisplay:
+
+  Competitive MultiSplay.Online.cost
+    (MultiSplay.logarithmicFactor Splay.Analysis.egTargetFactor).
+
+For n keys, logarithmicFactor g n is
+
+  L_3(n) * g(ceil(log_2(n+1))),
+
+where L_3 is the stabilized third binary logarithm. Competitive quantifies
+one positive constant uniformly over all nonempty universes, every supplied
+initial BST and every finite request word, against OPT(requests)+n.
+The concrete theorem has no comparator, representation-invariant or
+physical-simulation premise.
+
+AuditAll explicitly checks the axiom dependencies of the concrete service
+estimate, composed bound, logarithmic bound, expanded bound, generic
+logarithmic and shifted bounds, online legality, and the exact initialized
+classical execution certificates. In particular:
+
+  MultiSplay.Online.competitive_logarithmic
+  MultiSplay.Online.competitive_generic_logarithmic
+  MultiSplay.Online.first_cost_eq_classical
+  MultiSplay.Online.first_classical_transcript
+  MultiSplay.Online.run_classical
+  DynamicOptimality.Results.multisplay
+
+all depend only on the three accepted axioms.
+
+The generic logarithmic theorem assumes a monotone g : Nat -> Nat satisfying
+AdmissibleForestFactor g, the explicitly defined persistent Splay interface
+coefficient hypothesis. It does not assume a cheap comparator. An arbitrary
+query-only Splay competitiveness theorem is not substituted for that
+split/join interface.
+
+The BST model charges the initial search depth of each access, plus one,
+plus actual ordinary rotations. Computation and mathematical bookkeeping
+are free. Initialization is paid once; its exact concatenation with the
+chosen classical rotations is certified. Actual trees use exactly the
+original keys. The final statement does not assert an executable evaluator
+or a bounded local navigation controller.
+
+See COMPOSED_BOUND.txt for the mathematical argument and the module map.

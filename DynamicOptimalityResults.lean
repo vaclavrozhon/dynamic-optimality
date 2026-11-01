@@ -4,8 +4,8 @@ import DynamicOptimality.SearchRotationEquivalence
 import DynamicOptimality.OnlineBST
 import Greedy.Competitive
 import TangoSquaredAll
-import MultiSplay.CommonForestSplayBound
-import MultiSplay.EndpointCounterBound
+import DynamicOptimality.MultiSplayBound
+import MultiSplay.CompetitiveLogHeight
 
 /-!
 # Results in the common BST/OPT framework
@@ -18,11 +18,11 @@ key-tree types. Algorithm-specific cost conventions remain explicit:
 * Greedy: geometric touches from the initial tree's depth surface;
 * Tango²: a fixed online search-and-rotation strategy, from every initial
   tree on every finite key universe, with the shared-OPT competitive bound;
-* MultiSplay: the common-forest comparison and actual endpoint counters.
+* classical MultiSplay: a fixed online search-and-rotation strategy, with
+  factor `L₃(n) * egTargetFactor (ceil(log₂(n+1)))` from every initial tree.
 
-The MultiSplay imports must not be read as a full MultiSplay competitiveness
-theorem. See `docs/tango2-proof-guide/guide.pdf` for the proof and scope map,
-and its adjacent verification note for the completed Tango² endpoint.
+See `FORMALIZATION.md` for exact interfaces and scope, and
+`multisplay/COMPOSED_BOUND.txt` for the composed MultiSplay argument.
 -/
 
 namespace DynamicOptimality.Results
@@ -36,5 +36,9 @@ theorem greedy : Competitive Greedy.cost Greedy.loglogFactor :=
 
 theorem tango2 : Competitive Tango2.All.cost (Splay.Analysis.iteratedLog 3) :=
   Tango2.All.third_log_competitive
+
+theorem multisplay : Competitive MultiSplay.Online.cost
+    (MultiSplay.logarithmicFactor Splay.Analysis.egTargetFactor) :=
+  MultiSplay.Online.competitive_logarithmic
 
 end DynamicOptimality.Results

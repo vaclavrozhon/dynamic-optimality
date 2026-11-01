@@ -1,0 +1,258 @@
+Classical MultiSplay: the composed Splay bound
+============================================
+
+This note explains the composed bound proved in MultiSplay.Competitive
+and its precise logarithmic form in MultiSplay.CompetitiveLogHeight.
+The final theorem constructs its comparator and has no unproved service,
+representation, or simulation premise. The full build and both namespace
+axiom audits passed; their results are recorded in verification.txt.
+
+1. Statement and conventions
+----------------------------
+
+Let n be the number of keys, X a finite request sequence, and T the supplied
+initial binary search tree (BST); write |X| for the number of requests.
+A BST stores the keys in sorted inorder.
+The depth of a key is the number of edges from the root to that key. One
+access costs its depth in the tree at the start of the access, plus one,
+plus the number of ordinary rotations performed. A
+rotation exchanges a node with one of its children while preserving sorted
+inorder. Other computation and bookkeeping are free. These are the shared definitions
+DynamicOptimality.SearchRotation and DynamicOptimality.OnlineBST. Write
+cost(T,X) for the sum of these access costs over X.
+
+OPT(X) is the repository's attained offline optimum: requests plus rotations
+in an execution that brings each requested key to the root. Its initial tree
+is freely chosen. SearchRotationEquivalence compares this optimum with the
+search-depth-plus-rotations convention within constant factors.
+
+Write L_0(n)=n and L_(i+1)(n)=ceil(log_2(max(2,L_i(n)))). Let R_n be the
+fixed balanced reference BST on exactly the keys 0,...,n-1, with height
+at most ceil(log_2(n+1)). A recursive midpoint construction proves that such
+a tree exists, after which one tree is fixed for each n. Let H be its height, counting
+vertices on a longest root-to-leaf path (the empty tree has height zero). A
+preferred path is obtained by following the current preferred child at each
+reference node. Every preferred-path component contains at most H keys.
+The actual algorithm represents these components by splay trees, and carries
+out the bottom-up classical MultiSplay switches, including the final switch
+at the requested reference node.
+
+Let g(k) be the Splay factor available to the persistent forest comparison
+in Section 3. Define
+
+  comparisonFactor(H) = ceil(log_2(ceil(log_2(H+1))+2))+1
+                     = O(log log H).
+
+The asymptotic notation is for large H; the exact expression covers small
+sizes. The quantitative conclusion is that one constant C>0, independent
+of n, T and X, satisfies
+
+  cost(T,X) <= C * (OPT(X)+n) * comparisonFactor(H) * g(H).
+
+Since H=O(log n), this gives
+
+  O((OPT(X)+n) * L_3(n) * g(O(log n))).
+
+The concrete specialization uses Splay.Analysis.egTargetFactor, the strongest
+currently exported Splay factor. Let d(t) be the number of iterations of the
+binary ceiling logarithm needed to bring t to at most two, and define
+
+  E(t) = (2^(20*(d(t)+1)) * ((d(t)+1)!)^2)^2.
+
+This is the slowly growing coefficient envelope defined in
+Splay.Analysis.LayerEnvelope. The concrete factor is
+
+  g(k) = L_2(k) * L_3(k) * E(24*L_2(k)).
+
+The exact logarithmic-capacity theorem, Online.competitive_logarithmic,
+uses the sharp height estimate H <= ceil(log_2(n+1)) and proves factor
+
+  logarithmicFactor(g,n) = L_3(n) * g(ceil(log_2(n+1))).
+
+It needs no constant-factor enlargement inside g. A convenient shifted
+version in Lean is
+
+  shiftedEGFactor(n) = L_3(n) * g(2*L_1(n)).
+
+An expanded bound is
+
+  competitiveEGFactor(n) = L_3(n)^2 * L_4(n) * E(48*L_3(n)).
+
+For a general function g, passing from the exact H argument to 2*L_1(n)
+uses monotonicity. Absorbing the factor two inside g needs an additional
+scaling bound, even for monotone g. The exact H form avoids both issues.
+The proof does not remove the outer L_3 factor.
+
+2. One actual online algorithm
+------------------------------
+
+GlobalPreferredOnline defines a state with one actual indexed BST and a
+certificate identifying its preferred components. A transition performs the
+literal classical switch schedule. Its existence is proved using actual
+splay rotations. A fixed choice is made separately for each state and
+request, so no choice depends on future requests.
+
+GlobalPreferredInventoryHistory reconstructs the forest execution of that
+same chosen physical run. It keeps the output shapes and the exact
+chronological split/join word. Each split carries the corresponding actual
+pivot or guard splay; analytical forest permutations only reorder the
+component inventory. The resulting SplayTrace is not a newly chosen cheap
+run. Its work W pays for the physical algorithm:
+
+  physical cost <= 2*W + |X|.
+
+InitializedOnline accepts any supplied initial T. It searches the first
+request in T before initializing the canonical representation; initialization
+is paid once and costs at most 19*n beyond the canonical run. The empty word
+costs zero. No dummy keys are inserted into the physical algorithm.
+
+3. The persistent forest comparison
+----------------------------------
+
+The common event word records the exact chronological splits and raw joins
+of the classical run, with the pivot and guard splays certified by its trace.
+A comparator Program executes that same word on the same component key domains, with its own tree shapes. Its budget Q pays
+for its physical services and shape preparations. A forest is persistent:
+the outputs of one event are the inputs of the next.
+
+For a uniform comparison constant C_s, CommonForestCoefficientBound and
+ClassicalSwitchAccountingEG establish
+
+  W <= C_s * (n+Q) * g(H).
+
+The coefficient version permits any proved Splay interface coefficients.
+More precisely, AdmissibleForestFactor(g) requires one fixed valid coefficient
+function whose induced factor at normalizedValueCap(k) is at most D*g(k)
+for every capacity k, with one fixed constant D. GlobalPreferredGenericBound
+and InitializedGenericBound transport this assumption to the same actual
+algorithm. CompetitiveLogHeight then gives L_3(n)*g(ceil(log_2(n+1)))
+for monotone g; the alternative shifted form is L_3(n)*g(2*L_1(n)).
+The concrete envelope specialization gives g=egTargetFactor. Capacity,
+join-size checks, disjointness, the actual trace, and the single linear
+initialization allowance are established for the reference forest. Components
+are not restarted whenever a path splits or joins.
+
+This comparison is why an ordinary single-tree competitiveness statement
+alone is not silently used as a theorem about arbitrary split/join histories.
+The generalization available here is through the persistent Splay interface.
+
+4. The comparator's persistent secondary memory
+----------------------------------------------
+
+Each preferred component receives a secondary source tree on reference
+DEPTHS, maintained using the already proved Tango-squared machinery. The
+secondary reference is balanced on the depth alphabet 0,...,H. Actual
+switch pivots have depths in [0,H), while H is the terminal depth position.
+It has height O(log(H+1)); the stabilized bound for exposing and repairing
+one secondary seam, the boundary joining a path prefix to its tail, is
+comparisonFactor(H)=O(log log H).
+
+The endpoint of a component is the external reference address reached by
+following that preferred path. A memory row consists of a secondary depth
+interval together with its owning reference-address prefix; it stores one
+preferred-child bit. This is the persistent row memory
+used by the previously proved lower bound, not freshly initialized bits for
+each component.
+
+ComparatorStableTransaction.stable_exchange exposes the secondary leaf for
+a switched depth d. Its retained prefix is an optional unchanged source
+subtree, with exactly d-start depth leaves when the component starts at
+depth start; its old and incoming tails both start at d+1. After the exchange it restores the
+stable source representation with the correct spliced memory. Genuine
+secondary updates are charged to the persistent row ledger, and a fixed
+preparation and repair allowance is charged for each switch. Clipping a
+suffix at its beginning introduces forced boundary values, which are restored without treating them as genuine
+updates. Virtual depths past an actual path endpoint exist only in this
+comparator bookkeeping.
+
+5. Exact original-key switch services
+------------------------------------
+
+A source on depths is projected to an ordinary BST on the original keys of
+the corresponding preferred component. The final external gap is discarded;
+it does not become a dummy key. Projection transports paid source rotations
+to ordinary rotations on original keys.
+
+The prepared source has a retained prefix, the switched-depth leaf, and a
+tail. The prefix separates into two opaque blocks, one on each side of the
+pivot. Their boundary keys are exactly the classical switch's optional lower
+and upper guards. ComparatorGuardBoundaries identifies these guards from the
+actual indexed preferred path, including the cases where either guard is
+absent.
+
+ComparatorGuardExchange executes the exact pivot and guard splits and raw joins
+on these projected sources. It uses at most 294 units of local comparator
+work once the sources are exposed. Both switch directions are proved. The
+interiors of the retained prefix and the two tails are preserved; the local
+service does not rebuild large components at constant cost.
+
+A slot records a component's reference subtree, root address and external
+endpoint. ComparatorForestIndexedAlignment identifies the selected incoming
+and parked slots with the exact indexed child subtrees. This matters even for empty
+components, whose interval boundaries are not determined by their empty raw
+tree. The two local outputs are the projections of the stable source outputs,
+with precisely the next component memories.
+
+6. Global composition and charging
+----------------------------------
+
+ComparatorForestPartition selects the two affected components and proves
+that every other slot remains. ComparatorForestMemory transfers the row
+memory through the switch. ComparatorForestFrame preserves the physical
+shapes of all other components, including components whose opaque reference
+subtrees contain the switched node. Thus a local pair service gives a
+maintained global comparator forest after each switch.
+
+Let S be the number of actual classical switches, and V the total number of
+secondary-bit changes counted by Secondary.actualLedger, from its single
+initial memory state. ComparatorProgramChronology composes the local
+services in the actual switch order while retaining all exact output trees.
+The resulting comparator budget satisfies
+
+  Q <= A * comparisonFactor(H) * (S+V).
+
+BalancedReference transfers the previously proved endpoint lower bound to
+the reference on exactly n original keys. It gives, uniformly in X,
+
+  |X| + S + V <= 2137120 * (OPT(X)+n).
+
+No equivalence of the classical and Tango-squared switch orders is assumed:
+the counter theorem already accounts for their difference, and the physical
+comparator executes the classical word itself.
+
+Substitution into Section 3 gives
+
+  cost(T,X)
+    <= 19*n + |X| + 2*C_s*(n+Q)*g(H)
+    <= C*(OPT(X)+n)*comparisonFactor(H)*g(H).
+
+All constants precede the universe size, initial tree, and request word.
+The positive stabilized factors absorb initialization and request charges.
+The empty universe and empty word are handled explicitly.
+
+7. Reading the Lean dependency chain
+------------------------------------
+
+  InitializedOnline / InitializedClassicalExecution
+    fixed classical strategy, exact keys, arbitrary initial tree and transcript
+  GlobalPreferredInventoryHistory / GlobalPreferredForestBound
+    same-run physical forest replay and comparison
+  ComparatorStableTransaction
+    retained prefix, genuine secondary updates, stable tail exchange
+  ComparatorGuardExchange / ComparatorGuardBoundaries
+    literal original-key guard word in both directions
+  ComparatorForestIndexedAlignment / ComparatorForestMemory
+    exact selected child trees and persistent component memories
+  ComparatorForestService / ComparatorProgramChronology
+    complete local services framed and composed in chronological order
+  ComparatorCompetitiveReduction / InitializedComparatorBound
+    shared-OPT charging and the final numerical reduction
+  CompetitiveEGFactor / Competitive / CompetitiveLogHeight
+    exact-height, logarithmic-capacity and envelope factors; final theorems
+
+Intermediate theorems that accept PairService, ComparatorHistory.Service,
+or ComparatorEstimate are deliberately conditional. ComparatorConcreteService
+and Competitive construct and discharge these premises for the actual
+maintained forest. The resulting Online.competitive is unconditional.
+Online.competitive_generic and its logarithmic and shifted forms retain
+only the explicitly stated hypothesis on the numerical Splay factor.

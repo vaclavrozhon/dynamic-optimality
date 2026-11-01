@@ -52,48 +52,44 @@ import MultiSplay.InterfacePlacementFrame
 import MultiSplay.FramedSplay
 
 import MultiSplay.InitializedForestSplayBound
+import MultiSplay.InitializedForestCoefficientBound
 import MultiSplay.SharedSplayComponents
 import MultiSplay.PackedBoundedPreparation
 import MultiSplay.PhysicalForestSplayBound
 import MultiSplay.ForestSplayNormalForm
 import MultiSplay.CommonForestSplayBound
+import MultiSplay.CommonForestCoefficientBound
 import MultiSplay.SecondaryEmissionWords
 import MultiSplay.IntervalLowerBound
 import MultiSplay.EndpointLedgerSupport
 import MultiSplay.EndpointCounterBound
 
-/-!
-Formal components of the standard multi-splay proof: exact switch words,
-physical splaying and chronological forest replay, persistent sparse forest
-normalization with explicit pointer traces and bounded preparation paths, strict
-interface root operations, reusable rich histories through common joins and
-splits with persistent block placements, and the endpoint-aware primary switch bound against
-the shared OPT.
+import MultiSplay.ComparatorGuardHull
+import MultiSplay.ComparatorGuardPath
+import MultiSplay.ComparatorGuardPreparation
+import MultiSplay.ComparatorSuffixSeam
+import MultiSplay.ComparatorVirtualSeam
+import MultiSplay.CompetitiveLogHeight
 
-The portable forest splay comparison constructs its finite global universe,
-disjoint component placements, complete shared history, and one-time
-initialization from the indexed physical program. Its uniform
-factor is G * (clog 2 G + 1)^2, or the stabilized
-log log K * (log log log K)^2 factor for the bounded normalizer height.
-The raw common-forest theorem accepts an independently supplied physical
-splay execution and an arbitrary raw comparator for the same event word.
-It constructs the full bounded normalizer and the indexed coupling, and
-proves exact physical cost transfer by uniqueness of splaying and component
-selection. Empty components and arbitrary component-list permutations are
-allowed. All constituent splays also have shared pointer-model implementations.
-The secondary ledger is defined from the literal adaptive switch emissions.
-For every binary depth hierarchy, changing from increasing to actual switch
-order changes its count by at most twice the primary-switch count.
-The dynamic lower bound is also proved for every binary interval hierarchy,
-using the shared actual pointer execution model and the constant 2888.
-This extension does not use the Tango-squared upper bound.
-The encoded leaf ledger contains the increasing multisplay ledger as exact
-chronological row subsequences. Its initialization support has at most 3n
-primary core vertices and 4n left-writing owner rows.
-The actual endpoint-aware counter bound is proved for arbitrary initial
-primary preferences and every binary depth hierarchy: for a perfect reference,
-requests + primary switches + actual secondary flips <= 2137120*OPT + 21n.
-This root does not assert full multi-splay competitiveness:
-the physical multi-splay comparator and its assembly with the raw forest splay
-theorem remain. The E(G) improvement is not used here.
+/-!
+Classical MultiSplay in the shared abstract BST model. `Online.strategy`
+performs the literal classical switches using actual original-key rotations.
+Its cost includes the initial search depth of every request, and a single
+charged initialization accepts every supplied initial BST.
+
+`Online.competitive_logarithmic` proves factor
+`L₃(n) * egTargetFactor (ceil(log₂(n+1)))` against
+`DynamicOptimality.OPT + n`. The Splay factor is the strongest existing
+export, evaluated at logarithmic component size. `Online.competitive_generic`
+and `Online.competitive_generic_shifted` permit any factor supported by valid
+persistent Splay interface coefficients; the shifted form also assumes
+monotonicity. These final results have no cheap-comparator or physical
+simulation hypothesis.
+
+The proof retains the exact physical run and its chronological forest word.
+The comparator maintains persistent endpoint-owned row memory, performs the
+same guarded splits and joins on actual component keys, and charges its
+secondary services to the proved actual ledger. The endpoint counter theorem
+then pays this ledger and all classical switches using the shared optimum.
+See `multisplay/COMPOSED_BOUND.txt` for the mathematical proof map.
 -/
