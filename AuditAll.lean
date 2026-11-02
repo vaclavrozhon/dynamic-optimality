@@ -9,7 +9,9 @@ import Lean
 
 set_option stderrAsMessages false
 
-/-! Audit public and private declarations using Lean's standard collector.
+/-! Focused legacy namespace audit, including public and private declarations.
+`make audit` uses these endpoint diagnostics in the complete registered-module
+audit, which also covers modules outside these imports and other namespaces.
 The imported axiom summaries avoid rereading proof bodies under memory
 pressure. Keep this file outside the module system so private declarations
 remain included. Progress goes directly to stderr for long-running audits. -/
@@ -39,6 +41,11 @@ run_cmd do
 #print axioms MultiSplay.Online.competitive_logarithmic
 #print axioms MultiSplay.Online.competitive_generic_logarithmic
 #print axioms MultiSplay.Online.competitive_generic_shifted
+#print axioms MultiSplay.admissible_egTargetFactor
+#print axioms DynamicOptimality.Results.splay
+#print axioms DynamicOptimality.Results.splay_refined
+#print axioms DynamicOptimality.Results.greedy
+#print axioms DynamicOptimality.Results.chacha
 #print axioms DynamicOptimality.Results.multisplay
 #print axioms DynamicOptimality.Results.bst_models_equivalent
 #print axioms DynamicOptimality.BSTModel.competitive_iff

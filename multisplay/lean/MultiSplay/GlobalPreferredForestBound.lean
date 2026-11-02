@@ -1,4 +1,4 @@
-import MultiSplay.GlobalPreferredInventoryHistory
+import MultiSplay.GlobalPreferredGenericBound
 import MultiSplay.ClassicalSwitchAccountingEG
 
 /-!
@@ -30,18 +30,7 @@ theorem initial_run_comparator_bound_eg :
             (requests.map fun key => nodeAddress reference key.val)) targets budget →
         ((strategy reference).run (initial reference preference) requests).2 ≤
           constant * (n + budget) * Splay.Analysis.egTargetFactor reference.height +
-            requests.length := by
-  obtain ⟨constant,positive,bound⟩ := Accounting.finite_history_splay_bound_linear_eg
-  refine ⟨2*constant,Nat.mul_pos (by omega) positive,?_⟩
-  intro n reference preference requests sources targets budget same comparator
-  obtain ⟨next,inventory,trace⟩ := initial_run_trace reference preference requests
-  have paid := bound reference preference requests rfl same trace comparator
-  calc
-    ((strategy reference).run (initial reference preference) requests).2 ≤
-        2 * runWork (initial reference preference) requests + requests.length := run_cost_le _ _
-    _ ≤ 2 * (constant * (n+budget) * Splay.Analysis.egTargetFactor reference.height) +
-        requests.length := Nat.add_le_add_right (Nat.mul_le_mul_left 2 paid) _
-    _ = (2*constant) * (n+budget) * Splay.Analysis.egTargetFactor reference.height +
-        requests.length := by ring
+            requests.length :=
+  initial_run_comparator_bound_of_factor Splay.Analysis.egTargetFactor admissible_egTargetFactor
 
 end MultiSplay.Global.Preferred.Online

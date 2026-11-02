@@ -84,6 +84,9 @@ jobs:
             build/dependency-graph/build.log
             build/dependency-graph/export.log
             build/dependency-graph/manifest.json
+            build/audit/build.log
+            build/audit/audit.log
+            build/audit/manifest.json
 
       - name: Upload the complete or partial local build cache
         if: ${{ !cancelled() && steps.cache_archive.outputs.available == 'true' }}

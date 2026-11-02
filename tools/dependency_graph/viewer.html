@@ -26,6 +26,11 @@
       }
       body {
         margin: 0;
+        height: 100vh;
+        height: 100dvh;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
         background: var(--bg);
         color: var(--ink);
         font:
@@ -76,6 +81,7 @@
       }
       header {
         height: 100px;
+        flex-shrink: 0;
         padding: 20px 26px;
         display: flex;
         align-items: center;
@@ -118,7 +124,9 @@
         font-size: 11px;
       }
       .app {
-        height: calc(100vh - 100px);
+        flex: 1;
+        min-height: 0;
+        position: relative;
         display: grid;
         grid-template-columns: 320px minmax(0, 1fr);
       }
@@ -237,7 +245,7 @@
       .graph-wrap {
         position: relative;
         overflow: hidden;
-        min-height: 300px;
+        min-height: 0;
         background: radial-gradient(ellipse at 48% 45%, #1c2b34 0, #10191e 80%);
       }
       canvas {
@@ -256,6 +264,91 @@
         justify-content: space-between;
         gap: 20px;
         pointer-events: none;
+        flex-wrap: wrap;
+      }
+      .result-strip {
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 9px 15px;
+        padding: 11px 26px;
+        background: #1a2931;
+        border-bottom: 1px solid var(--line);
+      }
+      .result-strip-title {
+        font-size: 10px;
+        font-weight: 750;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: #ffe7a3;
+      }
+      .result-links {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 7px;
+      }
+      .result-link {
+        font-size: 12px;
+        padding: 6px 10px;
+        background: #243841;
+        border-color: #60716e;
+      }
+      .result-link[aria-pressed="true"] {
+        background: #3a4b45;
+        border-color: #ffe7a3;
+        box-shadow: 0 0 0 1px #ffe7a344;
+      }
+      .result-link.secondary {
+        border-style: dashed;
+        border-color: var(--line);
+        color: var(--muted);
+      }
+      .result-symbol {
+        color: #ffe7a3;
+        margin-right: 5px;
+      }
+      .result-link.secondary .result-symbol {
+        color: var(--muted);
+      }
+      .view-switcher {
+        display: flex;
+        gap: 5px;
+        margin-bottom: 10px;
+        pointer-events: auto;
+      }
+      .view-switcher button {
+        background: #1e303a;
+        font-size: 12px;
+        font-weight: 600;
+        padding: 8px 12px;
+      }
+      .view-switcher button[aria-pressed="true"] {
+        background: #235e54;
+        border-color: #91e1d0;
+        color: #fff;
+      }
+      .zoom-controls {
+        display: flex;
+        align-items: center;
+        gap: 3px;
+      }
+      .toolbar .zoom-button {
+        font-size: 19px;
+        line-height: 1;
+        width: 32px;
+        padding: 6px 0;
+      }
+      #zoom-level {
+        font-size: 10px;
+        min-width: 36px;
+        text-align: center;
+        color: var(--muted);
+        font-variant-numeric: tabular-nums;
+      }
+      .result-badge {
+        color: #ffe7a3;
+        border-color: #897b51;
       }
       .view-title {
         font-size: 16px;
@@ -272,6 +365,7 @@
         gap: 6px;
         pointer-events: auto;
         flex-shrink: 0;
+        flex-wrap: wrap;
       }
       .toolbar button {
         background: #18242be8;
@@ -454,7 +548,6 @@
           font-size: 23px;
         }
         .app {
-          height: calc(100vh - 90px);
           grid-template-columns: 280px minmax(0, 1fr);
         }
         aside {
@@ -496,12 +589,33 @@
           font-size: 21px;
         }
         .app {
-          height: calc(100vh - 95px);
           display: block;
+        }
+        .result-strip {
+          padding: 9px 15px;
+          gap: 6px;
+        }
+        .result-strip-title {
+          width: 100%;
+        }
+        .result-links {
+          gap: 5px;
+        }
+        .result-link {
+          padding: 5px 8px;
+          font-size: 11px;
+        }
+        .view-switcher {
+          gap: 4px;
+          margin-bottom: 7px;
+        }
+        .view-switcher button {
+          padding: 7px 9px;
+          font-size: 11px;
         }
         aside {
           position: absolute;
-          top: 95px;
+          top: 0;
           bottom: 0;
           left: 0;
           width: 285px;
@@ -543,7 +657,18 @@
       <div>
         <div class="eyebrow">Dynamic optimality · Lean</div>
         <h1>Proof atlas</h1>
-        <p><a href="https://vaclavrozhon.github.io/dynamic-optimality/">Project overview</a> · <a href="https://github.com/vaclavrozhon/dynamic-optimality" target="_blank" rel="noopener noreferrer">Source repository</a></p>
+        <p>
+          <a href="https://vaclavrozhon.github.io/dynamic-optimality/"
+            >Project overview</a
+          >
+          ·
+          <a
+            href="https://github.com/vaclavrozhon/dynamic-optimality"
+            target="_blank"
+            rel="noopener noreferrer"
+            >Source repository</a
+          >
+        </p>
       </div>
       <div class="headstats" aria-label="Repository totals">
         <div><strong id="total-nodes">—</strong><span>declarations</span></div>
@@ -555,6 +680,10 @@
         </div>
       </div>
     </header>
+    <nav class="result-strip" aria-label="Main proof results">
+      <span class="result-strip-title">Start with a result</span>
+      <div id="result-links" class="result-links"></div>
+    </nav>
     <main class="app" id="app">
       <aside aria-label="Graph controls">
         <div class="section search-wrap">
@@ -640,10 +769,17 @@
             >
           </div>
           <div class="legend-note">
-            An arrow points from a declaration to a declaration it uses. Select
-            a node to highlight its arrows. Module edges combine these direct
-            references. Large views use an explicitly counted drawing sample
-            unless “Draw every visible edge” is selected.
+            An arrow points from a declaration to a declaration it uses. Hover
+            over or select a node to highlight all its incident edges in this
+            view, including edges omitted from the background drawing sample.
+            Module edges combine these direct references. Large views use an
+            explicitly counted drawing sample unless “Draw every visible edge”
+            is selected.
+          </div>
+          <div class="legend-note">
+            <span class="result-symbol">★</span> Main result or its proof
+            module. <span class="result-symbol">◇</span> Supporting model
+            equivalence.
           </div>
         </div>
         <div class="section details" id="details">
@@ -662,12 +798,55 @@
         ></canvas>
         <div class="graph-top">
           <div>
+            <div class="view-switcher" role="group" aria-label="Graph level">
+              <button
+                id="view-modules"
+                aria-pressed="true"
+                title="Group declarations by their Lean module"
+              >
+                Modules
+              </button>
+              <button
+                id="view-declarations"
+                aria-pressed="false"
+                title="Show every matching declaration as a node"
+              >
+                Declarations
+              </button>
+              <button
+                id="view-neighborhood"
+                aria-pressed="false"
+                title="Explore the selected declaration"
+                disabled
+              >
+                Neighborhood
+              </button>
+            </div>
             <div class="view-title" id="view-title">Module overview</div>
             <div class="view-subtitle" id="view-subtitle">
               Direct dependencies, grouped by Lean module.
             </div>
           </div>
           <div class="toolbar">
+            <div class="zoom-controls" role="group" aria-label="Zoom">
+              <button
+                id="zoom-out"
+                class="zoom-button"
+                aria-label="Zoom out"
+                title="Zoom out (−)"
+              >
+                −
+              </button>
+              <output id="zoom-level" aria-label="Current zoom">100%</output>
+              <button
+                id="zoom-in"
+                class="zoom-button"
+                aria-label="Zoom in"
+                title="Zoom in (+)"
+              >
+                +
+              </button>
+            </div>
             <button id="pause" title="Pause or resume spring layout">
               Pause</button
             ><button id="fit" title="Fit all visible nodes (F)">Fit</button
@@ -683,8 +862,8 @@
             Preparing graph…
           </div>
           <div class="help">
-            Drag the background to pan · scroll to zoom<br />Drag a node to move
-            it · F to fit
+            Hover to highlight edges · + / − to zoom<br />Drag a node to move it
+            · F to fit
           </div>
         </div>
         <div class="tooltip" id="tooltip" hidden></div>
@@ -700,238 +879,238 @@
     </main>
     <!-- GRAPH_DATA -->
     <script id="layout-worker" type="text/plain">
-"use strict";
-let n = 0,
-  xy,
-  velocity,
-  links,
-  weights,
-  pin = -1,
-  running = false,
-  timer = null,
-  tick = 0,
-  epoch = 0,
-  groupMode = false;
-let cap = 0,
-  mass,
-  sumX,
-  sumY,
-  centerX,
-  centerY,
-  half,
-  point,
-  children,
-  used = 0,
-  stack;
-function allocate(k) {
-  cap = Math.max(32, k * 4 + 64);
-  mass = new Float32Array(cap);
-  sumX = new Float64Array(cap);
-  sumY = new Float64Array(cap);
-  centerX = new Float32Array(cap);
-  centerY = new Float32Array(cap);
-  half = new Float32Array(cap);
-  point = new Int32Array(cap);
-  children = new Int32Array(cap * 4);
-  stack = new Int32Array(cap);
-}
-function cell(x, y, h) {
-  if (used >= cap) return -1;
-  const q = used++;
-  mass[q] = 0;
-  sumX[q] = sumY[q] = 0;
-  centerX[q] = x;
-  centerY[q] = y;
-  half[q] = h;
-  point[q] = -1;
-  children.fill(-1, q * 4, q * 4 + 4);
-  return q;
-}
-function quadrant(q, x, y) {
-  return (x >= centerX[q] ? 1 : 0) + (y >= centerY[q] ? 2 : 0);
-}
-function child(q, quadr) {
-  let c = children[q * 4 + quadr];
-  if (c < 0) {
-    const h = half[q] / 2;
-    c = cell(
-      centerX[q] + (quadr & 1 ? h : -h),
-      centerY[q] + (quadr & 2 ? h : -h),
-      h,
-    );
-    children[q * 4 + quadr] = c;
-  }
-  return c;
-}
-function insert(i) {
-  let q = 0,
-    depth = 0;
-  const x = xy[2 * i],
-    y = xy[2 * i + 1];
-  while (q >= 0) {
-    mass[q]++;
-    sumX[q] += x;
-    sumY[q] += y;
-    const old = point[q];
-    if (old === -1) {
-      point[q] = i;
-      return;
-    }
-    if (depth++ > 24 || half[q] < 1e-6) return;
-    if (old >= 0) {
-      const c = child(q, quadrant(q, xy[2 * old], xy[2 * old + 1]));
-      if (c < 0) return;
-      mass[c] = 1;
-      sumX[c] = xy[2 * old];
-      sumY[c] = xy[2 * old + 1];
-      point[c] = old;
-      point[q] = -2;
-    }
-    q = child(q, quadrant(q, x, y));
-  }
-}
-function step() {
-  if (!n) return;
-  let minX = Infinity,
-    minY = Infinity,
-    maxX = -Infinity,
-    maxY = -Infinity;
-  for (let i = 0; i < n; i++) {
-    const x = xy[2 * i],
-      y = xy[2 * i + 1];
-    minX = Math.min(minX, x);
-    maxX = Math.max(maxX, x);
-    minY = Math.min(minY, y);
-    maxY = Math.max(maxY, y);
-  }
-  used = 0;
-  cell(
-    (minX + maxX) / 2,
-    (minY + maxY) / 2,
-    Math.max(10, maxX - minX, maxY - minY) / 2 + 1,
-  );
-  for (let i = 0; i < n; i++) insert(i);
-  const alpha = Math.max(0.09, 0.75 * Math.pow(0.994, tick)),
-    charge = groupMode ? 115 : 36;
-  for (let i = 0; i < n; i++) {
-    const x = xy[2 * i],
-      y = xy[2 * i + 1];
-    let fx = -x * 0.00075,
-      fy = -y * 0.00075,
-      sp = 0;
-    stack[sp++] = 0;
-    while (sp) {
-      const q = stack[--sp];
-      if (!mass[q] || (mass[q] === 1 && point[q] === i)) continue;
-      const dx = x - sumX[q] / mass[q],
-        dy = y - sumY[q] / mass[q],
-        d2 = dx * dx + dy * dy + 25;
-      const contains =
-        Math.abs(x - centerX[q]) <= half[q] &&
-        Math.abs(y - centerY[q]) <= half[q];
-      if (point[q] !== -2 || (!contains && 4 * half[q] * half[q] < 0.81 * d2)) {
-        const f = (charge * mass[q]) / d2;
-        fx += dx * f;
-        fy += dy * f;
-      } else
-        for (let k = 0; k < 4; k++) {
-          const c = children[q * 4 + k];
-          if (c >= 0) stack[sp++] = c;
+      "use strict";
+      let n = 0,
+        xy,
+        velocity,
+        links,
+        weights,
+        pin = -1,
+        running = false,
+        timer = null,
+        tick = 0,
+        epoch = 0,
+        groupMode = false;
+      let cap = 0,
+        mass,
+        sumX,
+        sumY,
+        centerX,
+        centerY,
+        half,
+        point,
+        children,
+        used = 0,
+        stack;
+      function allocate(k) {
+        cap = Math.max(32, k * 4 + 64);
+        mass = new Float32Array(cap);
+        sumX = new Float64Array(cap);
+        sumY = new Float64Array(cap);
+        centerX = new Float32Array(cap);
+        centerY = new Float32Array(cap);
+        half = new Float32Array(cap);
+        point = new Int32Array(cap);
+        children = new Int32Array(cap * 4);
+        stack = new Int32Array(cap);
+      }
+      function cell(x, y, h) {
+        if (used >= cap) return -1;
+        const q = used++;
+        mass[q] = 0;
+        sumX[q] = sumY[q] = 0;
+        centerX[q] = x;
+        centerY[q] = y;
+        half[q] = h;
+        point[q] = -1;
+        children.fill(-1, q * 4, q * 4 + 4);
+        return q;
+      }
+      function quadrant(q, x, y) {
+        return (x >= centerX[q] ? 1 : 0) + (y >= centerY[q] ? 2 : 0);
+      }
+      function child(q, quadr) {
+        let c = children[q * 4 + quadr];
+        if (c < 0) {
+          const h = half[q] / 2;
+          c = cell(
+            centerX[q] + (quadr & 1 ? h : -h),
+            centerY[q] + (quadr & 2 ? h : -h),
+            h,
+          );
+          children[q * 4 + quadr] = c;
         }
-    }
-    velocity[2 * i] =
-      (velocity[2 * i] + Math.max(-24, Math.min(24, fx)) * alpha) * 0.72;
-    velocity[2 * i + 1] =
-      (velocity[2 * i + 1] + Math.max(-24, Math.min(24, fy)) * alpha) * 0.72;
-  }
-  for (let e = 0; e < links.length; e += 2) {
-    const a = links[e],
-      b = links[e + 1];
-    if (a === b) continue;
-    const dx = xy[2 * b] - xy[2 * a],
-      dy = xy[2 * b + 1] - xy[2 * a + 1],
-      dist = Math.sqrt(dx * dx + dy * dy) + 0.001;
-    const desired = groupMode ? 105 : 40;
-    const strength =
-      (groupMode ? 0.005 : 0.008) * Math.min(3, weights[e / 2] || 1);
-    const f =
-      Math.max(-2.5, Math.min(2.5, (dist - desired) * strength)) * alpha;
-    const sx = (dx / dist) * f,
-      sy = (dy / dist) * f;
-    velocity[2 * a] += sx;
-    velocity[2 * a + 1] += sy;
-    velocity[2 * b] -= sx;
-    velocity[2 * b + 1] -= sy;
-  }
-  let motion = 0;
-  for (let i = 0; i < n; i++) {
-    if (i === pin) {
-      velocity[2 * i] = velocity[2 * i + 1] = 0;
-      continue;
-    }
-    const vx = Math.max(-18, Math.min(18, velocity[2 * i])),
-      vy = Math.max(-18, Math.min(18, velocity[2 * i + 1]));
-    xy[2 * i] += vx;
-    xy[2 * i + 1] += vy;
-    motion += vx * vx + vy * vy;
-  }
-  tick++;
-  return motion / n;
-}
-function publish() {
-  const copy = xy.slice();
-  postMessage({ type: "positions", epoch, tick, positions: copy, running }, [
-    copy.buffer,
-  ]);
-}
-function loop() {
-  timer = null;
-  if (!running) return;
-  const start = performance.now();
-  let motion = 0;
-  do {
-    motion = step();
-  } while (n < 1500 && performance.now() - start < 14);
-  if (tick >= 700 || (tick > 90 && motion < 0.003)) running = false;
-  publish();
-  if (running) timer = setTimeout(loop, n > 12000 ? 65 : 25);
-}
-onmessage = (e) => {
-  const m = e.data;
-  if (m.type === "init") {
-    if (timer) clearTimeout(timer);
-    epoch = m.epoch;
-    n = m.positions.length / 2;
-    xy = m.positions;
-    velocity = new Float32Array(xy.length);
-    links = m.edges;
-    weights = m.weights;
-    groupMode = m.groupMode;
-    pin = -1;
-    tick = 0;
-    allocate(n);
-    running = n > 0 && !m.paused;
-    publish();
-    if (running) timer = setTimeout(loop, 0);
-  } else if (m.epoch === epoch && m.type === "pause") {
-    running = n > 0 && !m.paused;
-    if (timer) clearTimeout(timer);
-    timer = null;
-    if (running) {
-      if (tick >= 700) tick = 0;
-      timer = setTimeout(loop, 0);
-    } else publish();
-  } else if (m.epoch === epoch && m.type === "pin") {
-    pin = m.index;
-    if (pin >= 0) {
-      xy[2 * pin] = m.x;
-      xy[2 * pin + 1] = m.y;
-      velocity[2 * pin] = velocity[2 * pin + 1] = 0;
-    }
-    if (!running) publish();
-  }
-};
-</script>
+        return c;
+      }
+      function insert(i) {
+        let q = 0,
+          depth = 0;
+        const x = xy[2 * i],
+          y = xy[2 * i + 1];
+        while (q >= 0) {
+          mass[q]++;
+          sumX[q] += x;
+          sumY[q] += y;
+          const old = point[q];
+          if (old === -1) {
+            point[q] = i;
+            return;
+          }
+          if (depth++ > 24 || half[q] < 1e-6) return;
+          if (old >= 0) {
+            const c = child(q, quadrant(q, xy[2 * old], xy[2 * old + 1]));
+            if (c < 0) return;
+            mass[c] = 1;
+            sumX[c] = xy[2 * old];
+            sumY[c] = xy[2 * old + 1];
+            point[c] = old;
+            point[q] = -2;
+          }
+          q = child(q, quadrant(q, x, y));
+        }
+      }
+      function step() {
+        if (!n) return;
+        let minX = Infinity,
+          minY = Infinity,
+          maxX = -Infinity,
+          maxY = -Infinity;
+        for (let i = 0; i < n; i++) {
+          const x = xy[2 * i],
+            y = xy[2 * i + 1];
+          minX = Math.min(minX, x);
+          maxX = Math.max(maxX, x);
+          minY = Math.min(minY, y);
+          maxY = Math.max(maxY, y);
+        }
+        used = 0;
+        cell(
+          (minX + maxX) / 2,
+          (minY + maxY) / 2,
+          Math.max(10, maxX - minX, maxY - minY) / 2 + 1,
+        );
+        for (let i = 0; i < n; i++) insert(i);
+        const alpha = Math.max(0.09, 0.75 * Math.pow(0.994, tick)),
+          charge = groupMode ? 115 : 36;
+        for (let i = 0; i < n; i++) {
+          const x = xy[2 * i],
+            y = xy[2 * i + 1];
+          let fx = -x * 0.00075,
+            fy = -y * 0.00075,
+            sp = 0;
+          stack[sp++] = 0;
+          while (sp) {
+            const q = stack[--sp];
+            if (!mass[q] || (mass[q] === 1 && point[q] === i)) continue;
+            const dx = x - sumX[q] / mass[q],
+              dy = y - sumY[q] / mass[q],
+              d2 = dx * dx + dy * dy + 25;
+            const contains =
+              Math.abs(x - centerX[q]) <= half[q] &&
+              Math.abs(y - centerY[q]) <= half[q];
+            if (point[q] !== -2 || (!contains && 4 * half[q] * half[q] < 0.81 * d2)) {
+              const f = (charge * mass[q]) / d2;
+              fx += dx * f;
+              fy += dy * f;
+            } else
+              for (let k = 0; k < 4; k++) {
+                const c = children[q * 4 + k];
+                if (c >= 0) stack[sp++] = c;
+              }
+          }
+          velocity[2 * i] =
+            (velocity[2 * i] + Math.max(-24, Math.min(24, fx)) * alpha) * 0.72;
+          velocity[2 * i + 1] =
+            (velocity[2 * i + 1] + Math.max(-24, Math.min(24, fy)) * alpha) * 0.72;
+        }
+        for (let e = 0; e < links.length; e += 2) {
+          const a = links[e],
+            b = links[e + 1];
+          if (a === b) continue;
+          const dx = xy[2 * b] - xy[2 * a],
+            dy = xy[2 * b + 1] - xy[2 * a + 1],
+            dist = Math.sqrt(dx * dx + dy * dy) + 0.001;
+          const desired = groupMode ? 105 : 40;
+          const strength =
+            (groupMode ? 0.005 : 0.008) * Math.min(3, weights[e / 2] || 1);
+          const f =
+            Math.max(-2.5, Math.min(2.5, (dist - desired) * strength)) * alpha;
+          const sx = (dx / dist) * f,
+            sy = (dy / dist) * f;
+          velocity[2 * a] += sx;
+          velocity[2 * a + 1] += sy;
+          velocity[2 * b] -= sx;
+          velocity[2 * b + 1] -= sy;
+        }
+        let motion = 0;
+        for (let i = 0; i < n; i++) {
+          if (i === pin) {
+            velocity[2 * i] = velocity[2 * i + 1] = 0;
+            continue;
+          }
+          const vx = Math.max(-18, Math.min(18, velocity[2 * i])),
+            vy = Math.max(-18, Math.min(18, velocity[2 * i + 1]));
+          xy[2 * i] += vx;
+          xy[2 * i + 1] += vy;
+          motion += vx * vx + vy * vy;
+        }
+        tick++;
+        return motion / n;
+      }
+      function publish() {
+        const copy = xy.slice();
+        postMessage({ type: "positions", epoch, tick, positions: copy, running }, [
+          copy.buffer,
+        ]);
+      }
+      function loop() {
+        timer = null;
+        if (!running) return;
+        const start = performance.now();
+        let motion = 0;
+        do {
+          motion = step();
+        } while (n < 1500 && performance.now() - start < 14);
+        if (tick >= 700 || (tick > 90 && motion < 0.003)) running = false;
+        publish();
+        if (running) timer = setTimeout(loop, n > 12000 ? 65 : 25);
+      }
+      onmessage = (e) => {
+        const m = e.data;
+        if (m.type === "init") {
+          if (timer) clearTimeout(timer);
+          epoch = m.epoch;
+          n = m.positions.length / 2;
+          xy = m.positions;
+          velocity = new Float32Array(xy.length);
+          links = m.edges;
+          weights = m.weights;
+          groupMode = m.groupMode;
+          pin = -1;
+          tick = 0;
+          allocate(n);
+          running = n > 0 && !m.paused;
+          publish();
+          if (running) timer = setTimeout(loop, 0);
+        } else if (m.epoch === epoch && m.type === "pause") {
+          running = n > 0 && !m.paused;
+          if (timer) clearTimeout(timer);
+          timer = null;
+          if (running) {
+            if (tick >= 700) tick = 0;
+            timer = setTimeout(loop, 0);
+          } else publish();
+        } else if (m.epoch === epoch && m.type === "pin") {
+          pin = m.index;
+          if (pin >= 0) {
+            xy[2 * pin] = m.x;
+            xy[2 * pin + 1] = m.y;
+            velocity[2 * pin] = velocity[2 * pin + 1] = 0;
+          }
+          if (!running) publish();
+        }
+      };
+    </script>
     <script>
       "use strict";
       (() => {
@@ -947,6 +1126,64 @@ onmessage = (e) => {
         };
         const groupNames = Object.keys(colors),
           groupEnabled = new Set(groupNames);
+        // Navigation annotations only: every marked node must exist in the
+        // exported graph. They neither add declarations nor change dependencies.
+        const mainResults = [
+          {
+            key: "splay",
+            label: "Splay",
+            group: "Splay",
+            name: "DynamicOptimality.Results.splay",
+            endpoints: [],
+          },
+          {
+            key: "splay-refined",
+            label: "Splay · refined",
+            group: "Splay",
+            name: "DynamicOptimality.Results.splay_refined",
+            endpoints: [
+              "DynamicOptimality.splay_eg_competitive",
+              "Splay.concreteIteratedLogEGBound",
+            ],
+          },
+          {
+            key: "greedy",
+            label: "Greedy",
+            group: "Greedy",
+            name: "DynamicOptimality.Results.greedy",
+            endpoints: ["Greedy.competitive"],
+          },
+          {
+            key: "chacha",
+            label: "Cha-Cha",
+            group: "Cha-Cha",
+            name: "DynamicOptimality.Results.chacha",
+            endpoints: ["DynamicOptimality.ChaCha.All.third_log_competitive"],
+          },
+          {
+            key: "multisplay",
+            label: "MultiSplay",
+            group: "MultiSplay",
+            name: "DynamicOptimality.Results.multisplay",
+            endpoints: ["MultiSplay.Online.competitive_logarithmic"],
+          },
+          {
+            key: "models",
+            label: "BST models",
+            group: "Shared",
+            secondary: true,
+            name: "DynamicOptimality.Results.bst_models_equivalent",
+            endpoints: [],
+          },
+        ];
+        const resultByKey = new Map(
+          mainResults.map((result) => [result.key, result]),
+        );
+        const resultNames = new Map();
+        const noResultKeys = Object.freeze([]);
+        for (const result of mainResults)
+          for (const name of [result.name, ...result.endpoints])
+            resultNames.set(name, result.key);
         const canvas = $("canvas"),
           ctx = canvas.getContext("2d", { alpha: false });
         let data,
@@ -979,7 +1216,9 @@ onmessage = (e) => {
           layoutRunning = true,
           matchedCount = 0,
           drawnEdges = 0,
-          matchedReferences = 0;
+          matchedReferences = 0,
+          highlightedEdges = 0,
+          hoverIncidentEdges = 0;
         const neighborCache = new Map();
         function make(tag, text, className) {
           const e = document.createElement(tag);
@@ -1000,6 +1239,109 @@ onmessage = (e) => {
         }
         function nodeTitle(n) {
           return n.moduleNode ? n.name : n.name;
+        }
+        function resultKeys(n) {
+          return (
+            n.resultKeys ||
+            (resultNames.has(n.name) ? [resultNames.get(n.name)] : [])
+          );
+        }
+        function primaryResult(n) {
+          return resultKeys(n).some((key) => !resultByKey.get(key).secondary);
+        }
+        function resultLabel(n) {
+          const keys = resultKeys(n);
+          if (keys.length > 2) return "Main theorem statements";
+          return (
+            keys.map((key) => resultByKey.get(key).label).join(" / ") +
+            (n.moduleNode ? " · proof" : "")
+          );
+        }
+        function selectedIndexInGraph() {
+          if (!selected) return undefined;
+          if (graph.moduleMode && selected.startsWith("decl:")) {
+            const node = nodes[Number(selected.slice(5))];
+            return node ? nodeMap.get("module:" + node.module) : undefined;
+          }
+          return nodeMap.get(selected);
+        }
+        function syncViewControls() {
+          const mode = $("view").value;
+          $("view-modules").setAttribute(
+            "aria-pressed",
+            String(mode === "modules"),
+          );
+          $("view-declarations").setAttribute(
+            "aria-pressed",
+            String(mode === "all"),
+          );
+          $("view-neighborhood").setAttribute(
+            "aria-pressed",
+            String(mode === "local"),
+          );
+          $("view-neighborhood").disabled = localCenter === null;
+          $("view-neighborhood").title =
+            localCenter === null
+              ? "Choose a result or declaration first"
+              : "Explore " + nodes[localCenter].name;
+          const selectedNode = selected?.startsWith("decl:")
+            ? nodes[Number(selected.slice(5))]
+            : null;
+          for (const button of $("result-links").children)
+            button.setAttribute(
+              "aria-pressed",
+              String(
+                !!selectedNode &&
+                  resultKeys(selectedNode).includes(button.dataset.result),
+              ),
+            );
+        }
+        function switchView(mode) {
+          if (mode === "local" && localCenter === null) return;
+          $("view").value = mode;
+          // Keep the declaration selected when moving to its containing module
+          // and back, rather than replacing it with a different declaration.
+          if (mode === "local" && localCenter !== null)
+            inspect({ ...nodes[localCenter], key: "decl:" + localCenter });
+          scheduleRebuild();
+        }
+        function revealResult(result) {
+          if (result.id === undefined) return;
+          groupNames.forEach((group) => groupEnabled.add(group));
+          syncGroups();
+          $("kind").value = "";
+          $("generated").checked = true;
+          $("type-edges").checked = true;
+          $("value-edges").checked = true;
+          $("radius").value = "1";
+          $("direction").value = "both";
+          $("app").classList.remove("sidebar-open");
+          chooseDeclaration(result.id, true);
+        }
+        function setupResults() {
+          const byName = new Map(nodes.map((node) => [node.name, node]));
+          for (const result of mainResults) {
+            const node = byName.get(result.name);
+            result.id = node?.id;
+            const button = make(
+              "button",
+              undefined,
+              "result-link" + (result.secondary ? " secondary" : ""),
+            );
+            button.dataset.result = result.key;
+            button.dataset.declaration = result.name;
+            button.setAttribute("aria-pressed", "false");
+            button.append(
+              make("span", result.secondary ? "◇" : "★", "result-symbol"),
+              document.createTextNode(result.label),
+            );
+            button.disabled = !node;
+            button.title = node
+              ? result.name + " — open its proof neighborhood"
+              : result.name + " is not present in this exported snapshot";
+            button.onclick = () => revealResult(result);
+            $("result-links").append(button);
+          }
         }
         function edgeAllowed(e) {
           const mask =
@@ -1059,14 +1401,26 @@ onmessage = (e) => {
             minY = Math.min(minY, positions[i + 1]);
             maxY = Math.max(maxY, positions[i + 1]);
           }
+          const top =
+            $("view-title").closest(".graph-top").getBoundingClientRect()
+              .height + 35;
+          const usableHeight = Math.max(60, height - top - 75);
           camera.k = Math.min(
             3,
             (width - 100) / Math.max(120, maxX - minX),
-            (height - 170) / Math.max(120, maxY - minY),
+            usableHeight / Math.max(120, maxY - minY),
           );
           camera.k = Math.max(0.002, camera.k);
           camera.x = width / 2 - ((minX + maxX) / 2) * camera.k;
-          camera.y = height / 2 + 15 - ((minY + maxY) / 2) * camera.k;
+          camera.y = top + usableHeight / 2 - ((minY + maxY) / 2) * camera.k;
+          requestDraw();
+        }
+        function zoomBy(factor, x = width / 2, y = height / 2) {
+          firstFit = false;
+          const next = Math.max(0.0005, Math.min(30, camera.k * factor));
+          camera.x = x - ((x - camera.x) * next) / camera.k;
+          camera.y = y - ((y - camera.y) * next) / camera.k;
+          camera.k = next;
           requestDraw();
         }
         function initialPositions(g) {
@@ -1089,12 +1443,16 @@ onmessage = (e) => {
           layoutTicks = 0;
           positions = initialPositions(graph);
           nodeMap = new Map(graph.nodes.map((n, i) => [n.key, i]));
+          graph.incidentCounts = new Uint32Array(graph.nodes.length);
           const packed = new Uint32Array(graph.edges.length * 2),
             weights = new Float32Array(graph.edges.length);
           for (let i = 0; i < graph.edges.length; i++) {
             packed[2 * i] = graph.edges[i].a;
             packed[2 * i + 1] = graph.edges[i].b;
             weights[i] = Math.log2((graph.edges[i].weight || 1) + 1);
+            graph.incidentCounts[graph.edges[i].a]++;
+            if (graph.edges[i].b !== graph.edges[i].a)
+              graph.incidentCounts[graph.edges[i].b]++;
           }
           const copy = positions.slice();
           worker.postMessage(
@@ -1198,12 +1556,15 @@ onmessage = (e) => {
                     count: 0,
                     ids: [],
                     groups: {},
+                    resultKeys: [],
                   });
                 }
                 const m = graph.nodes[index];
                 m.count++;
                 m.ids.push(i);
                 m.groups[n.group] = (m.groups[n.group] || 0) + 1;
+                for (const key of resultKeys(n))
+                  if (!m.resultKeys.includes(key)) m.resultKeys.push(key);
                 map[i] = index;
               }
             for (const m of graph.nodes)
@@ -1269,6 +1630,7 @@ onmessage = (e) => {
             mode === "local" && localCenter === null
               ? "Search for a declaration to open its neighborhood."
               : "No declarations match this view. Adjust filters or choose a different center.";
+          syncViewControls();
           launchLayout();
         }
         function scheduleRebuild() {
@@ -1286,21 +1648,30 @@ onmessage = (e) => {
           ctx.fillRect(0, 0, width, height);
           if (!positions.length) {
             drawnEdges = 0;
+            highlightedEdges = 0;
+            hoverIncidentEdges = 0;
             updateStatus();
             return;
           }
           const k = camera.k,
             cx = camera.x,
             cy = camera.y,
-            selectedIndex = selected ? nodeMap.get(selected) : undefined;
+            selectedIndex = selectedIndexInGraph();
           const selectedEdges = [];
           const maxEdges = $("draw-all").checked ? Infinity : 18000;
           const stride = Math.max(1, Math.ceil(graph.edges.length / maxEdges));
           drawnEdges = 0;
+          hoverIncidentEdges = hover >= 0 ? graph.incidentCounts[hover] : 0;
           ctx.beginPath();
           for (let i = 0; i < graph.edges.length; i++) {
             const e = graph.edges[i];
-            if (e.a === selectedIndex || e.b === selectedIndex) {
+            // Incident edges bypass the background sampling completely.
+            if (
+              e.a === selectedIndex ||
+              e.b === selectedIndex ||
+              e.a === hover ||
+              e.b === hover
+            ) {
               selectedEdges.push(e);
               continue;
             }
@@ -1320,10 +1691,16 @@ onmessage = (e) => {
           }
           ctx.lineWidth = graph.moduleMode ? 0.65 : 0.5;
           ctx.strokeStyle =
-            graph.nodes.length > 8000 ? "#8ca5b917" : "#8ca5b929";
+            hover >= 0
+              ? "#8ca5b914"
+              : graph.nodes.length > 8000
+                ? "#8ca5b917"
+                : "#8ca5b929";
           ctx.stroke();
+          highlightedEdges = selectedEdges.length;
           for (const e of selectedEdges) {
-            const outgoing = e.a === selectedIndex;
+            const hovered = e.a === hover || e.b === hover;
+            const outgoing = e.a === (hovered ? hover : selectedIndex);
             ctx.beginPath();
             const ax = positions[2 * e.a] * k + cx,
               ay = positions[2 * e.a + 1] * k + cy,
@@ -1337,7 +1714,7 @@ onmessage = (e) => {
               ctx.lineTo(bx, by);
             }
             ctx.strokeStyle = outgoing ? "#91e1d0bb" : "#f0c66dbb";
-            ctx.lineWidth = 1.3;
+            ctx.lineWidth = hovered ? 2 : 1.3;
             ctx.stroke();
             if (e.a === e.b)
               drawArrow(ax + 9, ay - 18, ax + 9, ay - 9, 0, "#91e1d0");
@@ -1352,12 +1729,14 @@ onmessage = (e) => {
               );
             drawnEdges++;
           }
+          const resultIndices = [];
           for (const group of groupNames) {
             ctx.beginPath();
             ctx.fillStyle = colors[group];
             for (let i = 0; i < graph.nodes.length; i++) {
               const n = graph.nodes[i];
               if (n.group !== group) continue;
+              if (resultKeys(n).length) resultIndices.push(i);
               const x = positions[2 * i] * k + cx,
                 y = positions[2 * i + 1] * k + cy;
               if (x < -20 || x > width + 20 || y < -20 || y > height + 20)
@@ -1374,7 +1753,43 @@ onmessage = (e) => {
             }
             ctx.fill();
           }
-          const labels = [];
+          const labels = [...resultIndices];
+          for (const i of resultIndices) {
+            const n = graph.nodes[i],
+              x = positions[2 * i] * k + cx,
+              y = positions[2 * i + 1] * k + cy;
+            if (x < -20 || x > width + 20 || y < -20 || y > height + 20)
+              continue;
+            const primary = primaryResult(n);
+            const radius = Math.max(7, Math.min(18, nodeRadius(n) * k));
+            ctx.beginPath();
+            ctx.arc(x, y, radius + 4, 0, Math.PI * 2);
+            ctx.strokeStyle = primary ? "#ffe7a3cc" : "#a9bdc5";
+            ctx.lineWidth = 1.5;
+            ctx.setLineDash(primary ? [] : [3, 3]);
+            ctx.stroke();
+            ctx.setLineDash([]);
+            ctx.beginPath();
+            if (primary) {
+              for (let p = 0; p < 10; p++) {
+                const angle = -Math.PI / 2 + (p * Math.PI) / 5;
+                const r = p % 2 ? 3.1 : 7;
+                const px = x + Math.cos(angle) * r,
+                  py = y + Math.sin(angle) * r;
+                p ? ctx.lineTo(px, py) : ctx.moveTo(px, py);
+              }
+            } else {
+              ctx.moveTo(x, y - 6);
+              ctx.lineTo(x + 6, y);
+              ctx.lineTo(x, y + 6);
+              ctx.lineTo(x - 6, y);
+            }
+            ctx.closePath();
+            ctx.fillStyle = primary ? "#ffe7a3" : "#a9bdc5";
+            ctx.fill();
+            ctx.strokeStyle = "#10191e";
+            ctx.stroke();
+          }
           if (graph.moduleMode && graph.nodes.length < 250) {
             for (let i = 0; i < graph.nodes.length; i++)
               if (k > 0.35 || graph.nodes[i].count > 400) labels.push(i);
@@ -1393,7 +1808,10 @@ onmessage = (e) => {
             const n = graph.nodes[i],
               x = positions[2 * i] * k + cx,
               y = positions[2 * i + 1] * k + cy,
-              r = Math.max(3, Math.min(18, nodeRadius(n) * k));
+              r = Math.max(
+                resultKeys(n).length ? 9 : 3,
+                Math.min(18, nodeRadius(n) * k),
+              );
             if (x < -100 || x > width + 100 || y < -25 || y > height + 25)
               continue;
             const active = i === selectedIndex || i === hover;
@@ -1406,12 +1824,18 @@ onmessage = (e) => {
             }
             let label = active
               ? n.name
-              : (n.label || n.name).split(".").slice(-2).join(".");
+              : resultKeys(n).length
+                ? resultLabel(n)
+                : (n.label || n.name).split(".").slice(-2).join(".");
             if (label.length > 90) label = label.slice(0, 87) + "…";
             const tw = ctx.measureText(label).width;
             ctx.fillStyle = "#10191edf";
             ctx.fillRect(x - tw / 2 - 4, y + r + 6, tw + 8, 17);
-            ctx.fillStyle = active ? "#f5f9fa" : "#b9ced7";
+            ctx.fillStyle = active
+              ? "#f5f9fa"
+              : primaryResult(n)
+                ? "#ffe7a3"
+                : "#b9ced7";
             ctx.fillText(label, x, y + r + 18);
           }
           updateStatus();
@@ -1434,7 +1858,11 @@ onmessage = (e) => {
           ctx.fill();
         }
         function nodeRadius(n) {
-          return n.moduleNode ? 3 + Math.sqrt(n.count) * 0.38 : 2.4;
+          return n.moduleNode
+            ? 3 + Math.sqrt(n.count) * 0.38
+            : resultKeys(n).length
+              ? 5.5
+              : 2.4;
         }
         function updateStatus() {
           if (!data) return;
@@ -1460,6 +1888,11 @@ onmessage = (e) => {
               " edges";
           if (!graph.moduleMode)
             s += " · " + fmt(nodes.length) + " total declarations loaded";
+          if (hover >= 0)
+            s +=
+              " · hover highlights all " +
+              fmt(hoverIncidentEdges) +
+              " incident edges";
           s +=
             " · " +
             (paused
@@ -1470,6 +1903,10 @@ onmessage = (e) => {
           $("status").textContent = s;
           $("pause").textContent =
             paused || !layoutRunning ? "Resume" : "Pause";
+          $("zoom-level").textContent =
+            (camera.k < 0.1
+              ? (camera.k * 100).toFixed(1)
+              : Math.round(camera.k * 100)) + "%";
         }
         function setPause(p) {
           paused = p;
@@ -1485,7 +1922,7 @@ onmessage = (e) => {
               dy = positions[2 * i + 1] * camera.k + camera.y - y,
               d = dx * dx + dy * dy,
               r = Math.max(
-                6,
+                resultKeys(graph.nodes[i]).length ? 11 : 6,
                 Math.min(20, nodeRadius(graph.nodes[i]) * camera.k + 4),
               );
             if (d <= r * r && d < best) {
@@ -1575,11 +2012,24 @@ onmessage = (e) => {
         }
         function inspect(n) {
           selected = n.key;
+          if (!n.moduleNode) localCenter = n.id;
           const panel = $("details");
           panel.replaceChildren(
             make("div", "Inspect", "section-title"),
             make("h2", n.name),
           );
+          for (const key of resultKeys(n)) {
+            const result = resultByKey.get(key);
+            panel.append(
+              make(
+                "span",
+                (result.secondary
+                  ? "◇ Supporting result: "
+                  : "★ Main result: ") + result.label,
+                "badge result-badge",
+              ),
+            );
+          }
           if (n.moduleNode) {
             panel.append(make("span", fmt(n.count) + " declarations", "badge"));
             const info = make(
@@ -1651,6 +2101,7 @@ onmessage = (e) => {
               ),
             );
           }
+          syncViewControls();
           requestDraw();
         }
         function chooseDeclaration(id, resetFilters) {
@@ -1797,11 +2248,11 @@ onmessage = (e) => {
               throw Error(
                 "Graph node IDs must be consecutive and match array positions.",
               );
-            if (
-              nodes[i].group === "ChaCha"
-            )
-              nodes[i].group = "Cha-Cha";
+            if (nodes[i].group === "ChaCha") nodes[i].group = "Cha-Cha";
             if (!colors[nodes[i].group]) nodes[i].group = "Other";
+            nodes[i].resultKeys = resultNames.has(nodes[i].name)
+              ? [resultNames.get(nodes[i].name)]
+              : noResultKeys;
           }
           for (const e of edges)
             if (
@@ -1837,6 +2288,7 @@ onmessage = (e) => {
             label.append(check, dot, document.createTextNode(group));
             $("groups").append(label);
           }
+          setupResults();
           buildAdjacency();
           const blob = new Blob([$("layout-worker").textContent], {
               type: "text/javascript",
@@ -1947,6 +2399,11 @@ onmessage = (e) => {
             scheduleRebuild();
           };
           $("pause").onclick = () => setPause(!paused && layoutRunning);
+          $("view-modules").onclick = () => switchView("modules");
+          $("view-declarations").onclick = () => switchView("all");
+          $("view-neighborhood").onclick = () => switchView("local");
+          $("zoom-in").onclick = () => zoomBy(1.4);
+          $("zoom-out").onclick = () => zoomBy(1 / 1.4);
           $("fit").onclick = fit;
           $("reset").onclick = launchLayout;
           $("png").onclick = downloadPng;
@@ -1980,6 +2437,8 @@ onmessage = (e) => {
             if (/INPUT|SELECT|TEXTAREA/.test(document.activeElement.tagName))
               return;
             if (e.key.toLowerCase() === "f") fit();
+            if (e.key === "+" || e.key === "=") zoomBy(1.4);
+            if (e.key === "-" || e.key === "−") zoomBy(1 / 1.4);
             if (
               e.code === "Space" &&
               document.activeElement === document.body
@@ -1992,16 +2451,11 @@ onmessage = (e) => {
             "wheel",
             (e) => {
               e.preventDefault();
-              firstFit = false;
               const rect = canvas.getBoundingClientRect(),
                 x = e.clientX - rect.left,
                 y = e.clientY - rect.top,
-                factor = Math.exp(-e.deltaY * 0.0012),
-                next = Math.max(0.0005, Math.min(30, camera.k * factor));
-              camera.x = x - ((x - camera.x) * next) / camera.k;
-              camera.y = y - ((y - camera.y) * next) / camera.k;
-              camera.k = next;
-              requestDraw();
+                factor = Math.exp(-e.deltaY * 0.0012);
+              zoomBy(factor, x, y);
             },
             { passive: false },
           );
@@ -2060,7 +2514,14 @@ onmessage = (e) => {
                 nodeTitle(n) +
                 (n.moduleNode
                   ? " · " + fmt(n.count) + " declarations"
-                  : " · " + n.kind);
+                  : " · " + n.kind) +
+                (resultKeys(n).length
+                  ? " · " +
+                    (primaryResult(n) ? "★ Main result" : "◇ Supporting result")
+                  : "") +
+                " · " +
+                fmt(graph.incidentCounts[next]) +
+                " incident edges highlighted";
               tooltip.style.left =
                 Math.max(8, Math.min(x + 13, width - 320)) + "px";
               tooltip.style.top = Math.min(y + 16, height - 65) + "px";
@@ -2102,12 +2563,33 @@ onmessage = (e) => {
                 loadedEdges: edges.length,
                 paused,
                 epoch,
+                zoom: camera.k,
+                selected: selected?.startsWith("decl:")
+                  ? nodes[Number(selected.slice(5))].name
+                  : selected,
+                hovered: hover >= 0 ? graph.nodes[hover].name : null,
+                highlightedEdges,
+                hoverIncidentEdges,
+                drawnEdges,
+                resultNodes: graph.nodes
+                  .filter((n) => resultKeys(n).length)
+                  .map((n) => n.name),
               };
             },
             select: (name) => {
               const n = nodes.find((n) => n.name === name);
               if (n) chooseDeclaration(n.id, true);
               return !!n;
+            },
+            positionOf: (name) => {
+              const i = graph.nodes.findIndex((n) => n.name === name);
+              if (i < 0) return null;
+              const rect = canvas.getBoundingClientRect();
+              return {
+                x: rect.left + camera.x + positions[2 * i] * camera.k,
+                y: rect.top + camera.y + positions[2 * i + 1] * camera.k,
+                incidentEdges: graph.incidentCounts[i],
+              };
             },
             fit,
           };

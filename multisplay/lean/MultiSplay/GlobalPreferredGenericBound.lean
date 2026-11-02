@@ -30,6 +30,33 @@ theorem AdmissibleForestFactor.positive {factor : Nat → Nat}
   simp only [zero,Nat.mul_zero] at paid
   omega
 
+/-- The concrete refined Splay factor satisfies the same interface hypothesis
+used by the generic theorem. The coefficient function and the constant
+`16 * 168` are independent of the component capacity and request history. -/
+theorem admissible_egTargetFactor : AdmissibleForestFactor Splay.Analysis.egTargetFactor := by
+  let coefficients := Splay.Interface.LayerCoefficients.coefficients Splay.Accounting.articleShape
+  refine ⟨coefficients, 16 * 168,
+    Splay.Interface.LayerCoefficients.valid Splay.Accounting.articleShape rfl rfl rfl, ?_⟩
+  intro capacity
+  let gap := Unlocated.normalizedValueCap capacity
+  have gapPositive : 0 < gap := lt_of_lt_of_le (by decide : 0 < 2)
+    (Splay.Accounting.articleParameters (Layered.Bounded.height capacity)).valueBound_ge_two
+  have estimates := Splay.Analysis.LayerEnvelope.coefficients_le
+    Splay.Accounting.articleShape (by decide) gap
+  have factor := Splay.Analysis.coefficientFactor_le_envelope coefficients gap
+    (Splay.Analysis.LayerEnvelope.envelope (Splay.Analysis.LayerEnvelope.depth gap))
+    gapPositive (Splay.Analysis.LayerEnvelope.envelope_pos _) estimates.1 estimates.2
+  calc
+    Splay.Analysis.coefficientFactor coefficients gap ≤
+        16 * gap * Splay.Analysis.LayerEnvelope.envelope (Splay.Analysis.LayerEnvelope.depth gap)^2 *
+          (Nat.clog 2 gap + 1) := factor
+    _ = 16 * (gap * (Nat.clog 2 gap + 1) * Splay.Analysis.LayerEnvelope.E gap) := by
+      unfold Splay.Analysis.LayerEnvelope.E
+      ring
+    _ ≤ 16 * (168 * Splay.Analysis.egTargetFactor capacity) :=
+      Nat.mul_le_mul_left 16 (Unlocated.normalizedFactor_le_egTargetFactor capacity)
+    _ = (16 * 168) * Splay.Analysis.egTargetFactor capacity := by ring
+
 end MultiSplay
 
 namespace MultiSplay.Global.Preferred.Online

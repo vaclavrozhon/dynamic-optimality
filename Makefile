@@ -3,9 +3,10 @@
 lean:
 	lake build
 
-audit: lean
-	lake env lean AuditAll.lean
-	lake env lean AuditDynamicOptimality.lean
+# The runner builds every registered module and audits their declarations once.
+# It does not acquire a lock; callers can use the usual external flock command.
+audit:
+	python3 tools/audit.py
 
 guide:
 	cd docs/chacha-proof-guide && pdflatex -interaction=nonstopmode -halt-on-error guide.tex

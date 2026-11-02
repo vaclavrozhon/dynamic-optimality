@@ -1,5 +1,6 @@
 import MultiSplay.GlobalPreferredGenericBound
-import MultiSplay.InitializedComparatorBound
+import MultiSplay.ComparatorEstimate
+import MultiSplay.CompetitiveEGFactor
 
 /-! # A generic factor from every original initial BST
 

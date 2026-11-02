@@ -5,7 +5,6 @@ import DynamicOptimality.OnlineBST
 import Greedy.Competitive
 import ChaChaAll
 import DynamicOptimality.MultiSplayBound
-import MultiSplay.CompetitiveLogHeight
 import DynamicOptimality.BSTModels
 
 /-!
@@ -32,6 +31,11 @@ theorem splay :
     Competitive Splay.Accounting.concreteSplayCost Splay.Analysis.targetFactor :=
   splay_competitive
 
+/-- The refined Splay factor, also used in the MultiSplay composition. -/
+theorem splay_refined :
+    Competitive Splay.Accounting.concreteSplayCost Splay.Analysis.egTargetFactor :=
+  splay_eg_competitive
+
 theorem greedy : Competitive Greedy.cost Greedy.loglogFactor :=
   Greedy.competitive
 
@@ -40,7 +44,7 @@ theorem chacha : Competitive ChaCha.All.cost (Splay.Analysis.iteratedLog 3) :=
 
 theorem multisplay : Competitive MultiSplay.Online.cost
     (MultiSplay.logarithmicFactor Splay.Analysis.egTargetFactor) :=
-  MultiSplay.Online.competitive_logarithmic
+  multisplay_logarithmic_competitive
 
 /-- Finite execution costs in all five models agree up to a universal factor.
 The geometric-to-tree reconstruction in this theorem is offline. -/

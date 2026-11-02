@@ -6,7 +6,9 @@ import Lean
 
 set_option stderrAsMessages false
 
-/-! Audit public and private declarations using Lean's standard collector.
+/-! Focused legacy namespace audit, including public and private declarations.
+`make audit` uses these endpoint diagnostics in the complete registered-module
+audit, which also covers modules outside these imports and other namespaces.
 The imported axiom summaries avoid rereading proof bodies under memory
 pressure. Keep this file outside the module system so private declarations
 remain included. Progress goes directly to stderr for long-running audits. -/

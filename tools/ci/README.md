@@ -5,12 +5,16 @@ started manually. It installs the toolchain in `lean-toolchain`, downloads
 Mathlib's pinned cache, builds every registered local module through the graph
 exporter, runs `make audit`, and packages the graph. Lake uses four worker
 threads. Build commands run sequentially; dependency sources are not changed.
+The audit selects every declaration by its registered source module, including
+private declarations and helpers in other namespaces. It checks all explicit
+endpoints from the two root audit lists in the same imported environment.
 
 The workflow uploads two artifacts, identified by the source commit:
 
 - `lean-verification-<commit>` contains the standalone HTML graph, its summary,
   the complete graph JSON, module inventory, and build/audit/export logs. Logs
   are uploaded even when verification fails; a failed run is not a certificate.
+  The full-module audit logs and its exact inventory are under `build/audit/`.
 - `lean-build-<commit>` is uploaded whenever a local build cache was produced,
   including after failed verification. It contains `project-build.tar.gz`,
   `project-build.json`, and `SHA256SUMS`. The metadata explicitly labels the

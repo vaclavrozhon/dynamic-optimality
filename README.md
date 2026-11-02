@@ -6,7 +6,7 @@ Dynamic optimality asks whether an online binary search tree can serve every req
 
 Start with [the public theorem statements](DynamicOptimalityResults.lean), or read the [formalization map](FORMALIZATION.md) for the definitions and proof dependencies. The main source papers are [*Splay trees are almost dynamically optimal*](https://arxiv.org/abs/2607.18498) and the forthcoming public manuscript [*Dynamic Optimality to within O(log log log n)*](#chacha2026). Full references and [BibTeX entries](docs/references.bib) appear below.
 
-The [interactive dependency graph](https://vaclavrozhon.github.io/dynamic-optimality/proof-atlas.html) lets you explore all repository declarations and their direct references, with a spring layout, module overview, and searchable theorem neighborhoods. The [project page](https://vaclavrozhon.github.io/dynamic-optimality/) introduces the results and references. You can also [download the standalone HTML](https://github.com/vaclavrozhon/dynamic-optimality/raw/refs/heads/main/docs/dependency-graph.html) for offline use. See the [graph guide](docs/DEPENDENCY_GRAPH.md) for controls and rebuilding.
+The [interactive dependency graph](https://vaclavrozhon.github.io/dynamic-optimality/proof-atlas.html) lets you switch between modules and individual declarations. The main results are marked with stars and have direct navigation buttons. Zoom with the wheel or the zoom buttons; hover over a node to highlight its dependencies. The [project page](https://vaclavrozhon.github.io/dynamic-optimality/) introduces the results and references. You can also [download the standalone HTML](https://github.com/vaclavrozhon/dynamic-optimality/raw/refs/heads/main/docs/dependency-graph.html) for offline use. See the [graph guide](docs/DEPENDENCY_GRAPH.md) for controls and rebuilding.
 
 ## What is proved
 
@@ -29,7 +29,7 @@ Write `L₀(n) = n` and `Lₖ₊₁(n) = ceil(log₂(max(2, Lₖ(n))))`. These s
 
 ### Splay and Greedy
 
-The **Splay** theorem concerns the usual splay algorithm and its actual rotations. The simpler factor is the bound stated in [Chmel et al., *Splay trees are almost dynamically optimal*](#splay2026). The repository also exports the refined factor through [`splay_eg_competitive`](DynamicOptimality/SplayBlackBoxBound.lean). See the [Splay proof map](splay/formalization/COMPLETED_PROOF.md).
+The **Splay** theorem concerns the usual splay algorithm and its actual rotations. The simpler factor is the bound stated in [Chmel et al., *Splay trees are almost dynamically optimal*](#splay2026). The common entry point exports the refined factor as [`Results.splay_refined`](DynamicOptimalityResults.lean); the original [`splay_eg_competitive`](DynamicOptimality/SplayBlackBoxBound.lean) name is also retained. See the [Splay proof map](splay/formalization/COMPLETED_PROOF.md).
 
 The **Greedy** theorem concerns the geometric algorithm: a touch is a key–time point, and cost is the number of touches. Its actual rows satisfy the rectangle condition defining valid geometric executions, and a [fixed online geometric strategy](DynamicOptimality/GeometricOnlineGreedy.lean) reproduces those rows and their exact cost. The current result does not include an online physical BST implementation of Greedy. The [Greedy proof map](greedy/formalization/README.txt) explains the bound. The related paper [Guo et al.](#greedy2026) proves a different bound, `2^{O(√(log log n))}`; the stronger `O(log log n)` statement here is a repository result, not a claim attributed to that paper.
 
@@ -51,7 +51,7 @@ cost(initial, X) = O((OPT(X) + n) · L₃(n) · g(ceil(log₂(n+1)))).
 
 The proof constructs the comparison algorithm used for the persistent forest of splay components. No cheap-comparator or physical-simulation assumption remains in the concrete result. The [composed proof](multisplay/COMPOSED_BOUND.txt) explains how the Splay analysis and the Cha-Cha comparison fit together.
 
-A generic theorem also works for any monotone factor satisfying `AdmissibleForestFactor`: this means that the factor uniformly bounds the coefficients of the proved Splay interface for persistent searches, splits, and joins. A competitiveness theorem for searches alone is not sufficient for that interface. See `competitive_generic_logarithmic` in the [final module](multisplay/lean/MultiSplay/CompetitiveLogHeight.lean).
+A generic theorem also works for any monotone factor satisfying `AdmissibleForestFactor`: this means that the factor uniformly bounds the coefficients of the proved Splay interface for persistent searches, splits, and joins. A competitiveness theorem for searches alone is not sufficient for that interface. The concrete result specializes this generic theorem using the proved instance [`admissible_egTargetFactor`](multisplay/lean/MultiSplay/GlobalPreferredGenericBound.lean). See `competitive_generic_logarithmic` in the [final module](multisplay/lean/MultiSplay/CompetitiveLogHeight.lean).
 
 ### Refined Splay factor
 
@@ -97,7 +97,7 @@ make audit
 
 The [toolchain](lean-toolchain) and [Lake manifest](lake-manifest.json) pin Lean and its dependencies. Initial dependency and cache retrieval requires network access. No original-workspace paths or experimental datasets are needed.
 
-`make audit` builds the project and runs [AuditAll.lean](AuditAll.lean) and [AuditDynamicOptimality.lean](AuditDynamicOptimality.lean). These inspect logical dependencies, including private declarations. The accepted axioms are `propext`, `Classical.choice`, and `Quot.sound`; proof gaps such as `sorry` are not accepted. A separate focused Greedy audit is available as `lake env lean AuditGreedy.lean`. Run builds and audits one at a time; the full environment can require substantial memory.
+`make audit` builds every tracked Lean module registered in the Lake configuration, then checks the logical dependencies of every declaration originating in those modules, including private and generated declarations. It also runs the explicit endpoint checks listed in [AuditAll.lean](AuditAll.lean) and [AuditDynamicOptimality.lean](AuditDynamicOptimality.lean). The accepted axioms are `propext`, `Classical.choice`, and `Quot.sound`; proof gaps such as `sorry` are not accepted. The [audit runner](tools/audit.py) verifies module coverage before checking axioms. The original root audit files remain available as narrower checks; `lake env lean AuditGreedy.lean` focuses on Greedy. Run builds and audits one at a time; the full environment can require substantial memory.
 
 The full build and both audits passed again on 2 November 2026 after the Cha-Cha naming migration; see the [verification record](docs/verification-chacha-rename.txt). The earlier [five-model verification](docs/verification-bst-models.txt) records the supporting equivalences. [GitHub Actions](https://github.com/vaclavrozhon/dynamic-optimality/actions/workflows/lean.yml) repeats the full registered-module build and audits on future pushes.
 
