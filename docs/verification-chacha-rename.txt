@@ -2,7 +2,10 @@ Cha-Cha naming migration: verification
 =====================================
 
 Date: 2026-11-02.
-Status: the naming migration is complete; full rebuild and audits are running.
+Verified library source commit: 76d14cb1cb3c5ffb40db0f3f36eda9af7b16db8b.
+CI: https://github.com/vaclavrozhon/dynamic-optimality/actions/runs/41395235378
+Status: VERIFIED. The full registered-module build, both namespace audits,
+graph export, and graph packaging passed in CI.
 
 The algorithm library, namespaces, public result, source paths, guide, and
 graph tooling now use ChaCha or the manuscript spelling Cha-Cha. The
@@ -10,12 +13,73 @@ classical Tango algorithm retains its distinct name.
 
 Independent source review compared all 2228 Lean files with commit a2d6810.
 The differences are a consistent identifier/path substitution and a few
-library-name comments. No mathematical statement or proof was changed.
+library-name comments and diagnostic labels. No handwritten mathematical
+statement or proof was changed.
 
 The guide was rebuilt with pdfLaTeX. Local link and source-name checks passed.
 The original source hashes remain available unchanged through the immutable
 initial-commit link in PROVENANCE.txt. A new source manifest records the
 renamed files in snapshots/2026-11-02.sources.sha256.
 
-The full registered-module build, both namespace audits, and refreshed graph
-export are being checked before the migration is declared verified.
+Full verification
+-----------------
+
+python3 tools/dependency_graph/export.py
+flock /tmp/dynamic-optimality-lean-build.lock make audit
+python3 tools/dependency_graph/build.py
+
+The CI run completed successfully. The explicit build of all 2224 registered
+modules passed (10887 jobs). The ordinary default build passed (10814 jobs).
+AuditAll checked 61003 declarations; AuditDynamicOptimality checked 45185.
+Both reported no nonstandard axioms. The accepted dependencies remain
+propext, Classical.choice, and Quot.sound.
+
+The registered-source fingerprint matches the current local sources:
+  57c6f8c4c8320b66feb8145647b737a4ba16713718d820bada394aef8aa7b13c
+The canonical graph JSON payload fingerprint (without a trailing newline) is:
+  5c986a7ee1d12d08cfac3f10639e8a0d73a5cc989370828781cc69d9874c65e0
+
+The graph again contains 63307 declarations, 39435 theorems, and 541141
+direct local dependency pairs. All 2224 registered modules were loaded;
+2214 contain declarations. There are no unresolved constants. The current
+external-reference count is 1412848; these references are counted but their
+targets are outside the graph.
+
+Comparison with the previous compiled snapshot maps every declaration name
+exactly. All local edges agree except one compiler-generated equation proof:
+SourcePointer.plug.eq_def selects the PackedContext-generated splitter instead
+of the GapSource-generated splitter. A focused Lean check confirmed that the
+two splitter types and bodies are exactly identical. Generated equation and
+congruence lemmas can also have different reported originating modules in a
+fresh build; one elaborated proof has 13 fewer external reference pairs. These
+are compiled-output differences, not edits to handwritten mathematical proofs.
+The published graph is the actual fresh export, rather than relabeled old data.
+
+Viewer and publication
+----------------------
+
+The standalone HTML and summary were copied byte-for-byte from the successful
+CI artifact. Headless Chrome checked the complete declaration and edge counts,
+module overview, theorem/type/body filters, exact theorem neighborhoods,
+commit-pinned source links, PNG export, and mobile controls. There were no
+browser errors or network requests during offline graph exploration.
+
+The English personal-site landing page and graph use these addresses:
+  https://vaclavrozhon.github.io/dynamic-optimality/
+  https://vaclavrozhon.github.io/dynamic-optimality/proof-atlas.html
+
+Local recheck
+-------------
+
+The verified CI build cache was checked against its SHA-256, Linux x86-64
+platform, Lean toolchain, source fingerprint, and all three configuration
+fingerprints. Only the root .lake/build cache was restored; dependency sources
+were not changed. A focused local Lean check confirmed the identical generated
+splitters, and the cached default build passed (10814 jobs).
+
+An additional local make audit was started after the successful CI audit. Its
+default build passed; the duplicate AuditAll invocation was stopped on this
+heavily loaded machine. The complete audit results reported above are the CI
+results, not a claim that the duplicate local audit completed. The final change
+to AuditDynamicOptimality's diagnostic label only replaces the old algorithm
+spelling in its output; its imports and audit checks are unchanged.

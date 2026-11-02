@@ -99,7 +99,7 @@ The [toolchain](lean-toolchain) and [Lake manifest](lake-manifest.json) pin Lean
 
 `make audit` builds the project and runs [AuditAll.lean](AuditAll.lean) and [AuditDynamicOptimality.lean](AuditDynamicOptimality.lean). These inspect logical dependencies, including private declarations. The accepted axioms are `propext`, `Classical.choice`, and `Quot.sound`; proof gaps such as `sorry` are not accepted. A separate focused Greedy audit is available as `lake env lean AuditGreedy.lean`. Run builds and audits one at a time; the full environment can require substantial memory.
 
-The full build and both audits passed on 1 November 2026, including the five-model equivalence; see the [verification record](docs/verification-bst-models.txt).
+The full build and both audits passed again on 2 November 2026 after the Cha-Cha naming migration; see the [verification record](docs/verification-chacha-rename.txt). The earlier [five-model verification](docs/verification-bst-models.txt) records the supporting equivalences. [GitHub Actions](https://github.com/vaclavrozhon/dynamic-optimality/actions/workflows/lean.yml) repeats the full registered-module build and audits on future pushes.
 
 For navigation, use the [formalization map](FORMALIZATION.md), [public entry point](DynamicOptimalityResults.lean), and proof guides linked above. `make guide` rebuilds the Cha-Cha guide with pdfLaTeX and standard TeX packages, including TikZ.
 

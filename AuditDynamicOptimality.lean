@@ -400,7 +400,7 @@ run_cmd do
     count := count + 1
     if count % 2000 == 0 then
       Lean.Elab.Command.liftIO <| IO.eprintln s!"Axiom audit progress: {count}/{targets.size}."
-  logInfo m!"Audited shared, splay, and Tango declarations: {count}"
+  logInfo m!"Audited shared, splay, and Cha-Cha declarations: {count}"
   logInfo m!"Declarations using nonstandard axioms: {unexpected}"
   unless unexpected.isEmpty do
     throwError "Nonstandard axiom dependency in the shared development"

@@ -32,3 +32,4 @@ __pycache__/
 # Reproducible dependency-graph intermediates; the standalone HTML is versioned.
 /build/dependency-graph/
 /build/dependency-graph.json
+/build/ci/
