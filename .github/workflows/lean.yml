@@ -1,0 +1,96 @@
+name: Lean verification
+
+on:
+  push:
+    branches: ["**"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: lean-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    env:
+      LEAN_NUM_THREADS: "4"
+      PYTHONUNBUFFERED: "1"
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Check out the source commit
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Prepare verification logs
+        run: mkdir -p build/ci/logs build/ci/graph
+
+      - name: Install the pinned Lean toolchain
+        run: bash tools/ci/install_lean.sh 2>&1 | tee build/ci/logs/setup.log
+
+      - name: Download the pinned Mathlib build cache
+        run: lake exe cache get 2>&1 | tee build/ci/logs/mathlib-cache.log
+
+      # The exporter explicitly builds every registered, tracked local module,
+      # including modules not reachable from the usual public entry points.
+      - name: Build all registered modules and export their dependencies
+        id: export
+        run: python3 tools/dependency_graph/export.py 2>&1 | tee build/ci/logs/export-driver.log
+
+      - name: Audit the public and private Lean declarations
+        id: audit
+        run: flock /tmp/dynamic-optimality-lean-build.lock make audit 2>&1 | tee build/ci/logs/audit.log
+
+      - name: Package the standalone dependency graph
+        id: graph
+        run: |
+          python3 tools/dependency_graph/build.py \
+            --output build/ci/graph/dependency-graph.html \
+            --summary build/ci/graph/dependency-graph-summary.json \
+            2>&1 | tee build/ci/logs/graph-package.log
+
+      - name: Archive the complete or partial local build cache
+        id: cache_archive
+        if: ${{ !cancelled() }}
+        env:
+          VERIFICATION_STATUS: ${{ steps.export.outcome == 'success' && steps.audit.outcome == 'success' && steps.graph.outcome == 'success' && 'passed' || 'partial' }}
+        run: |
+          if [ -d .lake/build ]; then
+            python3 tools/ci/package_build.py --verification-status "$VERIFICATION_STATUS" \
+              2>&1 | tee build/ci/logs/build-cache-package.log
+            echo "available=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "No local build cache was produced."
+          fi
+
+      - name: Upload the graph and verification logs
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: lean-verification-${{ github.sha }}
+          retention-days: 30
+          if-no-files-found: warn
+          compression-level: 6
+          path: |
+            build/ci/logs/
+            build/ci/graph/
+            build/dependency-graph.json
+            build/dependency-graph/build.log
+            build/dependency-graph/export.log
+            build/dependency-graph/manifest.json
+
+      - name: Upload the complete or partial local build cache
+        if: ${{ !cancelled() && steps.cache_archive.outputs.available == 'true' }}
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: lean-build-${{ github.sha }}
+          retention-days: 14
+          if-no-files-found: error
+          compression-level: 0
+          path: build/ci/cache/
