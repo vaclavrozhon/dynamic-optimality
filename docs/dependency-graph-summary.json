@@ -1,13 +1,13 @@
 {
   "meta": {
     "schemaVersion": 1,
-    "gitCommit": "76d14cb1cb3c5ffb40db0f3f36eda9af7b16db8b",
-    "exportedAtUtc": "2026-11-02T06:19:37+00:00",
+    "gitCommit": "821bd3171327537180ceb27be2c003b91e434ab5",
+    "exportedAtUtc": "2026-11-02T07:39:41+00:00",
     "leanVersion": "Lean (version 4.32.1, x86_64-unknown-linux-gnu, commit f054605aea4b840552cca2e725580bffd1e1b704, Release)",
-    "sourceSha256": "57c6f8c4c8320b66feb8145647b737a4ba16713718d820bada394aef8aa7b13c",
+    "sourceSha256": "3ab3b254e63efbb040d18621fe0f86a16fd4913ca38bc16a2f5b2bb42795bc08",
     "sourceMatchesCommit": true,
-    "trackedLeanSourceCount": 2228,
-    "registeredModuleCount": 2224,
+    "trackedLeanSourceCount": 2230,
+    "registeredModuleCount": 2225,
     "directImportCount": 37,
     "importFrontier": [
       "ChaCha",
@@ -65,6 +65,10 @@
       {
         "file": "tools/dependency_graph/Export.lean",
         "reason": "Not a module in any configured local Lean library"
+      },
+      {
+        "file": "tools/lean_audit/Audit.lean",
+        "reason": "Not a module in any configured local Lean library"
       }
     ],
     "scope": "All declarations of every tracked Lean module registered in lakefile.toml, including private and generated declarations, whether or not reachable from public results.",
@@ -77,12 +81,12 @@
     "referenceSemantics": "Direct elaborated expression references, including structure names in projection expressions and recursor rule bodies; no transitive closure. External dependencies are counted per source/target pair but excluded as nodes.",
     "generatedFlag": "Display heuristic: Lean internal-detail name after private-name demangling, missing direct declaration source range, or kernel recursor.",
     "buildChecked": true,
-    "edgeCount": 541141,
+    "edgeCount": 541073,
     "externalConstantCount": 3422,
     "externalModuleCount": 357,
-    "externalReferenceCount": 1412848,
-    "externalTypeReferenceCount": 454459,
-    "externalValueReferenceCount": 1342407,
+    "externalReferenceCount": 1411912,
+    "externalTypeReferenceCount": 454345,
+    "externalValueReferenceCount": 1341439,
     "loadedModules": [
       "ChaCha.Primary",
       "ChaCha.Reference",
@@ -2209,16 +2213,17 @@
       "MultiSplay.ForestProgramCoefficientBound",
       "MultiSplay.CommonForestCoefficientBound",
       "MultiSplay.ClassicalSwitchAccountingCoefficients",
+      "MultiSplay.GlobalPreferredGenericBound",
+      "MultiSplay.ComparatorEstimate",
+      "MultiSplay.CompetitiveEGFactor",
+      "MultiSplay.InitializedGenericBound",
       "MultiSplay.ClassicalSwitchAccountingEG",
       "MultiSplay.GlobalPreferredForestBound",
-      "MultiSplay.CompetitiveEGFactor",
       "MultiSplay.InitializedComparatorBound",
       "MultiSplay.ComparatorCompetitiveReduction",
-      "MultiSplay.GlobalPreferredGenericBound",
-      "MultiSplay.InitializedGenericBound",
       "MultiSplay.Competitive",
-      "DynamicOptimality.MultiSplayBound",
       "MultiSplay.CompetitiveLogHeight",
+      "DynamicOptimality.MultiSplayBound",
       "DynamicOptimalityResults",
       "Greedy.InitializedRun",
       "Greedy.StoredCreatorSum",
@@ -4354,6 +4359,7 @@
       "MultiSplay.RichRestrictionStable",
       "Greedy.MembershipInstall",
       "ChaCha.Paper20261030.SourceInitialization",
+      "MultiSplay.ComparatorEstimate",
       "ChaCha.Paper20261030.PreparedBlockIntervals",
       "ChaCha.Paper20261030.DecompositionInventory",
       "Splay.Accounting.ArticleBoundaryMoveWitness",
@@ -4525,9 +4531,9 @@
       "Greedy.AccessCensus",
       "Splay.Interface.ActivityBoundProof"
     ],
-    "nodeCount": 63307,
+    "nodeCount": 63301,
     "unresolvedConstants": [],
-    "moduleCount": 2224,
+    "moduleCount": 2225,
     "modulesWithoutDeclarations": [
       "AuditFiniteExecution",
       "ChaCha",
@@ -4545,44 +4551,44 @@
       "definition": 19802,
       "inductive": 1002,
       "recursor": 1004,
-      "theorem": 39435
+      "theorem": 39429
     },
     "groupCounts": {
       "Cha-Cha": 24640,
       "Greedy": 8850,
-      "MultiSplay": 6523,
-      "Shared": 2465,
+      "MultiSplay": 6515,
+      "Shared": 2467,
       "Splay": 20829
     },
     "selfReferenceCount": 985,
     "edgeMaskCounts": {
-      "1": 51169,
-      "2": 205327,
-      "3": 284645
+      "1": 51204,
+      "2": 205276,
+      "3": 284593
     }
   },
-  "nodes": 63307,
-  "edges": 541141,
-  "modules": 2214,
+  "nodes": 63301,
+  "edges": 541073,
+  "modules": 2215,
   "kinds": {
     "constructor": 2064,
     "definition": 19802,
     "inductive": 1002,
     "recursor": 1004,
-    "theorem": 39435
+    "theorem": 39429
   },
   "groups": {
     "Cha-Cha": 24640,
     "Greedy": 8850,
-    "MultiSplay": 6523,
-    "Shared": 2465,
+    "MultiSplay": 6515,
+    "Shared": 2467,
     "Splay": 20829
   },
-  "generated": 38963,
-  "typeEdges": 335814,
-  "valueEdges": 489972,
+  "generated": 38954,
+  "typeEdges": 335797,
+  "valueEdges": 489869,
   "selfEdges": 985,
-  "jsonSha256": "5c986a7ee1d12d08cfac3f10639e8a0d73a5cc989370828781cc69d9874c65e0",
-  "jsonBytes": 31671121,
-  "htmlBytes": 3826157
+  "jsonSha256": "88a94cf6d58a1fa1b3ba6fa2d57d2842d97050b8736432e4de62d7d80975809b",
+  "jsonBytes": 31667882,
+  "htmlBytes": 3845134
 }

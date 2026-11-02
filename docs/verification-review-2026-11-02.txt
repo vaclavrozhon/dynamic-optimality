@@ -1,0 +1,120 @@
+Verification after the library review — 2 November 2026
+======================================================
+
+Verified source commit
+----------------------
+
+821bd3171327537180ceb27be2c003b91e434ab5
+Unify MultiSplay factor proofs and audit every registered declaration
+
+GitHub Actions run 41403436493 completed successfully:
+https://github.com/vaclavrozhon/dynamic-optimality/actions/runs/41403436493
+
+Environment: Linux x86_64, Lean 4.32.1, and the pinned lake-manifest.json.
+This is a completed CI verification, not a claim of a fresh local rebuild.
+The subsequent publication commit adds this record, the source-hash inventory,
+documentation, the verified graph, and an audit-parser duplicate-handling fix;
+it does not change the verified Lean sources or viewer implementation.
+
+Build and audit
+---------------
+
+python3 tools/dependency_graph/export.py
+  Built all 2,225 registered local modules: 10,888 jobs, success.
+  Imported a compiler-derived frontier of 37 modules and verified full coverage.
+  Exported all local declarations and their direct expression dependencies.
+
+flock /tmp/dynamic-optimality-lean-build.lock make audit
+  All-module build: 10,888 jobs, success.
+  Explicit endpoint diagnostics from both root audit lists: 375.
+  Audited all registered local declarations: 63301
+  Declarations using nonstandard axioms: []
+
+The accepted axioms are propext, Classical.choice, and Quot.sound. The audit
+selects declarations by originating module, including private and generated
+declarations and local declarations outside the main namespaces. It rejects
+missing registered modules. Existing linter warnings do not constitute proof
+gaps; the build and audit completed successfully despite those warnings.
+
+The downloadable artifact lean-verification-821bd3171327537180ceb27be2c003b91e434ab5
+contains the complete build, export, and audit logs and module inventories.
+GitHub artifact retention is limited; the workflow can reproduce the checks.
+
+The verified project build cache was subsequently restored locally after its
+checksum, platform, toolchain, configuration, and source fingerprint matched.
+A local cached lake build DynamicOptimalityResults then completed successfully
+(10,177 jobs). This cache check is additional to the full CI verification above.
+
+Scope and refactor checks
+-------------------------
+
+See review-2026-11-02.txt for review scope, mathematical boundaries, and changes.
+All 20 pre-existing declaration headers in the changed mathematical modules
+were unchanged after whitespace normalization. ComparatorEstimate's moved
+definition was byte-identical. The new concrete results specialize the proved
+generic MultiSplay interface without changing the algorithm or cost model.
+
+Comparing the complete old and new declaration inventories found three authored
+additions and nine removed compiler-generated proof helpers. No authored
+declaration was removed. The authored additions are:
+  MultiSplay.admissible_egTargetFactor
+  DynamicOptimality.multisplay_logarithmic_competitive
+  DynamicOptimality.Results.splay_refined
+
+Local audit-tool checks passed:
+  - The new Lean audit helper compiles.
+  - A temporary imported module's ordinary and private declarations in the List
+    namespace are both selected by module provenance.
+  - A missing module in the manifest is rejected.
+  - Selecting an existing library axiom outside the allowlist is rejected.
+    The fixture introduced no new axiom or admitted proof.
+  - Duplicate endpoint commands within or across the two historical lists are
+    deduplicated. Their actual current union remains 375 commands.
+
+Python syntax, generated-driver preparation, and git diff --check passed.
+The source inventory snapshots/2026-11-02.review.sources.sha256 has 2,233 entries:
+2,230 tracked Lean files and the three pinned project configuration files.
+Every recorded hash matched the local files after the review.
+
+Graph snapshot
+--------------
+
+Registered modules:                    2,225
+Modules with declarations:              2,215
+Declarations:                         63,301
+Theorems:                             39,429
+Direct local declaration references: 541,073
+Module-to-module connections:         29,032
+
+The graph has no unresolved constant references. External library declarations
+are counted in metadata but are not graph nodes. The ten registered modules
+without declarations are still included in the coverage check.
+
+Registered-source SHA-256:
+3ab3b254e63efbb040d18621fe0f86a16fd4913ca38bc16a2f5b2bb42795bc08
+
+Uncompressed graph JSON SHA-256:
+88a94cf6d58a1fa1b3ba6fa2d57d2842d97050b8736432e4de62d7d80975809b
+
+Published standalone HTML SHA-256:
+bac814ae1d5ca6fc502bffe4f05515a8df279e326edb17bf8decb8939bf56ba9
+
+The verified CI export was matched against the local module inventory and
+registered-source fingerprint before packaging. Local and CI HTML contain
+identical viewer code and identical uncompressed JSON. Their gzip OS header
+byte differs between Python versions; the local packaged HTML is published.
+
+Browser verification
+--------------------
+
+Automated Chrome checks passed against the full new snapshot, on desktop and
+mobile viewports, with no JavaScript errors or horizontal page overflow:
+  - Modules / Declarations / Neighborhood switching and preserved selection.
+  - Explicit zoom controls and result shortcuts, including refined Splay.
+  - Star markers and visibility after clearing conflicting filters.
+  - Hover highlighting of all incident edges in the filtered view, including
+    all four incident edges of the test node omitted by the background sample.
+  - Hover removal retains the selected node's highlighted edges.
+
+Desktop overview and mobile neighborhood screenshots were also inspected.
+The graph is a navigation tool; its markers do not add mathematical claims.

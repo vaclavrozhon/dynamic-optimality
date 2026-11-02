@@ -2,6 +2,8 @@
 
 This document describes the current exported statements and their remaining boundaries. The repository contains the registered Lean developments and three additional root audit files. The source snapshot preserves their relative paths so the shared Lake configuration can resolve every local import. Experimental programs, datasets, dependency caches, and archived literature are not build inputs.
 
+The [2 November library review](docs/review-2026-11-02.txt) records the generic MultiSplay refactor and broader audit coverage. The [verification record](docs/verification-review-2026-11-02.txt) covers every current registered module and declaration; the older records below describe their respective milestones.
+
 ## Shared trees, optimum, and online strategies
 
 [DynamicOptimality.Basic](DynamicOptimality/Basic.lean) reuses two existing tree types. `BST lower upper` stores exactly the natural keys in the interval `[lower, upper)`, with ordering enforced by its type. `RawTree` stores the same ordinary binary-tree structure without interval indices. `BST.toRaw` preserves its keys, children, and ordering.
@@ -86,6 +88,8 @@ The argument has four stages, explained in [COMPOSED_BOUND.txt](multisplay/COMPO
 
 The generalization is `Online.competitive_generic`: any `g : Nat → Nat` with `AdmissibleForestFactor g` yields factor `comparisonFactor H * g(H)`. Admissibility means that `g` uniformly dominates the factor supplied by some proved persistent Splay interface coefficients at the constructed normalizer cap. It introduces no comparator assumption. With monotone `g`, `Online.competitive_generic_logarithmic` yields the sharper `L₃(n)*g(ceil(log₂(n+1)))`; `Online.competitive_generic_shifted` also gives `L₃(n)*g(2L₁(n))`. This is a generalization through the split/join interface; an arbitrary query-only Splay competitiveness theorem is not silently substituted for that interface. Replacing `g(2t)` by `O(g(t))` requires an additional scaling property, even when `g` is monotone; the formal theorem retains the factor two in its argument.
 
+The concrete factor's admissibility is proved by `admissible_egTargetFactor` in [GlobalPreferredGenericBound](multisplay/lean/MultiSplay/GlobalPreferredGenericBound.lean), with a fixed coefficient function and domination constant `16*168`. The concrete forest, initialization, and logarithmic-capacity bounds now specialize the generic arguments. [ComparatorEstimate](multisplay/lean/MultiSplay/ComparatorEstimate.lean) contains the shared exact-word comparator premise; `Online.comparator_estimate` discharges it using the actual comparator construction.
+
 The complete build and both namespace axiom audits passed on 1 November 2026; see the [verification record](multisplay/verification.txt).
 
 The earlier [composition audit](multisplay/composition-audit.tex), [forest normal form](multisplay/common-forest-normal-form.tex), and [comparator draft](multisplay/chacha-common-forest-comparator.tex) remain research documents. Their warnings about missing bridges describe earlier stages; the definitive current statements are the Lean endpoints and this map.
@@ -96,4 +100,4 @@ Use the pinned root [Lake configuration](lakefile.toml), [manifest](lake-manifes
 
 Run `make audit` before reporting a complete verified change. The [runner](tools/audit.py) builds every registered module, imports a compiler-derived frontier covering the full inventory, runs both root audit files' explicit endpoint diagnostics, and audits all declarations by their originating module. This covers local declarations outside the historical namespace filters and modules outside the public entry points' import closure. The original [AuditAll.lean](AuditAll.lean), [AuditDynamicOptimality.lean](AuditDynamicOptimality.lean), and [AuditGreedy.lean](AuditGreedy.lean) remain available as narrower direct checks. The allowed logical axioms are `propext`, `Classical.choice`, and `Quot.sound`. Auditing these dependencies complements, rather than replaces, review of definitions and theorem hypotheses.
 
-The [snapshot hashes](docs/snapshots/2026-11-02.sources.sha256) record the renamed sources, not a fresh build certificate for another machine. Record build and audit outcomes separately when reproducing them. [PROVENANCE.txt](docs/PROVENANCE.txt) explains the preserved splay history and omitted workspace material. No repository license has yet been selected.
+The [snapshot hashes](docs/snapshots/2026-11-02.review.sources.sha256) record the reviewed sources, not a fresh build certificate for another machine. Record build and audit outcomes separately when reproducing them. [PROVENANCE.txt](docs/PROVENANCE.txt) explains the preserved splay history and omitted workspace material. No repository license has yet been selected.

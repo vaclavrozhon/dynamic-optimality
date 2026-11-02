@@ -1,0 +1,119 @@
+Lean library review and refactoring — 2 November 2026
+===================================================
+
+Scope
+-----
+
+The structural review covered every registered Lean module, its compiled
+imports, and the complete declaration dependency graph. The baseline at
+1acfcf5 had 2,228 tracked Lean files (355,158 lines), of which 2,224 were
+registered mathematical modules. The remaining files were audit/export tools.
+
+A comment-aware source scan found no explicit sorry/admit, axiom or opaque
+declarations, unsafe declarations, or native_decide in that baseline.
+This source scan is supplementary: the compiled axiom audit is the relevant
+check for logical dependencies, including dependencies introduced by tactics.
+
+Manual mathematical review concentrated on the shared definitions, public
+algorithm statements, initialization, online transitions, comparator interfaces,
+and final numerical reductions. This is not a claim to have manually reread
+every line of every proof. Kernel checking and whole-library axiom coverage
+complement that review; neither alone establishes that a definition models
+the intended algorithm.
+
+Findings and changes
+--------------------
+
+1. Audit coverage
+
+The old AuditAll import closure contained 2,151 of the 2,224 registered
+modules. The other 73 modules contained 2,223 declarations. A further 81
+loaded declarations, including five handwritten List lemmas and generated
+helpers, fell outside its namespace filter. This accounts for the difference
+between the graph's 63,307 declarations and the audit's 61,003 targets.
+Some omitted targets could still be visited as dependencies of audited ones.
+This was a coverage gap, not an identified false theorem or rejected proof.
+
+The new tools/audit.py runner builds all registered modules and constructs
+one import driver from compiler metadata. tools/lean_audit/Audit.lean checks
+that every registered module was loaded, then selects declarations by their
+actual source module. It includes private and generated declarations and
+local declarations in other namespaces. All explicit endpoint diagnostics
+from both historical root audit lists are retained. One complete pass
+replaces the two overlapping namespace scans in make audit. The old root
+files remain usable as narrower direct checks.
+
+2. One generic MultiSplay argument
+
+GlobalPreferredGenericBound now proves admissible_egTargetFactor: the concrete
+refined Splay factor satisfies the persistent search/split/join interface
+required by the generic theorem. The same coefficient function works for
+every capacity, with domination constant 16*168.
+
+The actual-forest bound, the one-time initialization argument, and the exact
+logarithmic-capacity theorem now specialize the generic argument instead of
+repeating it for the concrete factor. ComparatorEstimate is defined once in
+its own module to keep imports acyclic. Its fully qualified name and defining
+condition are unchanged. Existing public theorem names and types are retained.
+The fixed algorithm, its cost, its comparator construction, and its online
+choices are unchanged. Existential numerical witnesses in the reorganized
+proofs need not be the same witnesses as before.
+
+An independent source comparison found all 20 pre-existing declaration
+headers in the changed mathematical modules unchanged after whitespace
+normalization; the moved ComparatorEstimate definition is byte-identical.
+The internal import direction changes: InitializedGenericBound no longer
+imports its concrete specialization. A client that obtained concrete results
+incidentally through that generic module should import
+InitializedComparatorBound or CompetitiveLogHeight explicitly. The documented
+public result entry points retain their previous declarations.
+
+3. Consistent public entry points
+
+DynamicOptimality.Results.splay_refined exposes the existing refined Splay
+theorem beside the simpler one. DynamicOptimality.MultiSplayBound now exports
+the exact logarithmic-capacity result as multisplay_logarithmic_competitive,
+while retaining multisplay_competitive for its older shifted formulation.
+
+4. Mathematical boundaries retained
+
+Competitive fixes one constant before the universe, supplied initial tree,
+and request sequence. Every comparison uses the same attained OPT.
+Cha-Cha and classical MultiSplay certify ordinary rotations and the initial
+search depth, on exactly the original physical keys, with initialization paid
+once. Their concrete endpoints retain no unproved comparator premise.
+
+Generic MultiSplay still requires the persistent split/join interface; a bound
+for query-only Splay is not substituted for it. Greedy remains a geometric
+online algorithm. Finite cost equivalence of the five models does not claim
+the deferred online geometry-to-BST conversion.
+
+5. Deliberately retained structure
+
+At the baseline, the six inspected result endpoints collectively reached
+23,257 local declarations. The other 40,050 declarations include generated
+helpers, reusable results, and separate controller developments. Lack of a
+path from a chosen endpoint is not grounds for deleting those modules.
+
+Small remaining duplications, such as two proofs identifying an indexed
+tree's inorder list with List.range, do not justify changing foundational
+interfaces in this pass. The refactor targets the duplicated final MultiSplay
+argument and the concrete audit-coverage problem.
+
+Proof graph
+-----------
+
+The viewer has prominent Modules / Declarations / Neighborhood controls,
+explicit zoom buttons, and shortcuts to the public results. Stars identify
+main algorithm statements and their proof modules; a diamond distinguishes
+the supporting model-equivalence theorem. Hovering highlights every incident
+edge in the current filtered view, including edges omitted from the counted
+background drawing sample. These markers are navigation metadata, not new
+Lean declarations or assumptions.
+
+Verification
+------------
+
+The full build, expanded axiom audit, graph export, and browser checks passed.
+Their scope, counts, and source fingerprints are recorded separately in
+verification-review-2026-11-02.txt.

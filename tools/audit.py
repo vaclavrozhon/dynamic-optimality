@@ -53,9 +53,10 @@ def endpoint_commands() -> list[str]:
     for filename in ("AuditAll.lean", "AuditDynamicOptimality.lean"):
         for line in (ROOT / filename).read_text().splitlines():
             match = re.fullmatch(r"\s*#print\s+axioms\s+([\w.']+)\s*", line)
-            if match and match[1] not in seen:
-                commands.append(f"#print axioms {match[1]}")
-                seen.add(match[1])
+            if match:
+                if match[1] not in seen:
+                    commands.append(f"#print axioms {match[1]}")
+                    seen.add(match[1])
             elif re.match(r"\s*#print\s+axioms\b", line):
                 raise RuntimeError(f"Unsupported endpoint command in {filename}: {line}")
     if not commands:
