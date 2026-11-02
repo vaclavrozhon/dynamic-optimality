@@ -13,9 +13,9 @@ only a partition of keys into component domains.
 namespace MultiSplay.Global.Preferred
 
 open DynamicOptimality (RawTree)
-open TangoSquared.MTR
+open ChaCha.MTR
 open Pointer (MarkedTree)
-open TangoSquared.Primary (Key)
+open ChaCha.Primary (Key)
 open EndpointEncoding ClassicalSwitch
 
 variable {α : Type*}

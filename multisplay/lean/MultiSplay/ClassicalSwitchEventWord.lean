@@ -13,8 +13,8 @@ and comparator decisions are absent from these definitions.
 namespace MultiSplay.ClassicalSwitch
 
 open DynamicOptimality (RawTree BST)
-open TangoSquared.MTR.Tree (inorder)
-open TangoSquared.Primary (Key)
+open ChaCha.MTR.Tree (inorder)
+open ChaCha.Primary (Key)
 open EndpointEncoding CommonForest
 
 variable {α : Type*}

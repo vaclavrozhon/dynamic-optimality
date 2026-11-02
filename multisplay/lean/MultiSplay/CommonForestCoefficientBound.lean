@@ -40,7 +40,7 @@ namespace MultiSplay.DenseForest
 open DynamicOptimality (RawTree)
 open Splay.Interface (ActivityCoefficients CoefficientBound)
 open Splay.Accounting (articleShape)
-open TangoSquared.MTR.Tree (inorder size)
+open ChaCha.MTR.Tree (inorder size)
 
 variable {α : Type*}
 
@@ -96,7 +96,7 @@ namespace MultiSplay.CommonForest
 open DynamicOptimality (RawTree)
 open Splay.Interface (ActivityCoefficients CoefficientBound)
 open Splay.Accounting (articleShape)
-open TangoSquared.MTR.Tree (inorder size)
+open ChaCha.MTR.Tree (inorder size)
 
 variable {α : Type*}
 
@@ -135,7 +135,7 @@ theorem exists_splay_comparison_of_coefficients :
     bound coefficients valid α capacity run geometry (same.trans initialDomains.symm)
   have sizesEq : (actual.map size).sum = Forest.potential size sources := by
     have lengths := congrArg (fun domains : List (List α) => (domains.map List.length).sum) same
-    simpa only [Forest.potential, List.map_map, Function.comp_def, TangoSquared.MTR.Tree.length_inorder] using lengths
+    simpa only [Forest.potential, List.map_map, Function.comp_def, ChaCha.MTR.Tree.length_inorder] using lengths
   have volume : 2 * (actual.map size).sum + actual.length + work ≤
       2880036864 * ((actual.map size).sum + actual.length + budget) := by
     rw [← sizesEq] at paid

@@ -11,8 +11,8 @@ the third point of every new rectangle. No initial-tree charge is needed.
 
 namespace DynamicOptimality.Geometry
 
-open TangoSquared TangoSquared.MTR TangoSquared.MTR.Tree
-open TangoSquared.MTR.Tree.PriorityHull GreedyMerge.Geometry
+open ChaCha ChaCha.MTR ChaCha.MTR.Tree
+open ChaCha.MTR.Tree.PriorityHull GreedyMerge.Geometry
 
 noncomputable def hullRow {before after : RawTree Nat} {request : Nat}
     (access : HullAccess request before after) : Finset Nat := access.source.inorder.toFinset

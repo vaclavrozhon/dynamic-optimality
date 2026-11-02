@@ -12,8 +12,8 @@ next request. Its work is exactly the strategy's recorded splay work.
 namespace MultiSplay.Global.Preferred
 
 open DynamicOptimality (RawTree BST)
-open TangoSquared.MTR
-open TangoSquared.Primary (Key)
+open ChaCha.MTR
+open ChaCha.Primary (Key)
 open EndpointEncoding ClassicalSwitch CommonForest
 
 variable {α : Type*}

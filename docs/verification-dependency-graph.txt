@@ -59,3 +59,7 @@ Exit status 0. Default build: 10814 jobs. AuditAll checked 61003 declarations;
 AuditDynamicOptimality checked 45185. Both reported no nonstandard axioms.
 These audit counts overlap and concern their existing imported namespaces;
 they are not the declaration count of the broader all-module graph.
+
+Historical record: names and paths above use the current Cha-Cha spelling.
+The original version is preserved in commit a2d6810; the complete post-rename
+build and audit are recorded in docs/verification-chacha-rename.txt.

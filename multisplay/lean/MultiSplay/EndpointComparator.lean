@@ -2,7 +2,7 @@ import MultiSplay.CopyComparator
 import MultiSplay.EndpointPrimary
 import MultiSplay.ReferenceAddresses
 import MultiSplay.SwitchEmissions
-import TangoSquared.LowerBound
+import ChaCha.LowerBound
 
 /-!
 # The same adaptive endpoint word for counters and competitors
@@ -19,7 +19,7 @@ This does not yet bound the secondary ledger or the physical multi-splay cost.
 namespace MultiSplay.EndpointEncoding
 
 open DynamicOptimality (RawTree)
-open TangoSquared.Primary (Key)
+open ChaCha.Primary (Key)
 
 def choices (address : Nat → Key) (state : State) : List Nat → List (Nat × Bool)
   | [] => []
@@ -39,7 +39,7 @@ theorem choices_word (height : Nat) (address : Nat → Key) (state : State) (key
 theorem exists_endpoint_competitor {n : Nat} (requests : List (Fin n))
     (height : Nat) (address : Nat → Key) (state : State) :
     ∃ (initial : DynamicOptimality.BST 0 n) (final : RawTree Nat) (cost : Nat),
-      TangoSquared.MTR.Pointer.Execution
+      ChaCha.MTR.Pointer.Execution
         (CopyComparator.expand (fun side key => copy height (address key) side) initial.toRaw)
         (encode height state ((requests.map Fin.val).map address))
         (CopyComparator.expand (fun side key => copy height (address key) side) final) cost ∧
@@ -69,7 +69,7 @@ theorem primary_switches_le_OPT {n height : Nat} (requests : List (Fin n))
     (fun key member => within key (DynamicOptimality.BST.toRaw_mem initial |>.mp member).2)
     (fun x hx y hy less => between x (DynamicOptimality.BST.toRaw_mem initial |>.mp hx).2
       y (DynamicOptimality.BST.toRaw_mem initial |>.mp hy).2 less)
-  have leaves : ∀ leaf ∈ TangoSquared.MTR.Tree.inorder
+  have leaves : ∀ leaf ∈ ChaCha.MTR.Tree.inorder
       (CopyComparator.expand (fun side key => copy height (address key) side) initial.toRaw),
       leaf.length = 2 * height := by
     intro leaf member
@@ -78,7 +78,7 @@ theorem primary_switches_le_OPT {n height : Nat} (requests : List (Fin n))
     have keyBound := (DynamicOptimality.BST.toRaw_mem initial |>.mp inInitial).2
     simp only [List.mem_cons, List.not_mem_nil, or_false] at inPair
     rcases inPair with rfl | rfl <;> exact copy_length (inside key keyBound) _
-  have lower := TangoSquared.dynamic_bst_lower_bound execution ordered leaves
+  have lower := ChaCha.dynamic_bst_lower_bound execution ordered leaves
   have primary := nodeCost_le_primary height state ((requests.map Fin.val).map address)
   rw [encode_length, List.length_map, List.length_map] at lower
   omega

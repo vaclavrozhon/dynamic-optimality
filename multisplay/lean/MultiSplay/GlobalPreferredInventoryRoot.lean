@@ -13,9 +13,9 @@ contribute no nonempty component; the completed forest supplies their slots.
 namespace MultiSplay.Global.Preferred
 
 open DynamicOptimality (RawTree)
-open TangoSquared.MTR
+open ChaCha.MTR
 open Pointer (MarkedTree)
-open TangoSquared.Primary (Key)
+open ChaCha.Primary (Key)
 open EndpointEncoding ClassicalSwitch
 
 variable {α : Type*}
@@ -51,7 +51,7 @@ theorem repartition_inventory {state : State} {reference left right : RawTree α
   obtain ⟨front,back,beforeHoles,afterHoles,frontLength⟩ := path.holes_switch
   obtain ⟨actualFront,actualBack,actualLength,beforeActual,afterActual⟩ := partition
   have aligned : front.length = actualFront.length := frontLength.trans actualLength.symm
-  have focusUnique : (TangoSquared.MTR.Tree.node left pivot right).inorder.Nodup := by
+  have focusUnique : (ChaCha.MTR.Tree.node left pivot right).inorder.Nodup := by
     rw [← path.referenceAt]
     exact unique.sublist (referenceAt_inorder_sublist reference address)
   rw [beforeHoles,beforeActual] at children

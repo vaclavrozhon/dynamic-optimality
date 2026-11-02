@@ -543,7 +543,7 @@
       <div>
         <div class="eyebrow">Dynamic optimality · Lean</div>
         <h1>Proof atlas</h1>
-        <p>Explore the declarations behind the formal proofs.</p>
+        <p><a href="https://vaclavrozhon.github.io/dynamic-optimality/">Project overview</a> · <a href="https://github.com/vaclavrozhon/dynamic-optimality" target="_blank" rel="noopener noreferrer">Source repository</a></p>
       </div>
       <div class="headstats" aria-label="Repository totals">
         <div><strong id="total-nodes">—</strong><span>declarations</span></div>
@@ -1798,9 +1798,7 @@ onmessage = (e) => {
                 "Graph node IDs must be consecutive and match array positions.",
               );
             if (
-              nodes[i].group === "ChaCha" ||
-              nodes[i].group === "Cha-Cha" ||
-              nodes[i].group === "Cha-Cha / Tango²"
+              nodes[i].group === "ChaCha"
             )
               nodes[i].group = "Cha-Cha";
             if (!colors[nodes[i].group]) nodes[i].group = "Other";

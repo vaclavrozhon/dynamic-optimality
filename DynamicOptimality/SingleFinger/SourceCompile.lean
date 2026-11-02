@@ -1,5 +1,5 @@
-import TangoSquared.Paper20261030.GapBSTCompilerCorrectness
-import TangoSquared.Paper20261030.SourceProgramObservation
+import ChaCha.Paper20261030.GapBSTCompilerCorrectness
+import ChaCha.Paper20261030.SourceProgramObservation
 
 /-! Compile a finite helper prefix, without halting or reinitializing the
 single-pointer simulator. The resulting physical cursor is retained for the
@@ -8,7 +8,7 @@ next helper call. This is the prefix form of the existing GapBST compiler.
 
 namespace DynamicOptimality.SingleFinger.SourceCompile
 
-open TangoSquared.Paper20261030
+open ChaCha.Paper20261030
 
 variable {α ρ σ : Type*}
 

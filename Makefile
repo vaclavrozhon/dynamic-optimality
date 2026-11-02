@@ -8,8 +8,8 @@ audit: lean
 	lake env lean AuditDynamicOptimality.lean
 
 guide:
-	cd docs/tango2-proof-guide && pdflatex -interaction=nonstopmode -halt-on-error guide.tex
-	cd docs/tango2-proof-guide && pdflatex -interaction=nonstopmode -halt-on-error guide.tex
+	cd docs/chacha-proof-guide && pdflatex -interaction=nonstopmode -halt-on-error guide.tex
+	cd docs/chacha-proof-guide && pdflatex -interaction=nonstopmode -halt-on-error guide.tex
 
 # The exporter serializes Lean work with the same lock used for audits.
 graph:

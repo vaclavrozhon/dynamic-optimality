@@ -1,6 +1,6 @@
 import MultiSplay.IntervalLayoutPayments
 import MultiSplay.IntervalGadgetPotentials
-import TangoSquared.GadgetLocalBound
+import ChaCha.GadgetLocalBound
 
 /-!
 # Actual local lower bounds for arbitrary binary interval hierarchies
@@ -12,9 +12,9 @@ entry or delayed record; no cost certificate is a premise.
 
 namespace MultiSplay.IntervalLower
 
-open TangoSquared
-open TangoSquared.Primary TangoSquared.CyclicRuns TangoSquared.GapChunks TangoSquared.TurnAccounting
-open TangoSquared.Witnesses TangoSquared.NormalizedWords TangoSquared.DelayedPayments TangoSquared.CyclicGapAccounting
+open ChaCha
+open ChaCha.Primary ChaCha.CyclicRuns ChaCha.GapChunks ChaCha.TurnAccounting
+open ChaCha.Witnesses ChaCha.NormalizedWords ChaCha.DelayedPayments ChaCha.CyclicGapAccounting
 open MultiSplay.IntervalLower.DelayedPayments
 
 theorem projectedLayout_returnsMatch {H : Nat} {hierarchy : DepthTree 0 H} {q : Gadget} {xs : List Key}

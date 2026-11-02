@@ -7,7 +7,7 @@ supply the local transport needed when an endpoint changes tendon queues.
 
 namespace DynamicOptimality.SingleFinger.SourceBoundary
 
-open TangoSquared.Paper20261030 ColoredStorage SourcePointer SourceLocalProgram
+open ChaCha.Paper20261030 ColoredStorage SourcePointer SourceLocalProgram
 open DynamicOptimality.LocalProgram (Move)
 open SourceSpine SourceCounted
 

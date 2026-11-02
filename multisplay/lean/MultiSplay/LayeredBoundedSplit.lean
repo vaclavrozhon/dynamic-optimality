@@ -53,7 +53,7 @@ theorem split_exists {capacity : Nat} (state : State capacity α)
   | empty => simp [State.source, DynamicOptimality.BST.toRaw, Auxiliary.map] at root
   | node l r =>
       simp only [State.source, DynamicOptimality.BST.toRaw, Auxiliary.map,
-        TangoSquared.MTR.Tree.node.injEq] at root
+        ChaCha.MTR.Tree.node.injEq] at root
       obtain ⟨heavy⟩ := Heavy.exists_split heavyRep
       have heavyFits : heavyTree.size ≤ capacity := (Rib.same_interval_size (.node l r) heavyTree) ▸ fits
       have initialHeight := heavyRep.height_le_capacity fits

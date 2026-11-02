@@ -1,6 +1,6 @@
 import MultiSplay.ComparatorPreparedSuffixSeam
 import MultiSplay.ComparatorTailMemory
-import TangoSquared.Paper20261030.MarkedJoin
+import ChaCha.Paper20261030.MarkedJoin
 
 /-! # Restoring an incoming tail at an existing separator
 
@@ -12,7 +12,7 @@ incoming component itself, so its actual off-path components persist.
 
 namespace MultiSplay.ComparatorIncomingSeam
 
-open TangoSquared
+open ChaCha
 open Paper20261030
 open Std Std.DTreeMap.Internal Std.DTreeMap.Internal.Impl
 open ColoredStorage Auxiliary Auxiliary.Metadata AuxiliaryComponent BoundaryObservations PathDecomposition

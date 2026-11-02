@@ -13,7 +13,7 @@ than supplied as an unverified labeling. The endpoint copies respect this order.
 
 namespace MultiSplay.EndpointEncoding
 
-open TangoSquared.Primary (Key)
+open ChaCha.Primary (Key)
 open DynamicOptimality (BST)
 
 inductive Before : Key → Key → Prop

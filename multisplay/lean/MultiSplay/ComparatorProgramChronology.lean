@@ -12,8 +12,8 @@ parameters here; the actual comparator instantiates them separately.
 namespace MultiSplay.ComparatorHistory
 
 open DynamicOptimality (RawTree)
-open TangoSquared (DepthTree)
-open TangoSquared.Primary (Key)
+open ChaCha (DepthTree)
+open ChaCha.Primary (Key)
 open EndpointEncoding ClassicalSwitch CommonForest
 open Secondary (Row)
 

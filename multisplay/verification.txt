@@ -14,7 +14,7 @@ Result: exit status 0.
     Build completed successfully (10797 jobs).
 
   lake env lean AuditAll.lean
-    Audited shared, splay, Greedy, Tango-squared and MultiSplay declarations:
+    Audited shared, splay, Greedy, Cha-Cha and MultiSplay declarations:
       60379
     Declarations using nonstandard axioms: []
 
@@ -71,3 +71,7 @@ original keys. The final statement does not assert an executable evaluator
 or a bounded local navigation controller.
 
 See COMPOSED_BOUND.txt for the mathematical argument and the module map.
+
+Historical record: names and paths above use the current Cha-Cha spelling.
+The original version is preserved in commit a2d6810; the complete post-rename
+build and audit are recorded in docs/verification-chacha-rename.txt.

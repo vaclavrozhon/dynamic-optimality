@@ -13,7 +13,7 @@ ancestor switches have placed the query in the global root component.
 namespace MultiSplay.Global
 
 open DynamicOptimality DynamicOptimality.SearchRotation
-open TangoSquared.MTR
+open ChaCha.MTR
 open Pointer (MarkedTree)
 open ClassicalSwitch
 

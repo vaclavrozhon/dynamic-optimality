@@ -5,7 +5,7 @@ import Splay.Tree.RotationDepthBound
 
 namespace DynamicOptimality.SearchRotation
 
-open TangoSquared.MTR
+open ChaCha.MTR
 
 theorem toRaw_searchDepth {lower upper key : Nat} (tree : BST lower upper)
     (insideLower : lower ≤ key) (insideUpper : key < upper) :

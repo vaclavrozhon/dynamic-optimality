@@ -14,7 +14,7 @@ The comparison with the splay forest is a separate subsequent theorem.
 namespace MultiSplay.Layered.Bounded
 
 open DynamicOptimality (RawTree)
-open TangoSquared.MTR.Tree (size)
+open ChaCha.MTR.Tree (size)
 
 variable {α : Type*}
 

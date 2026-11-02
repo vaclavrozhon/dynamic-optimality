@@ -20,7 +20,7 @@ splits. Empty tails do not delete the pivot split or its final raw join.
 namespace MultiSplay.ClassicalSwitch
 
 open DynamicOptimality (RawTree)
-open TangoSquared.MTR.Tree (inorder rootKey)
+open ChaCha.MTR.Tree (inorder rootKey)
 open CommonForest
 
 variable {α : Type*}

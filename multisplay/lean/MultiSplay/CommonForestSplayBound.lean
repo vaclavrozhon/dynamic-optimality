@@ -18,7 +18,7 @@ whole execution. This is the original interface factor; E(G) is not used.
 namespace MultiSplay.CommonForest
 
 open DynamicOptimality (RawTree)
-open TangoSquared.MTR.Tree (inorder size)
+open ChaCha.MTR.Tree (inorder size)
 
 variable {α : Type*}
 

@@ -18,15 +18,15 @@ uses them in all subsequent operations; it never resets their shapes.
 namespace MultiSplay.CommonForest
 
 open DynamicOptimality (RawTree)
-open TangoSquared.MTR.Tree (inorder rootKey)
-open TangoSquared.MTR.Pointer (Frame)
+open ChaCha.MTR.Tree (inorder rootKey)
+open ChaCha.MTR.Pointer (Frame)
 
 variable {α : Type*}
 
 def PointerSplay : Access α := fun key a b rotations =>
   Auxiliary.Splay key a b rotations ∧
   ∀ outer : List (Frame α),
-    TangoSquared.MTR.Pointer.Trace ⟨a, outer⟩ [key] ⟨b, outer⟩ (3 * rotations + 1)
+    ChaCha.MTR.Pointer.Trace ⟨a, outer⟩ [key] ⟨b, outer⟩ (3 * rotations + 1)
 
 abbrev PointerSplayTrace := @Trace α PointerSplay idle
 

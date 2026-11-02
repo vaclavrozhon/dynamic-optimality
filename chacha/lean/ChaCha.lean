@@ -1,0 +1,32 @@
+import ChaCha.Monotonicity
+import ChaCha.RestrictedRotations
+import ChaCha.Recency
+import ChaCha.TurnAccounting
+import ChaCha.NormalizedWords
+import ChaCha.BSTExecution
+import ChaCha.ExecutionFacts
+import ChaCha.Simulation
+import ChaCha.CyclicCounts
+import ChaCha.PeriodicAccounting
+import ChaCha.FragmentHierarchy
+import ChaCha.BinaryLeafPotential
+import ChaCha.GadgetAggregation
+import ChaCha.ReturnLayouts
+import ChaCha.OccurrenceAccounting
+import ChaCha.EntryPayments
+import ChaCha.DelayedPayments
+import ChaCha.ExitGapBridge
+import ChaCha.Transfer
+import ChaCha.LowerBound
+import ChaCha.FlipAccounting
+import ChaCha.PreferenceStability
+import ChaCha.MarkedHull
+import ChaCha.VineTour
+import ChaCha.BitReversal
+import ChaCha.BroadcastTour
+import ChaCha.EndpointProvenance
+import ChaCha.ColoredMerge
+import ChaCha.DynamicReferenceBoxes
+import ChaCha.AdjacentWalkFirstEntry
+
+/-! Formalization of the Cha-Cha lower-bound argument. -/

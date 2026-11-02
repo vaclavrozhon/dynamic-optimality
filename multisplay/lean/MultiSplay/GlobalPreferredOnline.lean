@@ -14,7 +14,7 @@ requires the persistent forest replay and its cheap exact-word comparator.
 namespace MultiSplay.Global.Preferred.Online
 
 open DynamicOptimality DynamicOptimality.SearchRotation
-open TangoSquared.MTR
+open ChaCha.MTR
 open EndpointEncoding ClassicalSwitch
 
 variable {n : Nat}

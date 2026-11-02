@@ -13,8 +13,8 @@ joins, and charges the initial global potential only once.
 namespace MultiSplay.ForestCompiler
 
 open DynamicOptimality (RawTree)
-open TangoSquared.MTR.Tree (inorder size)
-open TangoSquared.Paper20261030.Auxiliary (Rearranges)
+open ChaCha.MTR.Tree (inorder size)
+open ChaCha.Paper20261030.Auxiliary (Rearranges)
 open CommonForest (RootAccess RotationPreparation)
 
 variable {α σ : Type*}
@@ -110,7 +110,7 @@ theorem interface_step {input output : CommonForest.Preparation α} {outputAcces
       have fits := joins (.join (inorder left) key (inorder right)) (by simp)
       have sizeBound : size (source a) + size (source b) + 1 ≤ capacity := by
         simpa [CommonForest.Domains.JoinFits, aEq, bEq,
-          TangoSquared.MTR.Tree.length_inorder, Nat.add_assoc, Nat.add_comm, Nat.add_left_comm] using fits
+          ChaCha.MTR.Tree.length_inorder, Nat.add_assoc, Nat.add_comm, Nat.add_left_comm] using fits
       obtain ⟨result, cost, resultEq, run, bound⟩ := primitives.join a b key sizeBound
       exact ⟨[result], cost, by simp [resultEq, aEq, bEq], by simpa [aEq, bEq] using run,
         by simpa [Forest.potential, Nat.add_assoc] using bound⟩

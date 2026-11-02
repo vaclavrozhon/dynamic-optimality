@@ -344,5 +344,5 @@ import ValueNullRanks
 import WinnerGeometry
 
 /-! Geometric Greedy and its unconditional log-log competitive theorem,
-built in the shared DynamicOptimality project alongside Splay and Tango².
+built in the shared DynamicOptimality project alongside Splay and Cha-Cha.
 The public endpoint is `Greedy.competitive : Greedy.Target`. -/

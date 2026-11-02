@@ -5,7 +5,7 @@ import MultiSplay.DenseForestCompiler
 namespace MultiSplay.DenseForest
 
 open DynamicOptimality (RawTree)
-open TangoSquared.MTR.Tree (inorder size)
+open ChaCha.MTR.Tree (inorder size)
 
 variable {α : Type*}
 

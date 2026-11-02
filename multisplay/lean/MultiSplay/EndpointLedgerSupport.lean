@@ -9,8 +9,8 @@ only core vertices and core-owned rows, rather than the full perfect reference.
 
 namespace MultiSplay.EndpointEncoding
 
-open TangoSquared (changesFrom alternations primaryCount)
-open TangoSquared.Primary (Key branch owners)
+open ChaCha (changesFrom alternations primaryCount)
+open ChaCha.Primary (Key branch owners)
 
 theorem leafCost_eq_sum (height : Nat) (state : State) (leaves : List Key) :
     leafCost height state leaves = ∑ owner ∈ owners height,
@@ -26,7 +26,7 @@ theorem leafCost_eq_sum (height : Nat) (state : State) (leaves : List Key) :
       | none => simp [write,changes,leafStep]
       | some side =>
           by_cases same : state owner = side <;>
-            simp [write,changes,leafStep,changesFrom,TangoSquared.edgeChange,same]
+            simp [write,changes,leafStep,changesFrom,ChaCha.edgeChange,same]
 
 theorem encoded_outside_changes_zero {height : Nat} {leafState : State}
     (right : RightOutside height leafState) (nodeState : State) {addresses : List Key}
@@ -51,7 +51,7 @@ theorem encoded_outside_changes_zero {height : Nat} {leafState : State}
       | some side =>
           cases side
           · exact False.elim (noLeft write)
-          · simpa only [write,Option.getD_some,changesFrom,TangoSquared.edgeChange,old,
+          · simpa only [write,Option.getD_some,changesFrom,ChaCha.edgeChange,old,
               if_true,Nat.zero_add] using later
 
 theorem encoded_leafCost_le_primary {height : Nat} {leafState : State}
@@ -65,9 +65,9 @@ theorem encoded_leafCost_le_primary {height : Nat} {leafState : State}
           if owner ∈ coreNodes height then 1 else 0 := by
     intro owner member
     by_cases present : owner ∈ coreNodes height
-    · simpa only [if_pos present] using TangoSquared.FlipAccounting.changesFrom_le_alternations_add_one
+    · simpa only [if_pos present] using ChaCha.FlipAccounting.changesFrom_le_alternations_add_one
         (leafState owner) ((encode height nodeState addresses).filterMap (branch owner))
-    · rw [encoded_outside_changes_zero right nodeState inside present ((TangoSquared.Primary.mem_owners _ _).mp member),if_neg present]
+    · rw [encoded_outside_changes_zero right nodeState inside present ((ChaCha.Primary.mem_owners _ _).mp member),if_neg present]
       omega
   have sums := Finset.sum_le_sum rows
   rw [Finset.sum_add_distrib,← leafCost_eq_sum,Finset.sum_boole] at sums
@@ -81,8 +81,8 @@ end MultiSplay.EndpointEncoding
 
 namespace MultiSplay.Secondary
 
-open TangoSquared (DepthTree)
-open TangoSquared.Primary (Key)
+open ChaCha (DepthTree)
+open ChaCha.Primary (Key)
 open EndpointEncoding
 
 theorem project_false {row : Row} {leaf emitted : Key}

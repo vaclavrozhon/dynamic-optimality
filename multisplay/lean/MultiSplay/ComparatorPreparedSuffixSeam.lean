@@ -1,5 +1,5 @@
 import MultiSplay.ComparatorSeam
-import TangoSquared.Paper20261030.PreparedSuffixCut
+import ChaCha.Paper20261030.PreparedSuffixCut
 
 /-!
 # The prepared cut produces the tail boundary seam
@@ -13,7 +13,7 @@ the exact balanced split; no tail representation is assumed.
 
 namespace MultiSplay.ComparatorPreparedSuffix
 
-open TangoSquared
+open ChaCha
 open Paper20261030
 open Std Std.DTreeMap.Internal Std.DTreeMap.Internal.Impl
 open ColoredStorage Auxiliary Auxiliary.Metadata AuxiliaryComponent BoundaryObservations PathDecomposition

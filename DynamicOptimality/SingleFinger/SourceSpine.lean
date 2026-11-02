@@ -1,4 +1,4 @@
-import TangoSquared.Paper20261030.SourceProgramObservation
+import ChaCha.Paper20261030.SourceProgramObservation
 
 /-! The counted spine kernels in the actual leaf-oriented source language.
 The only runtime register is a natural countdown. All source subtrees below
@@ -8,7 +8,7 @@ and rotations only. The existing GapBST compiler can compile these routines.
 
 namespace DynamicOptimality.SingleFinger.SourceSpine
 
-open TangoSquared.Paper20261030 ColoredStorage SourcePointer SourceLocalProgram
+open ChaCha.Paper20261030 ColoredStorage SourcePointer SourceLocalProgram
 open DynamicOptimality.LocalProgram (Move)
 
 variable {α ρ : Type*}

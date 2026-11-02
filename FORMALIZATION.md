@@ -35,7 +35,7 @@ The full build and both namespace audits passed with these modules imported on 1
 | `DynamicOptimality.Results.splay` | `Competitive Splay.Accounting.concreteSplayCost Splay.Analysis.targetFactor`, where the factor is `L₂(n) * L₃(n)^2`. |
 | `DynamicOptimality.splay_eg_competitive` | The same actual splay cost with the additional proved factor `Splay.Analysis.egTargetFactor`; its exact definition is in [IteratedLogEGBound](splay/formalization/Splay/Accounting/IteratedLogEGBound.lean). |
 | `DynamicOptimality.Results.greedy` | `Competitive Greedy.cost Greedy.loglogFactor`, where `loglogFactor = L₂`. |
-| `DynamicOptimality.Results.tango2` | `Competitive DynamicOptimality.Tango2.All.cost (Splay.Analysis.iteratedLog 3)`. |
+| `DynamicOptimality.Results.chacha` | `Competitive DynamicOptimality.ChaCha.All.cost (Splay.Analysis.iteratedLog 3)`. |
 | `DynamicOptimality.Results.multisplay` | `Competitive MultiSplay.Online.cost (MultiSplay.logarithmicFactor Splay.Analysis.egTargetFactor)`, with factor `L₃(n) * egTargetFactor (ceil(log₂(n+1)))`. |
 
 Splay's cost counts requests and its actual standard rotations. Greedy's cost counts geometric touches from the surface determined by the supplied initial BST; a geometric point represents a key touched at a request time. These cost conventions remain explicit. The Greedy theorem does not itself export a strategy through `OnlineBST`.
@@ -44,7 +44,7 @@ The detailed splay and Greedy proof maps are [COMPLETED_PROOF.md](splay/formaliz
 
 ## Cha-Cha: actual online BST accesses on every universe
 
-The current manuscript calls the structure Cha-Cha; the Lean sources retain its earlier Tango² names. The final interface is [TangoSquaredAll.lean](TangoSquaredAll.lean), in namespace `DynamicOptimality.Tango2.All`:
+The final interface is [ChaChaAll.lean](ChaChaAll.lean), in namespace `DynamicOptimality.ChaCha.All`:
 
 - `strategy` is an `OnlineBST n`; its tree contains exactly `0,...,n-1`.
 - `initial_tree` identifies its initial physical tree with any supplied `BST 0 n`.
@@ -55,9 +55,9 @@ The current manuscript calls the structure Cha-Cha; the Lean sources retain its 
 
 The proof has four connected stages.
 
-1. Persistent primary and secondary preference histories are charged to a robust rectangle count, a geometric lower-bound quantity defined from the actual requests. The count is bounded by the shared BST optimum. The maintained component construction produces actual metadata-decorated BST accesses. [OnlineSharedOPT](tango_squared/lean/TangoSquared/Paper20261030/OnlineSharedOPT.lean) bounds one fixed online sequence of these accesses.
-2. [SearchRotationMetadata](tango_squared/lean/TangoSquared/Paper20261030/SearchRotationMetadata.lean) erases metadata while preserving real keys and both tree endpoints. It bounds the requested key's depth in the original tree, even when the source trace rotates before serving it. The resulting search-and-rotation cost is at most twice the source metadata cost. [OnlineSearchRotation](tango_squared/lean/TangoSquared/Paper20261030/OnlineSearchRotation.lean) fixes this conversion separately for each current state and request.
-3. [OnlineSearchRotationInitialization](tango_squared/lean/TangoSquared/Paper20261030/OnlineSearchRotationInitialization.lean) accepts any initial tree. The first request searches that supplied tree before initialization rotations. A permanent transition from fresh to active state charges initialization only once. [TangoSquaredAbstract.lean](TangoSquaredAbstract.lean) exports the power-of-two construction through `OnlineBST`.
+1. Persistent primary and secondary preference histories are charged to a robust rectangle count, a geometric lower-bound quantity defined from the actual requests. The count is bounded by the shared BST optimum. The maintained component construction produces actual metadata-decorated BST accesses. [OnlineSharedOPT](chacha/lean/ChaCha/Paper20261030/OnlineSharedOPT.lean) bounds one fixed online sequence of these accesses.
+2. [SearchRotationMetadata](chacha/lean/ChaCha/Paper20261030/SearchRotationMetadata.lean) erases metadata while preserving real keys and both tree endpoints. It bounds the requested key's depth in the original tree, even when the source trace rotates before serving it. The resulting search-and-rotation cost is at most twice the source metadata cost. [OnlineSearchRotation](chacha/lean/ChaCha/Paper20261030/OnlineSearchRotation.lean) fixes this conversion separately for each current state and request.
+3. [OnlineSearchRotationInitialization](chacha/lean/ChaCha/Paper20261030/OnlineSearchRotationInitialization.lean) accepts any initial tree. The first request searches that supplied tree before initialization rotations. A permanent transition from fresh to active state charges initialization only once. [ChaChaAbstract.lean](ChaChaAbstract.lean) exports the power-of-two construction through `OnlineBST`.
 4. [UniverseExtension](DynamicOptimality/UniverseExtension.lean) embeds an arbitrary universe into a power-of-two virtual universe. [SearchRotationProjection](DynamicOptimality/SearchRotationProjection.lean) removes every virtual key from the physical tree: each source rotation induces at most one physical rotation, and initial search depth cannot increase. [OnlineBSTProjection](DynamicOptimality/OnlineBSTProjection.lean) fixes those projected transitions online. Pruning the extended initial tree returns the exact supplied original tree. The extra keys exist only in free internal bookkeeping.
 
 [PaddingSize](DynamicOptimality/PaddingSize.lean) bounds the virtual universe by `4n` for `n > 0`; `UniverseExtension.OPT_castLE_le` bounds its embedded optimum by `6 * OPT`. [PaddingFactor](DynamicOptimality/PaddingFactor.lean) bounds the resulting factor by `4 * L₃(n)`. The explicit final theorem is
@@ -67,7 +67,7 @@ cost initial requests
   ≤ 3237120000456 * (OPT requests + n) * L₃(n).
 ```
 
-The [proof guide](docs/tango2-proof-guide/guide.pdf) explains the mathematical argument. [PROOF_REPAIRS_2026_10_30.md](tango_squared/lean/PROOF_REPAIRS_2026_10_30.md) records corrections and implementation differences from the imported manuscript. The stronger bounded local-controller model is separate from the completed abstract theorem; historical controller modules remain available without becoming additional hypotheses of the final result.
+The [proof guide](docs/chacha-proof-guide/guide.pdf) explains the mathematical argument. [PROOF_REPAIRS_2026_10_30.md](chacha/lean/PROOF_REPAIRS_2026_10_30.md) records corrections and implementation differences from the imported manuscript. The stronger bounded local-controller model is separate from the completed abstract theorem; historical controller modules remain available without becoming additional hypotheses of the final result.
 
 ## Classical MultiSplay: the composed bound
 
@@ -88,7 +88,7 @@ The generalization is `Online.competitive_generic`: any `g : Nat → Nat` with `
 
 The complete build and both namespace axiom audits passed on 1 November 2026; see the [verification record](multisplay/verification.txt).
 
-The earlier [composition audit](multisplay/composition-audit.tex), [forest normal form](multisplay/common-forest-normal-form.tex), and [comparator draft](multisplay/tango-common-forest-comparator.tex) remain research documents. Their warnings about missing bridges describe earlier stages; the definitive current statements are the Lean endpoints and this map.
+The earlier [composition audit](multisplay/composition-audit.tex), [forest normal form](multisplay/common-forest-normal-form.tex), and [comparator draft](multisplay/chacha-common-forest-comparator.tex) remain research documents. Their warnings about missing bridges describe earlier stages; the definitive current statements are the Lean endpoints and this map.
 
 ## Verification and repository boundaries
 
@@ -96,4 +96,4 @@ Use the pinned root [Lake configuration](lakefile.toml), [manifest](lake-manifes
 
 Run `lake build`, then `make audit` before reporting a complete verified change. The latter also runs the build and invokes [AuditAll.lean](AuditAll.lean) and [AuditDynamicOptimality.lean](AuditDynamicOptimality.lean). [AuditGreedy.lean](AuditGreedy.lean) supplies an additional focused audit. The allowed logical axioms are `propext`, `Classical.choice`, and `Quot.sound`. Auditing these dependencies complements, rather than replaces, review of definitions and theorem hypotheses.
 
-The [snapshot hashes](docs/snapshots/2026-11-01.sources.sha256) record the copied sources, not a fresh build certificate for another machine. Record build and audit outcomes separately when reproducing them. [PROVENANCE.txt](docs/PROVENANCE.txt) explains the preserved splay history and omitted workspace material. No repository license has yet been selected.
+The [snapshot hashes](docs/snapshots/2026-11-02.sources.sha256) record the renamed sources, not a fresh build certificate for another machine. Record build and audit outcomes separately when reproducing them. [PROVENANCE.txt](docs/PROVENANCE.txt) explains the preserved splay history and omitted workspace material. No repository license has yet been selected.

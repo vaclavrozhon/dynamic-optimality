@@ -8,7 +8,7 @@ operations and at most nine amortized operations. No stored subtree is read.
 
 namespace DynamicOptimality.SingleFinger.SourceOpenDeque
 
-open TangoSquared.Paper20261030 ColoredStorage SourcePointer SourceLocalProgram
+open ChaCha.Paper20261030 ColoredStorage SourcePointer SourceLocalProgram
 open DynamicOptimality.LocalProgram (Move)
 open SourceSpine SourceCounted SourceBoundary
 

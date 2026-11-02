@@ -24,7 +24,7 @@ not asserted by this module.
 
 namespace DynamicOptimality.SingleFinger.Spine
 
-open TangoSquared.MTR TangoSquared.Paper20261030.Auxiliary LocalProgram
+open ChaCha.MTR ChaCha.Paper20261030.Auxiliary LocalProgram
 
 variable {κ α ρ : Type*}
 

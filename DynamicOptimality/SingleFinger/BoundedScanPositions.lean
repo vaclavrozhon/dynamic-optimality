@@ -1,5 +1,5 @@
 import DynamicOptimality.SingleFinger.BoundedScan
-import TangoSquared.Paper20261030.SourceCursorPositions
+import ChaCha.Paper20261030.SourceCursorPositions
 
 /-! Completeness of bounded scanning for a physically reached marked
 vertex. Addresses occur only in this theorem's ghost hypothesis; the scanner
@@ -8,7 +8,7 @@ receives the fixed depth and the record predicate, never the address.
 
 namespace DynamicOptimality.SingleFinger.BoundedScan
 
-open TangoSquared.Paper20261030 ColoredStorage SourcePointer SourceLocalProgram
+open ChaCha.Paper20261030 ColoredStorage SourcePointer SourceLocalProgram
 
 variable {α ρ : Type*}
 

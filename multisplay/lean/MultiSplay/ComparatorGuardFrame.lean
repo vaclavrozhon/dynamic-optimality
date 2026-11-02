@@ -10,7 +10,7 @@ changing the projected component, provided its endpoint remains the same.
 
 namespace MultiSplay.ComparatorPrimary
 
-open DynamicOptimality TangoSquared Paper20261030
+open DynamicOptimality ChaCha Paper20261030
 open EndpointEncoding ColoredStorage PrimaryWings PreferredProjection
 open ComparatorGuard
 

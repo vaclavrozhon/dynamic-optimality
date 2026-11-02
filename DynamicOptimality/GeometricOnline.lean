@@ -19,7 +19,7 @@ simulations; no online geometric-to-BST converse is claimed here.
 namespace DynamicOptimality.Geometry
 
 open GreedyMerge.Geometry
-open TangoSquared.MTR TangoSquared.MTR.Tree.PriorityHull
+open ChaCha.MTR ChaCha.MTR.Tree.PriorityHull
 
 /-- Pure online geometry. The freshness condition makes each new row later
 than every previous touch represented by the stored surface. -/

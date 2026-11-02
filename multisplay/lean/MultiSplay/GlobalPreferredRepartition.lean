@@ -5,8 +5,8 @@ import MultiSplay.GlobalPreferredHoles
 namespace MultiSplay.Global
 
 open DynamicOptimality DynamicOptimality.SearchRotation
-open TangoSquared.MTR
-open TangoSquared.MTR.Tree (graft size inorder)
+open ChaCha.MTR
+open ChaCha.MTR.Tree (graft size inorder)
 open Pointer (MarkedTree)
 open ClassicalSwitch
 

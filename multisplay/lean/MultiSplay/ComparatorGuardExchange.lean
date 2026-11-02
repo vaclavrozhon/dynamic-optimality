@@ -5,7 +5,7 @@ import MultiSplay.ComparatorGuardReflected
 
 namespace MultiSplay.ComparatorGuard
 
-open TangoSquared Paper20261030 ColoredStorage PreferredProjection
+open ChaCha Paper20261030 ColoredStorage PreferredProjection
 open ComparatorPrimary (signature projected)
 open CommonForest
 

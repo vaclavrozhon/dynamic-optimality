@@ -1,6 +1,6 @@
 import MultiSplay.IntervalChunkPayments
-import TangoSquared.EntryPayments
-import TangoSquared.DelayedPayments
+import ChaCha.EntryPayments
+import ChaCha.DelayedPayments
 
 /-!
 # Entry and delayed payment families for arbitrary interval hierarchies
@@ -11,9 +11,9 @@ physical witness record. No injection or aggregate cost premise is supplied.
 
 namespace MultiSplay.IntervalLower.EntryPayments
 
-open TangoSquared MultiSplay.IntervalLower
-open TangoSquared.Primary TangoSquared.Witnesses TangoSquared.NormalizedWords TangoSquared.CyclicRuns TangoSquared.RunOccurrences
-open TangoSquared.CyclicEntryAccounting TangoSquared.ChunkOccurrences TangoSquared.TurnAccounting TangoSquared.EntryPayments
+open ChaCha MultiSplay.IntervalLower
+open ChaCha.Primary ChaCha.Witnesses ChaCha.NormalizedWords ChaCha.CyclicRuns ChaCha.RunOccurrences
+open ChaCha.CyclicEntryAccounting ChaCha.ChunkOccurrences ChaCha.TurnAccounting ChaCha.EntryPayments
 
 theorem entry_at_occurrence {H : Nat} {hierarchy : DepthTree 0 H} {q : Gadget} {word : List Key}
     (hq : Valid hierarchy q) (initial : Key → Bool) (leaves : OnLeaves H word)
@@ -124,9 +124,9 @@ end MultiSplay.IntervalLower.EntryPayments
 
 namespace MultiSplay.IntervalLower.DelayedPayments
 
-open TangoSquared MultiSplay.IntervalLower
-open TangoSquared.Primary TangoSquared.Witnesses TangoSquared.NormalizedWords TangoSquared.CyclicRuns TangoSquared.GapChunks
-open TangoSquared.CyclicGapAccounting TangoSquared.TurnAccounting TangoSquared.DelayedPayments
+open ChaCha MultiSplay.IntervalLower
+open ChaCha.Primary ChaCha.Witnesses ChaCha.NormalizedWords ChaCha.CyclicRuns ChaCha.GapChunks
+open ChaCha.CyclicGapAccounting ChaCha.TurnAccounting ChaCha.DelayedPayments
 
 theorem family_of_contexts {H : Nat} {hierarchy : DepthTree 0 H} {q : Gadget} {word : List Key}
     (hq : Valid hierarchy q) (initial : Key → Bool) (leaves : OnLeaves H word)

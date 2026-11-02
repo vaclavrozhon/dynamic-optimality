@@ -13,7 +13,7 @@ starts. Switch updates replace only the two selected endpoint components.
 
 namespace MultiSplay.ClassicalSwitch
 
-open TangoSquared.Primary (Key)
+open ChaCha.Primary (Key)
 open EndpointEncoding
 
 /-- The last nonpreferred boundary in a concatenated route is either inside
@@ -87,7 +87,7 @@ end MultiSplay.ClassicalSwitch
 namespace MultiSplay.ComparatorForest
 
 open DynamicOptimality (BST)
-open TangoSquared
+open ChaCha
 open Paper20261030
 open Primary (Key)
 open EndpointEncoding ClassicalSwitch

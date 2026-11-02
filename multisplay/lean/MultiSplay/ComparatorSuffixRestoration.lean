@@ -1,5 +1,5 @@
 import MultiSplay.ComparatorSuffixMemory
-import TangoSquared.Paper20261030.SecondaryAccessRearrangement
+import ChaCha.Paper20261030.SecondaryAccessRearrangement
 
 /-!
 # Physically restoring the structural suffix boundary
@@ -13,8 +13,8 @@ restoration proof, rather than an uncharged assignment to the boundary.
 
 namespace MultiSplay.ComparatorSuffix
 
-open TangoSquared
-open TangoSquared.Paper20261030
+open ChaCha
+open ChaCha.Paper20261030
 open Secondary (intervalUpdate)
 open SecondaryDecomposition
 open ColoredStorage Auxiliary AuxiliaryComponent BoundaryObservations PathDecomposition

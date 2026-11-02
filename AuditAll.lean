@@ -1,8 +1,8 @@
 import DynamicOptimalityResults
 import DynamicOptimality
 import Splay
-import TangoSquared
-import TangoSquaredPaper20261030
+import ChaCha
+import ChaChaPaper20261030
 import Greedy
 import MultiSplay
 import Lean
@@ -18,15 +18,15 @@ open Lean in
 run_cmd do
   Lean.Elab.Command.liftIO <| IO.eprintln "Imports loaded; checking public endpoints."
 
-#print axioms DynamicOptimality.Tango2.execution
-#print axioms DynamicOptimality.Tango2.online
-#print axioms DynamicOptimality.Tango2.competitive
-#print axioms DynamicOptimality.Tango2.competitor_bound
-#print axioms DynamicOptimality.Tango2.All.execution
-#print axioms DynamicOptimality.Tango2.All.online
-#print axioms DynamicOptimality.Tango2.All.competitive
-#print axioms DynamicOptimality.Tango2.All.competitor_bound
-#print axioms DynamicOptimality.Tango2.All.third_log_competitive
+#print axioms DynamicOptimality.ChaCha.execution
+#print axioms DynamicOptimality.ChaCha.online
+#print axioms DynamicOptimality.ChaCha.competitive
+#print axioms DynamicOptimality.ChaCha.competitor_bound
+#print axioms DynamicOptimality.ChaCha.All.execution
+#print axioms DynamicOptimality.ChaCha.All.online
+#print axioms DynamicOptimality.ChaCha.All.competitive
+#print axioms DynamicOptimality.ChaCha.All.competitor_bound
+#print axioms DynamicOptimality.ChaCha.All.third_log_competitive
 #print axioms MultiSplay.Online.execution
 #print axioms MultiSplay.Online.online
 #print axioms MultiSplay.Online.first_cost_eq_classical
@@ -51,7 +51,7 @@ run_cmd do
 open Lean in
 run_cmd do
   let env ← getEnv
-  let prefixes := #[`DynamicOptimality, `Splay, `TangoSquared,
+  let prefixes := #[`DynamicOptimality, `Splay, `ChaCha,
     `Greedy, `GreedyForest, `GreedyMerge, `MultiSplay]
   let mut targets : Array Name := #[]
   for (name, _) in env.constants.toList do
@@ -67,7 +67,7 @@ run_cmd do
     count := count + 1
     if count % 2000 == 0 then
       Lean.Elab.Command.liftIO <| IO.eprintln s!"Axiom audit progress: {count}/{targets.size}."
-  logInfo m!"Audited shared, splay, Greedy, Tango², and MultiSplay declarations: {count}"
+  logInfo m!"Audited shared, splay, Greedy, Cha-Cha, and MultiSplay declarations: {count}"
   logInfo m!"Declarations using nonstandard axioms: {unexpected}"
   unless unexpected.isEmpty do
     throwError "Nonstandard axiom dependency in the shared development"

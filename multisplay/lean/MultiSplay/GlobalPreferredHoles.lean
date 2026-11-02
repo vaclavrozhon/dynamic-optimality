@@ -12,7 +12,7 @@ global representation through the local classical switch.
 namespace MultiSplay.Global
 
 open DynamicOptimality DynamicOptimality.SearchRotation
-open TangoSquared.MTR
+open ChaCha.MTR
 open Pointer (MarkedTree)
 
 variable {α : Type*}

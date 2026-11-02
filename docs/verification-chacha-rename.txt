@@ -1,0 +1,21 @@
+Cha-Cha naming migration: verification
+=====================================
+
+Date: 2026-11-02.
+Status: the naming migration is complete; full rebuild and audits are running.
+
+The algorithm library, namespaces, public result, source paths, guide, and
+graph tooling now use ChaCha or the manuscript spelling Cha-Cha. The
+classical Tango algorithm retains its distinct name.
+
+Independent source review compared all 2228 Lean files with commit a2d6810.
+The differences are a consistent identifier/path substitution and a few
+library-name comments. No mathematical statement or proof was changed.
+
+The guide was rebuilt with pdfLaTeX. Local link and source-name checks passed.
+The original source hashes remain available unchanged through the immutable
+initial-commit link in PROVENANCE.txt. A new source manifest records the
+renamed files in snapshots/2026-11-02.sources.sha256.
+
+The full registered-module build, both namespace audits, and refreshed graph
+export are being checked before the migration is declared verified.

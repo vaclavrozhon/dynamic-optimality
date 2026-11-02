@@ -1,4 +1,4 @@
-import TangoSquared.Primary
+import ChaCha.Primary
 import Mathlib.Data.Finset.Card
 
 /-!
@@ -18,7 +18,7 @@ primary-reference `branch`, with the final switch included.
 
 namespace MultiSplay.EndpointEncoding
 
-open TangoSquared.Primary (Key branch owners mem_owners)
+open ChaCha.Primary (Key branch owners mem_owners)
 
 abbrev State := Key → Bool
 

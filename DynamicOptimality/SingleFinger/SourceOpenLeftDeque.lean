@@ -7,7 +7,7 @@ representation. The executable insertion uses at most five adjacent moves.
 
 namespace DynamicOptimality.SingleFinger.SourceOpenDeque
 
-open TangoSquared.Paper20261030 ColoredStorage SourcePointer SourceLocalProgram
+open ChaCha.Paper20261030 ColoredStorage SourcePointer SourceLocalProgram
 open SourceSpine SourceCounted SourceBoundary
 
 variable {α ρ : Type*}

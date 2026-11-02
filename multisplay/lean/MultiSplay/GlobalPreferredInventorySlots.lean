@@ -11,7 +11,7 @@ the number of slots and does not reset any nonempty auxiliary tree.
 namespace MultiSplay.Global.Preferred
 
 open DynamicOptimality (RawTree)
-open TangoSquared.MTR
+open ChaCha.MTR
 open EndpointEncoding ClassicalSwitch CommonForest
 
 variable {α : Type*}

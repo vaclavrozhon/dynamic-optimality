@@ -1,4 +1,4 @@
-import TangoSquared.Witnesses
+import ChaCha.Witnesses
 
 /-!
 # Witness injection for an arbitrary binary depth hierarchy
@@ -7,13 +7,13 @@ This extends the concrete witness argument to any `DepthTree 0 H`. It reuses
 exactly the existing entry/delayed records, physical search paths, and one-flip
 normalization. The only hierarchy property needed for injection is uniqueness
 of the split separating two depths, proved by `DepthTree.locate_of_separates`.
-The shared Tango-squared sources remain unchanged.
+The shared Cha-Cha sources remain unchanged.
 -/
 
 namespace MultiSplay.IntervalLower
 
-open TangoSquared
-open TangoSquared.Primary TangoSquared.NormalizedWords TangoSquared.Witnesses
+open ChaCha
+open ChaCha.Primary ChaCha.NormalizedWords ChaCha.Witnesses
 
 /-- Membership in the supplied hierarchy and the exact owner depth. -/
 def Valid {H : Nat} (hierarchy : DepthTree 0 H) (gadget : Gadget) : Prop :=

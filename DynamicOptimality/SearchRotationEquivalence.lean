@@ -12,7 +12,7 @@ can reduce the requested key's depth by at most one.
 
 namespace DynamicOptimality.SearchRotation
 
-open TangoSquared.MTR
+open ChaCha.MTR
 
 /-- A local root service and return to the prescribed boundary tree.
 The two rotation sequences use only this access and its initial tree. -/

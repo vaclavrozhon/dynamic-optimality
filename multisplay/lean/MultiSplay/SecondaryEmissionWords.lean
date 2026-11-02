@@ -11,8 +11,8 @@ protocol, rather than to a separately supplied list of query blocks.
 
 namespace MultiSplay.Secondary
 
-open TangoSquared (DepthTree changesFrom)
-open TangoSquared.Primary (Key)
+open ChaCha (DepthTree changesFrom)
+open ChaCha.Primary (Key)
 open EndpointEncoding (State ancestorEmissions ascendingEmissions actualEmissions nodeStep actualHistory)
 
 def project (row : Row) (address emitted : Key) : Option Bool :=

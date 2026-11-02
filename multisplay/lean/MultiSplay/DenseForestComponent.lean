@@ -8,7 +8,7 @@ namespace MultiSplay.DenseForest
 open DynamicOptimality (RawTree)
 open Splay.Accounting
 open Splay.Tree (BST)
-open TangoSquared.MTR.Tree (inorder)
+open ChaCha.MTR.Tree (inorder)
 
 variable {α : Type*}
 
@@ -62,7 +62,7 @@ theorem request {height slack : Nat} (component : Component α) {left right : Ra
       have actual := (Auxiliary.Splay.of_indexed execution).map alphabet
       have keyEq : alphabet pivot = key := by
         simpa only [Component.source, DynamicOptimality.BST.toRaw, Auxiliary.map,
-          TangoSquared.MTR.Tree.node.injEq] using (show alphabet pivot = key from (TangoSquared.MTR.Tree.node.inj root).2.1)
+          ChaCha.MTR.Tree.node.injEq] using (show alphabet pivot = key from (ChaCha.MTR.Tree.node.inj root).2.1)
       refine ⟨result, splay.depth pivot, rfl, ?_, ⟨pivot, atRoot, execution.hasRoot_after⟩,
         .next (Unlocated.boundedRequest height slack 1 (.node cl cr) splay after ⟨pivot, inside⟩ [] atRoot execution bounded ribs) (.done _),
         rfl, rfl, rfl, rfl, rfl⟩

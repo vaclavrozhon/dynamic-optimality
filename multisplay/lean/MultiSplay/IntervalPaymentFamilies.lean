@@ -1,6 +1,6 @@
 import MultiSplay.IntervalProjectedRecords
-import TangoSquared.ProjectedGapPayments
-import TangoSquared.PaymentFamilies
+import ChaCha.ProjectedGapPayments
+import ChaCha.PaymentFamilies
 
 /-!
 # Indexed payment families for an arbitrary interval hierarchy
@@ -11,8 +11,8 @@ injections. Only the interval-hierarchy membership parameter changes.
 
 namespace MultiSplay.IntervalLower
 
-open TangoSquared
-open TangoSquared.Primary TangoSquared.Witnesses TangoSquared.NormalizedWords
+open ChaCha
+open ChaCha.Primary ChaCha.Witnesses ChaCha.NormalizedWords
 
 theorem indexed_projected_entry {H : Nat} {hierarchy : DepthTree 0 H} {q : Gadget} {word : List Key}
     (hq : Valid hierarchy q) (initial : Key → Bool) (leaves : OnLeaves H word)

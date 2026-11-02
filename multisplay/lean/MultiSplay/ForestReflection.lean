@@ -8,7 +8,7 @@ namespace MultiSplay.CommonForest
 
 open DynamicOptimality (RawTree)
 open Auxiliary (mirror inorder_mirror)
-open TangoSquared.MTR.Tree (inorder)
+open ChaCha.MTR.Tree (inorder)
 
 variable {α : Type*}
 

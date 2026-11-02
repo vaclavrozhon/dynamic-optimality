@@ -14,8 +14,8 @@ actual ancestors, so its two guards are derived rather than supplied.
 namespace MultiSplay.ClassicalSwitch
 
 open DynamicOptimality (RawTree BST)
-open TangoSquared.MTR.Tree (inorder Ordered size)
-open TangoSquared.Primary (Key branch)
+open ChaCha.MTR.Tree (inorder Ordered size)
+open ChaCha.Primary (Key branch)
 open EndpointEncoding
 
 variable {α : Type*}

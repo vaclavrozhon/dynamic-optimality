@@ -3,7 +3,7 @@ import DynamicOptimality.Cost
 /-!
 # The common offline optimum is a lower bound for pointer execution cost
 
-The proof reuses Tango's checked conversion from adjacent pointer accesses
+The proof reuses Cha-Cha's checked conversion from adjacent pointer accesses
 to rooted hulls and then to shallow rotations with marked root requests.
 Each shallow rotation is lifted to the existing indexed BST type used by
 the splay optimum. No new optimum or execution-cost annotation is assumed.
@@ -11,7 +11,7 @@ the splay optimum. No new optimum or execution-cost annotation is assumed.
 
 namespace DynamicOptimality
 
-open TangoSquared TangoSquared.MTR
+open ChaCha ChaCha.MTR
 
 theorem restricted_lift {a b : RawTree Nat} (step : MTR.Tree.RestrictedStep a b)
     {lower upper : Nat} (t : BST lower upper) (ht : t.toRaw = a) :

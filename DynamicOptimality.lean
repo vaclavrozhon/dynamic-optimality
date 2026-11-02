@@ -18,6 +18,6 @@ import DynamicOptimality.HullPriorityUpdate
 import DynamicOptimality.HullSeparation
 import DynamicOptimality.PointerRelabel
 import DynamicOptimality.BSTModels
-/-! Shared definitions and representation bridges for the splay and Tango²
+/-! Shared definitions and representation bridges for the splay and Cha-Cha
 formalizations. The algorithm libraries remain separate build targets in
 the same project. -/

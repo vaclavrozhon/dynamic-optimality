@@ -51,7 +51,7 @@ theorem physical_join (element : Element (0+l+1+r) → Element m) (left : BST 0 
   rfl
 
 theorem physical_inorder (element : Element n → Element m) (before after : BST 0 n) :
-    TangoSquared.MTR.Tree.inorder (physical element before) = TangoSquared.MTR.Tree.inorder (physical element after) :=
+    ChaCha.MTR.Tree.inorder (physical element before) = ChaCha.MTR.Tree.inorder (physical element after) :=
   Alphabet.indexed_inorder_eq before after (label element)
 
 theorem rotation_physical {lower upper depth : Nat} {before after : BST lower upper}

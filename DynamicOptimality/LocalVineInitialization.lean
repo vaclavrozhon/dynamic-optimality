@@ -1,5 +1,5 @@
 import DynamicOptimality.LocalProgramComposition
-import TangoSquared.BoundaryPotential
+import ChaCha.BoundaryPotential
 
 /-! The appendix's first initialization sweep as an actual local program.
 It repeatedly rotates away a left child and otherwise advances right.
@@ -8,8 +8,8 @@ changed, and the charged reads, rotations, and moves have linear cost. -/
 
 namespace DynamicOptimality.LocalVineInitialization
 
-open TangoSquared.MTR
-open TangoSquared.Paper20261030.Auxiliary
+open ChaCha.MTR
+open ChaCha.Paper20261030.Auxiliary
 open LocalProgram
 open Tree.BoundaryPotential (rightVine)
 
@@ -51,8 +51,8 @@ theorem normalize_prefix (tree : RawTree (NodeRecord α (fun _ => ρ))) (nonempt
       | node rl re rr =>
         obtain ⟨reads,cost,run,bound⟩ := normalize_prefix (.node rl re rr) (by simp) (depth+1) (.right .empty entry::outside)
         have back : Steps program (.up (depth+1))
-            ⟨rightVine (TangoSquared.MTR.Tree.node rl re rr).inorder,.right .empty entry::outside⟩ (.up depth)
-            ⟨.node .empty entry (rightVine (TangoSquared.MTR.Tree.node rl re rr).inorder),outside⟩ [] 1 := by
+            ⟨rightVine (ChaCha.MTR.Tree.node rl re rr).inorder,.right .empty entry::outside⟩ (.up depth)
+            ⟨.node .empty entry (rightVine (ChaCha.MTR.Tree.node rl re rr).inorder),outside⟩ [] 1 := by
           apply Steps.next (entry := none) (cost := 0)
           · apply Step.nav (action := .up) <;> rfl
           exact .nil _ _

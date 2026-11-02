@@ -1,5 +1,5 @@
-import TangoSquared.Paper20261030.BoundaryContext
-import TangoSquared.Paper20261030.SourceReversal
+import ChaCha.Paper20261030.BoundaryContext
+import ChaCha.Paper20261030.SourceReversal
 
 /-!
 # Removing and restoring the suffix boundary seam
@@ -14,7 +14,7 @@ created, and every off-path component is retained literally.
 
 namespace MultiSplay.ComparatorSeam
 
-open TangoSquared.Paper20261030
+open ChaCha.Paper20261030
 open Std Std.DTreeMap.Internal Std.DTreeMap.Internal.Impl
 open ColoredStorage Auxiliary Auxiliary.Metadata AuxiliaryComponent BoundaryObservations PathDecomposition
 

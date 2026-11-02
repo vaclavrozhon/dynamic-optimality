@@ -5,9 +5,9 @@ import MultiSplay.GlobalPreferredRoot
 namespace MultiSplay.Global.Preferred
 
 open DynamicOptimality DynamicOptimality.SearchRotation
-open TangoSquared.MTR
+open ChaCha.MTR
 open Pointer (MarkedTree)
-open TangoSquared.Primary (Key)
+open ChaCha.Primary (Key)
 open EndpointEncoding ClassicalSwitch CommonForest
 
 variable {α : Type*}

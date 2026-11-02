@@ -9,7 +9,7 @@ receive four integer counters, never these source cells or hanging subtrees.
 
 namespace DynamicOptimality.SingleFinger.SourceOpenDeque
 
-open TangoSquared.Paper20261030 ColoredStorage SourceSpine
+open ChaCha.Paper20261030 ColoredStorage SourceSpine
 
 variable {α ρ : Type*}
 

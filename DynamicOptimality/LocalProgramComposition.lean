@@ -16,16 +16,16 @@ def Instruction.mapState (f : σ → τ) : Instruction σ α ρ → Instruction 
   | .write fresh next => .write fresh (f next)
   | .writeSize fresh next => .writeSize fresh (f next)
 
-inductive Steps (program : Program σ α ρ) : σ → TangoSquared.Paper20261030.Auxiliary.Metadata.Cursor α (fun _ => ρ) →
-    σ → TangoSquared.Paper20261030.Auxiliary.Metadata.Cursor α (fun _ => ρ) →
-    List (TangoSquared.Paper20261030.Auxiliary.NodeRecord α (fun _ => ρ)) → Nat → Prop
+inductive Steps (program : Program σ α ρ) : σ → ChaCha.Paper20261030.Auxiliary.Metadata.Cursor α (fun _ => ρ) →
+    σ → ChaCha.Paper20261030.Auxiliary.Metadata.Cursor α (fun _ => ρ) →
+    List (ChaCha.Paper20261030.Auxiliary.NodeRecord α (fun _ => ρ)) → Nat → Prop
   | nil (state cursor) : Steps program state cursor state cursor [] 0
   | next {state middle last before current after entry reads cost}
       (first : Step program state before middle current entry)
       (rest : Steps program middle current last after reads cost) :
       Steps program state before last after (entry.toList++reads) (cost+1)
 
-open TangoSquared.Paper20261030.Auxiliary
+open ChaCha.Paper20261030.Auxiliary
 
 theorem Step.prefix {program : Program σ α ρ} {state next : σ}
     {before after : Metadata.Cursor α (fun _ => ρ)} {entry}

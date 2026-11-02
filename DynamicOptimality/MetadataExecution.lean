@@ -1,4 +1,4 @@
-import TangoSquared.Paper20261030.MetadataPointer
+import ChaCha.Paper20261030.MetadataPointer
 import DynamicOptimality.VisitedAncestors
 
 /-! Request-serving executions for the existing decorated pointer model.
@@ -7,7 +7,7 @@ read at that key, and erasure yields the shared ordinary BST execution. -/
 
 namespace DynamicOptimality
 
-open TangoSquared.MTR
+open ChaCha.MTR
 
 variable {α : Type*}
 
@@ -40,7 +40,7 @@ theorem trace_select_service [DecidableEq α] {before after : Pointer.Cursor α}
 
 end DynamicOptimality
 
-namespace TangoSquared.Paper20261030.Auxiliary.Metadata
+namespace ChaCha.Paper20261030.Auxiliary.Metadata
 
 open MTR
 open DynamicOptimality
@@ -150,4 +150,4 @@ theorem Execution.pointer [DecidableEq α] {before after : MTR.Tree (NodeRecord 
     obtain ⟨lastCost,lastBound,lastRun⟩ := ih
     exact ⟨firstCost+lastCost,by omega,.cons firstRun lastRun⟩
 
-end TangoSquared.Paper20261030.Auxiliary.Metadata
+end ChaCha.Paper20261030.Auxiliary.Metadata

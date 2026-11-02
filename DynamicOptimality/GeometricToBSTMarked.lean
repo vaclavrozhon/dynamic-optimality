@@ -10,8 +10,8 @@ the inorder sequence of both keys and holes.
 
 namespace DynamicOptimality.Geometry
 
-open TangoSquared TangoSquared.MTR TangoSquared.MTR.Tree
-open TangoSquared.MTR.Pointer TangoSquared.MTR.Tree.PriorityHull
+open ChaCha ChaCha.MTR ChaCha.MTR.Tree
+open ChaCha.MTR.Pointer ChaCha.MTR.Tree.PriorityHull
 
 namespace Marked
 
@@ -119,7 +119,7 @@ theorem moveToRoot_node (t : MarkedTree Nat) (x : Nat)
 /-- Subtree intervals, obtained from the actual ordered inorder word. -/
 theorem node_intervals {left right : RawTree Nat} {root lo hi : Nat}
     (ordered : Ordered (.node left root right))
-    (keys : ∀ key, key ∈ (TangoSquared.MTR.Tree.node left root right).inorder ↔ lo ≤ key ∧ key < hi) :
+    (keys : ∀ key, key ∈ (ChaCha.MTR.Tree.node left root right).inorder ↔ lo ≤ key ∧ key < hi) :
     (lo ≤ root ∧ root < hi) ∧
       (∀ key, key ∈ left.inorder ↔ lo ≤ key ∧ key < root) ∧
       (∀ key, key ∈ right.inorder ↔ root + 1 ≤ key ∧ key < hi) := by

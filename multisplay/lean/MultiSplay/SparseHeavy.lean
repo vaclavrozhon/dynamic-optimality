@@ -17,8 +17,8 @@ namespace MultiSplay.SparseHeavy
 
 open DynamicOptimality (RawTree)
 open Splay.Tree (BST)
-open TangoSquared.MTR.Tree (inorder)
-open TangoSquared.Paper20261030.Auxiliary (Rearranges)
+open ChaCha.MTR.Tree (inorder)
+open ChaCha.Paper20261030.Auxiliary (Rearranges)
 
 variable {α : Type*}
 
@@ -61,7 +61,7 @@ theorem State.inorder_eq {capacity : Nat} (state : State capacity α) :
   Alphabet.indexed_inorder_eq _ _ _
 
 @[simp] theorem State.source_size {capacity : Nat} (state : State capacity α) :
-    TangoSquared.MTR.Tree.size state.source = state.size := by
+    ChaCha.MTR.Tree.size state.source = state.size := by
   simp [State.source, State.size, Heavy.Component.size, DynamicOptimality.BST.toRaw_size]
 
 /-- Expose the source root, returning the actual surviving child histories. -/
@@ -77,7 +77,7 @@ theorem split_exists {capacity : Nat} (state : State capacity α)
   | empty => simp [State.source, DynamicOptimality.BST.toRaw, Auxiliary.map] at root
   | node l r =>
       simp only [State.source, DynamicOptimality.BST.toRaw, Auxiliary.map,
-        TangoSquared.MTR.Tree.node.injEq] at root
+        ChaCha.MTR.Tree.node.injEq] at root
       obtain ⟨split⟩ := Heavy.exists_split representation
       have leftFits : l.size ≤ capacity := by simp only [BST.size] at fits; omega
       have rightFits : r.size ≤ capacity := by simp only [BST.size] at fits; omega

@@ -5,8 +5,8 @@ import MultiSplay.SecondaryRowOrder
 
 namespace MultiSplay.Secondary
 
-open TangoSquared (DepthSplit DepthTree)
-open TangoSquared.Primary (Key level)
+open ChaCha (DepthSplit DepthTree)
+open ChaCha.Primary (Key level)
 
 def depthWord (split : DepthSplit) (depths : List Nat) : List Bool :=
   depths.filterMap (fun depth => if split.lo ≤ depth ∧ depth ≤ split.hi then some (decide (split.cut < depth)) else none)

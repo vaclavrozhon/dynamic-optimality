@@ -1,7 +1,7 @@
 import MultiSplay.IntervalLocalBound
 import MultiSplay.IntervalEventBudget
 import MultiSplay.IntervalMonotonicity
-import TangoSquared.Transfer
+import ChaCha.Transfer
 
 /-!
 # The dynamic BST lower bound for an arbitrary binary interval hierarchy
@@ -10,13 +10,13 @@ This extension uses the shared actual BST pointer execution and its proved
 closed normalized supersequence. Local occurrence records, their joint
 injection, global potential telescoping, and subsequence monotonicity are all
 proved for the supplied hierarchy. No charging or simulation hypothesis is
-left in the public theorem, and no Tango-squared upper bound is used.
+left in the public theorem, and no Cha-Cha upper bound is used.
 -/
 
 namespace MultiSplay.IntervalLower
 
-open TangoSquared
-open TangoSquared.Primary TangoSquared.MTR TangoSquared.MTR.Tree
+open ChaCha
+open ChaCha.Primary ChaCha.MTR ChaCha.MTR.Tree
 
 theorem secondaryDemands_le_allGadgets {H : Nat} (hierarchy : DepthTree 0 H) (xs : List Key) :
     secondaryDemands hierarchy xs ≤ ∑ q ∈ allGadgets hierarchy, q.count xs := by

@@ -14,9 +14,9 @@ namespace MultiSplay.Alphabet
 
 open DynamicOptimality (RawTree)
 open Splay.Tree (BST)
-open TangoSquared.MTR (Tree)
-open TangoSquared.MTR.Pointer (Frame Cursor Step Trace)
-open TangoSquared.Paper20261030.Auxiliary (Rearranges)
+open ChaCha.MTR (Tree)
+open ChaCha.MTR.Pointer (Frame Cursor Step Trace)
+open ChaCha.Paper20261030.Auxiliary (Rearranges)
 
 variable {α β : Type*}
 

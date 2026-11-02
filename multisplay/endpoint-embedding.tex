@@ -17,7 +17,7 @@
 
 \noindent\textbf{Status.}
 This note isolates an endpoint issue in comparing standard multi-splay
-with the local Tango-squared lower bound. Its main theorem is a hand
+with the local Cha-Cha lower bound. Its main theorem is a hand
 argument conditional on that manuscript's dynamic lower-bound theorem.
 The copy embedding, comparator lifting, and initialization calculation
 were independently hand-audited in this research session. The extension
@@ -53,7 +53,7 @@ $x_i$. Process $E_i$ in increasing order. Let $F_{\MS}$ count changes of
 these bits. There is no extra completion emission $h$ in $E_i$.
 
 \begin{theorem}\label{thm:endpoint}
-Assume the dynamic lower-bound theorem in the local Tango-squared
+Assume the dynamic lower-bound theorem in the local Cha-Cha
 manuscript. Then, for the perfect reference above,
 \[
  |X|+S_{\MS}(X)+F_{\MS}(X)=O(\OPT(X)+n).
@@ -69,7 +69,7 @@ the entire endpoint-aware history into a legitimate leaf-query history.
 
 \section{The lower bound permits arbitrary interval hierarchies}
 
-The Tango-squared manuscript defines a midpoint hierarchy, but its
+The Cha-Cha manuscript defines a midpoint hierarchy, but its
 dynamic lower-bound proof uses only the following properties of that
 hierarchy:
 \begin{enumerate}
@@ -217,7 +217,7 @@ For the encoded history,
 \]
 \end{lemma}
 \begin{proof}
-The initialized-flip conversion in the Tango-squared manuscript gives
+The initialized-flip conversion in the Cha-Cha manuscript gives
 the more precise intermediate estimate
 \begin{equation}\label{eq:precise}
  F_{B'}(Z)\le 2D_{B'}(Z)+3Q_L+2(P(Z)+I_0),
@@ -360,10 +360,10 @@ SODA 2006. Sections 2--4, including the final switch convention.
 \url{https://www.cs.cmu.edu/~chengwen/paper/MST.pdf}.
 
 \bibitem{TS}
-\emph{Tango Squared: An $O(\log\log\log n)$-Competitive Binary Search
+\emph{Cha-Cha: An $O(\log\log\log n)$-Competitive Binary Search
 Tree}. Local research manuscript, October 2026.
 The dynamic lower-bound theorem, initialized flip conversion, and
 their proofs in
-\texttt{tango\_squared/research/tango-squared.tex}.
+\texttt{chacha/research/chacha.tex}.
 \end{thebibliography}
 \end{document}

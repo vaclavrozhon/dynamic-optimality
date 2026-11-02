@@ -13,7 +13,7 @@ The persistent memory changes only on genuine original intervals.
 
 namespace MultiSplay.ComparatorStableSuffix
 
-open TangoSquared
+open ChaCha
 open Paper20261030
 open ColoredStorage Auxiliary AuxiliaryComponent BoundaryObservations PathDecomposition
 open SecondaryDecomposition

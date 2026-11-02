@@ -10,7 +10,7 @@ weak max-heap needed to start backwards geometric reconstruction.
 
 namespace DynamicOptimality.Geometry
 
-open TangoSquared.MTR.Tree.PriorityHull
+open ChaCha.MTR.Tree.PriorityHull
 
 theorem canonical_raw_heap {lower upper : Nat} {height : Nat → Int} {priority : Nat → Nat}
     (tree : BST lower upper) (canonical : GreedyMerge.Surface.Canonical height priority tree) :

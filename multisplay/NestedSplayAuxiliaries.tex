@@ -13,14 +13,14 @@
 \maketitle
 
 \noindent\textbf{Scope and status.}
-This note proves a splay-backend version of the local Tango-squared
+This note proves a splay-backend version of the local Cha-Cha
 construction. It retains the secondary reference, its preferred-path
 decomposition, its fixed-owner history, and the no-copy unfolding into
 actual keys. It is a different algorithm from standard multi-splay,
 which stores an entire primary preferred path in one auxiliary splay.
 The argument is a hand proof. Its physical realization uses the
 no-copy unfolding, rooted-hull transfer, and equal-frontier role-change
-lemmas in the existing Tango-squared upper manuscript. It has not been
+lemmas in the existing Cha-Cha upper manuscript. It has not been
 Lean checked, externally reviewed, or implemented as a data structure.
 
 \paragraph{Model.}
@@ -50,7 +50,7 @@ serves every sequence $X$ at cost
 \[
  O\bigl((m+P(X)+F(X)+n)\lambda\bigr).
 \]
-Thus the established fixed-owner count conversion and Tango-squared
+Thus the established fixed-owner count conversion and Cha-Cha
 dynamic lower bound give
 \[
  O\bigl((\OPT(X)+n)(1+\log\log\log(n+4))\bigr).
@@ -301,8 +301,8 @@ standard multi-splay by this nested algorithm's cost.
 
 \paragraph{Adopted sources.}
 The physical unfolding, suffix invariant, and exact-owner construction
-are Sections 3--6 of the sibling Tango-squared upper-bound manuscript,
-\path{research/tango-squared-upper-bound.tex}.
+are Sections 3--6 of the sibling Cha-Cha upper-bound manuscript,
+\path{research/chacha-upper-bound.tex}.
 The three-splay preferred-child switch and its sum-log-size accounting
 are described in Wang's thesis, Sections 3.2--3.4.1,
 \url{https://www.csd.cmu.edu/sites/default/files/phd-thesis/CMU-CS-06-140.pdf}.

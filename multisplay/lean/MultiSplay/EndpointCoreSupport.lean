@@ -11,7 +11,7 @@ is charged on at most three times the original number of reference nodes.
 
 namespace MultiSplay.EndpointEncoding
 
-open TangoSquared.Primary (Key branch owners mem_owners)
+open ChaCha.Primary (Key branch owners mem_owners)
 
 def coreNodes (height : Nat) : Finset Key :=
   (owners height).image core ∪

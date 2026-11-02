@@ -1,5 +1,5 @@
 import DynamicOptimality.SingleFinger.SourceCounted
-import TangoSquared.Paper20261030.ForestMirrorProgram
+import ChaCha.Paper20261030.ForestMirrorProgram
 
 /-! Reflect local programs and their counted schedules. Reflection is a
 proof construction: the actual controller executes the reflected adjacent
@@ -8,7 +8,7 @@ moves on the original tree. It stores no reflected tree or subtree data.
 
 namespace DynamicOptimality.SingleFinger.SourceReflection
 
-open TangoSquared.Paper20261030 ColoredStorage SourcePointer SourceLocalProgram
+open ChaCha.Paper20261030 ColoredStorage SourcePointer SourceLocalProgram
 open SourceCounted
 
 variable {α ρ σ : Type*}

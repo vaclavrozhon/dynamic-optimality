@@ -1,5 +1,5 @@
 import MultiSplay.ForestProgram
-import TangoSquared.RestrictedRotations
+import ChaCha.RestrictedRotations
 
 /-!
 # Concrete comparator preparation on a rooted skeleton
@@ -13,7 +13,7 @@ subtrees hanging in the skeleton's gaps are retained literally.
 namespace MultiSplay.CommonForest
 
 open DynamicOptimality (RawTree)
-open TangoSquared.MTR.Tree
+open ChaCha.MTR.Tree
 
 variable {α : Type*}
 

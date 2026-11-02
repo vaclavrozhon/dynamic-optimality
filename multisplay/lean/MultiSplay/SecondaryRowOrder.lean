@@ -11,7 +11,7 @@ entire chronological row word is retained in the estimate.
 
 namespace MultiSplay.Secondary
 
-open TangoSquared (changesFrom)
+open ChaCha (changesFrom)
 
 theorem row_order_bound (initial : Bool) (blocks : List (List Bool × List Bool)) (front : List Bool) :
     changesFrom initial (front ++ blocks.flatMap (fun block => block.1.reverse++block.2)) ≤

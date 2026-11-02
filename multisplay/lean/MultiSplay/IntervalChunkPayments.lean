@@ -1,13 +1,13 @@
 import MultiSplay.IntervalPaymentFamilies
-import TangoSquared.DelayedChunkPayments
+import ChaCha.DelayedChunkPayments
 
 /-! # Actual chunk contexts for arbitrary interval hierarchies -/
 
 namespace MultiSplay.IntervalLower
 
-open TangoSquared
-open TangoSquared.Primary TangoSquared.CyclicRuns TangoSquared.GapChunks TangoSquared.PeriodicChunks
-open TangoSquared.GapChronology TangoSquared.GapSourceData TangoSquared.CyclicGapAccounting TangoSquared.GapInheritance
+open ChaCha
+open ChaCha.Primary ChaCha.CyclicRuns ChaCha.GapChunks ChaCha.PeriodicChunks
+open ChaCha.GapChronology ChaCha.GapSourceData ChaCha.CyclicGapAccounting ChaCha.GapInheritance
 
 theorem gadgetProjection_returnWord {H : Nat} {hierarchy : DepthTree 0 H} {q : Gadget} {word : List Key}
     (hq : Valid hierarchy q) (initial : Key → Bool) (leaves : OnLeaves H word)

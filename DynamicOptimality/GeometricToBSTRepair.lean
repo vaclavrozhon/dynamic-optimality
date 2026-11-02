@@ -12,8 +12,8 @@ subtree is retained verbatim in its original inorder gap.
 
 namespace DynamicOptimality.Geometry
 
-open TangoSquared TangoSquared.MTR TangoSquared.MTR.Tree
-open TangoSquared.MTR.Pointer TangoSquared.MTR.Tree.PriorityHull
+open ChaCha ChaCha.MTR ChaCha.MTR.Tree
+open ChaCha.MTR.Pointer ChaCha.MTR.Tree.PriorityHull
 open GreedyMerge.Geometry
 
 theorem repair_marked {n lo hi : Nat} {height : Nat → Int} {row : Finset Nat}

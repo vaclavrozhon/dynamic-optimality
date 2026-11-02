@@ -11,7 +11,7 @@ remain in their inorder gaps. Every routine is the same counted local program
 
 namespace DynamicOptimality.SingleFinger.SourceDeque
 
-open TangoSquared.Paper20261030 ColoredStorage SourcePointer SourceLocalProgram
+open ChaCha.Paper20261030 ColoredStorage SourcePointer SourceLocalProgram
 open DynamicOptimality.LocalProgram (Move)
 open SourceSpine SourceCounted
 

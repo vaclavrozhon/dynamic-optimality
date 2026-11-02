@@ -11,8 +11,8 @@ owner rows with a core owner is at most 4*(2^H-1), uniformly in its shape.
 
 namespace MultiSplay.EndpointEncoding
 
-open TangoSquared (DepthTree DepthSplit)
-open TangoSquared.Primary (Key level mem_level)
+open ChaCha (DepthTree DepthSplit)
+open ChaCha.Primary (Key level mem_level)
 
 theorem level_card (depth : Nat) : (level depth).card = 2^depth := by
   induction depth with

@@ -1,0 +1,397 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=26mm]{geometry}
+\usepackage{amsmath,amssymb,amsthm,booktabs}
+\usepackage[colorlinks=true,urlcolor=blue,linkcolor=blue]{hyperref}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newcommand{\OPT}{\operatorname{OPT}}
+\newcommand{\cost}{\operatorname{cost}}
+\newcommand{\MS}{\operatorname{MS}}
+\newcommand{\Splay}{\operatorname{Splay}}
+\newcommand{\lgit}[1]{\log^{(#1)}}
+\setlength{\emergencystretch}{3em}
+\title{Standard multi-splay after Cha-Cha:\\a common-forest comparison}
+\author{Research session of 2 October 2026}
+\date{}
+\begin{document}
+\maketitle
+
+\begin{abstract}
+The triple-iterated-logarithmic bound of the local Cha-Cha
+manuscript does not transfer to standard multi-splay by replacing a
+balanced auxiliary with a splay tree. We obtain a weaker transfer:
+subject to the two local manuscripts' core proofs, standard multi-splay
+has competitive factor
+$O((1+\lgit{3}n)^2(1+\lgit{4}n)^2)$, with the usual additive
+initialization allowance. The argument uses the exact mixed split/join
+word executed by multi-splay, a persistent forest extension of the
+current splay comparison, and a compatible Cha-Cha comparator.
+All new composition and endpoint arguments here are hand proofs;
+the existing Lean results certify specified constituent interfaces,
+not this new conclusion. The exact $O(\lgit{3}n)$ bound for standard
+multi-splay remains unproved in this session.
+\end{abstract}
+
+\paragraph{Notation and scope.}
+$\lgit{j}$ denotes the $j$-fold iterated logarithm, not a power of a
+logarithm. All small logarithms are stabilized at a positive constant.
+The algorithm under discussion is the standard Wang--Derryberry--Sleator
+multi-splay algorithm, including its final switch at the requested node.
+Its fixed reference is the usual minimum-height node-storing BST.
+Set $H=\lceil\log_2(n+1)\rceil$ and
+\[
+ \lambda=1+\log_2\log_2(H+2),\qquad
+ g(H)=(1+\log\log(H+4))(1+\log\log\log(H+16))^2.
+\]
+Thus $\lambda=\Theta(1+\lgit{3}n)$ and
+$g(H)=O((1+\lgit{3}n)(1+\lgit{4}n)^2)$.
+Costs are pointer moves and rotations in the BST model. The comparator
+may compute from already read information for free, as in the local
+Cha-Cha manuscript. No uniform word-RAM implementation is asserted.
+
+\section{What the directory supplies, and what it does not}
+
+The splay manuscript supplies
+\[
+ \cost_{\Splay}(X)=
+ O\bigl((\OPT(X)+n)(1+\lgit{2}n)(1+\lgit{3}n)^2\bigr).
+                                                        \tag{1}
+\]
+Its split appendix and the existing heavy-path and rib representation
+interfaces are especially relevant here. The newer historical-compression
+notes improve the smaller factors but do not by themselves remove the
+leading $\lgit{2}n$ factor. We use the simpler accounting underlying (1).
+
+The current unified Cha-Cha manuscript in the neighboring
+repository is newer than the splay-side bridge notes. It presents a
+complete hand upper proof for its specific nested representation.
+Its lower theorem is formally checked in the actual BST model. With
+primary alternations $P$, completed episodes $D$, and initialized
+fixed-owner secondary changes $F$, it gives
+\[
+ m+P+D\le2888\OPT(X),\qquad
+ F\le2D+2P+5(n-1),
+\]
+and its algorithm costs $O((m+P+F+n)\lambda)$.
+
+The physical upper proof retains a secondary decomposition of each
+primary path. Its smallest balanced auxiliaries have only
+$O(\log H)$ nodes. Standard multi-splay instead stores all $O(H)$
+nodes of a primary path in one splay auxiliary. Applying its ordinary
+access lemma directly still costs $O(\log H)=O(\lgit{2}n)$ per switch.
+The stronger lower counter alone does not reduce that upper bound.
+
+\section{An endpoint-aware lower counter for standard multi-splay}
+
+For request $x_i$, let
+\[
+ E_i=(d_1<\cdots<d_k=\operatorname{depth}_P(x_i))
+\]
+consist of the wrong proper-ancestor depths and the mandatory final
+switch depth. Write $S=\sum_i|E_i|$. At a reference leaf the final
+switch still performs its splays; an analytical null-child direction
+bit may be toggled without changing the physical algorithm.
+
+On a balanced binary interval hierarchy $B$ of depths $0,\ldots,H$,
+an emission $d$ writes left or right at every interval containing $d$.
+The row is indexed by the interval and the original request's ancestor
+at that interval's left endpoint. All row bits start right. Let
+$F_\uparrow$ use the increasing order $E_i$, and let $F_{\rm act}$
+use the actual order
+\[
+ (d_{k-1},\ldots,d_1,d_k).
+\]
+There is no extra completion emission $H$.
+
+\begin{lemma}[Endpoint and order transport]\label{lem:counter}
+For the standard reference,
+\[
+ m+S+F_\uparrow=O(\OPT(X)+n),\qquad
+ |F_{\rm act}-F_\uparrow|
+ \le2\sum_i\max(|E_i|-2,0).
+\]
+Consequently $m+S+F_{\rm act}=O(\OPT(X)+n)$.
+\end{lemma}
+
+\begin{proof}[Proof outline]
+Replace each original key $q$ at depth $d$ by a pivot at depth $2d$
+and two connector children. The left connector separates the original
+left subtree from a copy $q^-$; the right connector separates a copy
+$q^+$ from the original right subtree. Query the copy on the side
+opposite the current preferred child of $q$. The even-depth pivot
+changes are then exactly the ancestor switches and the final toggle.
+Pad copy leaves by all-right paths to a common depth. Only the $3n$
+pivots and connectors can change; the padding creates no primary flips.
+
+Replace each secondary depth leaf $d$ by the pair $2d,2d+1$.
+The original row word is a subsequence of the corresponding expanded
+row word. Initialized variation cannot increase on deletion.
+The lower-bound proof uses ordered binary interval partitions and
+unique separation of two depths; balancing of the secondary hierarchy
+is not needed for that lower proof.
+
+The apparently large padded universe causes no large initial credit.
+At expanded depth $a$ there are at most
+$2^{\lfloor a/2\rfloor+1}$ core owners. Distinct secondary splits use
+distinct positions, so the number of rows ever written left is at most
+$4(2^H-1)=O(n)$. A competing BST on the original keys serves either
+copy using a two-key gadget per original node, at constant overhead.
+The Cha-Cha lower theorem therefore proves the first assertion.
+
+For the order assertion, fix one query and one secondary interval.
+A changed mixed block has its initialized variation altered by at
+most two, including its entry and exit boundaries. The induced binary
+trie on $k$ emitted depths has $k-1$ branching nodes. The parent of
+the maximum emitted leaf in the compressed trie has only that maximum
+on its right side, and its block is unchanged
+when the maximum stays last. At most $k-2$ mixed blocks change.
+Sum this replacement bound over queries and fixed owner rows.
+\end{proof}
+
+The complete proof and the initialization constants are in
+\href{endpoint-embedding.pdf}{\texttt{endpoint-embedding.pdf}}.
+An exhaustive finite audit in \texttt{endpoint-check.py} checked the
+encoding, row words, order estimate, and initialization support on
+32,140 sequences containing 171,611 requests. This is a check of those
+identities, not a substitute for the lower theorem or an upper-cost test.
+
+\section{The exact mixed forest word}
+
+A forest component is one auxiliary BST, with unit-cost selection of
+its root shared by both executions. No interior pointer jump is free.
+The operations are root-splaying searches; a split which splays and
+removes its pivot; and a raw common root join $x(L,R)$.
+
+Consider a left-to-right switch at $y$. Its old component is
+$U\cup\{y\}\cup L$, where $U$ is the preferred prefix above $y$ and
+$L$ is the old left tail. The incoming right tail $R$ is another
+component. Let $\ell,y,r$ be the nearest lower ancestor, the switched
+key, and the nearest upper ancestor. The exact word, when both guards
+exist, is
+\[
+ \begin{split}
+ &\operatorname{Split}(y),\quad
+  \operatorname{Split}(\ell),\quad
+  \operatorname{Split}(r),\\
+ &\operatorname{Join}(A,\ell,\varnothing),\quad
+  \operatorname{Join}(R,r,B),\quad
+  \operatorname{Join}(A',y,B').
+ \end{split}                                             \tag{2}
+\]
+The guard splits occur in the two daughters of the first split.
+Their detached pivots are then restored by the displayed joins.
+The old tail $L$ remains parked. Missing guards omit their operations;
+right-to-left switches are reflected.
+
+The three split splays are exactly the full and stopped splays of
+standard multi-splay, and the joins restore exactly its auxiliary
+shapes. Foreign marked subtrees remain opaque in the gaps. Thus one
+shape-independent word $W_{\MS}(X)$ describes the whole algorithm,
+with at most six operations per switch and component size at most $H$.
+The standard multi-splay traversal argument pays its initial global
+search from these splays and the final switch.
+
+\section{Splay comparison over one persistent forest}
+
+\begin{theorem}[Common-forest extension]\label{thm:forest}
+Assuming the current splay manuscript's core accounting proof, a
+mixed forest word with $N$ initially active keys, $q$ structural
+operations, maximum component size $K$, and a comparator of cost $C$
+has splay-forest cost
+\[
+ O\bigl((C+N+q)g(K)\bigr).
+\]
+There is one global initialization allowance, not one per component life.
+\end{theorem}
+
+\begin{proof}[Proof outline and interface audit]
+The existing Lean heavy representation has root split and join
+interfaces with a uniform supported-path cap $O(\log^2 K)$ and
+constant amortized allowance. Its potential is at most $64$ times
+the number of real keys. The rib representation has the corresponding
+interfaces, constant-cost amortized reorientation, and potential at
+most $256$ times the number of real keys. Sum each potential over
+live components. Root splits return the two actual child histories;
+root joins consume those histories. This yields a comparison forest
+of cost $O(C+N+q)$, height $O(\log^3 K)$, bounded minor ribs, and
+rotations at constant depth.
+
+At a common raw join, give the new pivot comparison rank zero and
+increase every old child rank by one. All internal rank differences,
+heavy paths, and lazy-interval histories of each child stay unchanged.
+Only the two former child roots become new heap children. Each has
+gap one. In the actual interface their contracted value changes from
+one to two, requiring one unit value increase and one legal insertion
+into a new singleton growing interval. Thus a join creates only
+constantly many paid events and bends. Root deletion uses the split
+appendix's inverse operation. Inactive keys can retain baseline value
+one, or one may bound the total key universe by $N+q$.
+
+The original pairing budgets now sum over the forest. Writing
+$B_0=C+N+q$ and $G=O(1+\log\log K)$, the interval, boundary,
+value-change, and bend budgets have exactly the original form with
+$B_0$ as their input allowance. The same absorption step gives
+$O(B_0G(1+\log G)^2)=O(B_0g(K))$ total work.
+\end{proof}
+
+This is a hand extension, with a concrete trace through the checked
+local interfaces. It is not asserted to follow from the fixed-universe
+statement (1) alone. The full interface account, source module names,
+and exact word (2) are in
+\href{common-forest-normal-form.pdf}{\texttt{common-forest-normal-form.pdf}}.
+
+\section{A compatible Cha-Cha comparator}
+
+\begin{theorem}[The comparator for the same word]\label{thm:comparator}
+The exact word $W_{\MS}(X)$ admits a comparator of cost
+\[
+ C_{\rm forest}=O\bigl(n+\lambda(S+F_{\rm act})\bigr).
+                                                               \tag{3}
+\]
+\end{theorem}
+
+\begin{proof}[Proof outline]
+View the node reference as a routing tree on its external gaps. Each
+primary path is represented by the Cha-Cha depth-ordered tree,
+unfolded onto exactly its own original separator keys. For a path
+beginning at depth $a$, use genuine secondary intervals starting at
+depth at least $a$, together with the structural boundary spine
+$\beta_a$ of the induced suffix $[a,H]$.
+
+The forest word already supplies the component and switched pivot.
+Therefore the comparator can follow the actual bottom-up order without
+paying for a separate discovery search. A local request to depth $d$
+costs $O((1+f)\lambda)$, where $f$ counts genuine changes. Remove
+the one administrative seam at the end of $\beta_a$, perform the inner
+Tango request and the exposed primary splice, then restore the at most
+one temporary right boundary preference and the seam. These are
+constantly many extra balanced split/concatenate operations.
+
+For every fixed genuine owner row, the comparator's write word is the
+full $F_{\rm act}$ word with writes deleted whenever the selected
+primary component begins below that owner. Splices preserve the
+surviving histories. Hence the total genuine changes are at most
+$F_{\rm act}$ by initialized variation monotonicity.
+
+The remaining requirement is to obey the exact pivot checkpoints in
+(2). After the local depth request and the conceptual tail cut, the
+last two prefix gaps are cheaply exposed. In physical key order their
+boundaries are $\ell,y$ and $y,r$. Both neighboring keys of an external
+BST gap lie on its search path. A rooted hull of $O(\lambda)$ nodes
+therefore contains all existing guards and $y$. During this preparation
+the old tail remains attached inside the original common component.
+
+Keep the rooted touched hulls of the ideal exposed-splice transaction
+and its incoming component. Their untouched frontier subtrees are
+identical ordered key intervals before and after. Reconfigure the
+old hull to $y(\ell(A,L),r(\varnothing,B))$, execute the prescribed
+splits and joins, and obtain $y(\ell(A,\varnothing),r(R,B))$ with
+$L$ parked. Reconfigure each resulting rooted hull separately to its
+valid Cha-Cha after-state. Every rotation occurs in a current
+common component. The total touched-hull cost is
+$O((1+f)\lambda)$; no frontier subtree is rebuilt.
+
+Summing proves (3). Initially every physical component can be put
+into its prescribed balanced representation in linear cost, totaling
+$O(n)$. For a nonperfect minimum-height reference, complete only the
+virtual routing reference and retain the all-right descendant of
+each original external gap. Inactive pieces and dummy separators have
+no physical images. This preserves the exact original word, all real
+guards, and the cost bound without introducing physical dummy keys.
+\end{proof}
+
+The full proof, including the suffix seam and the checkpoint certificate,
+is in \href{chacha-common-forest-comparator.pdf}{\texttt{chacha-common-forest-comparator.pdf}}.
+
+\section{The resulting bound and the precise remaining question}
+
+\begin{theorem}[Composed hand upper bound]\label{thm:main}
+Under the stated local Splay and Cha-Cha proof dependencies,
+standard multi-splay on the usual minimum-height reference satisfies
+\[
+ \boxed{\displaystyle
+ \cost_{\MS}(X)=
+ O\bigl((\OPT(X)+n)(1+\lgit{3}n)^2(1+\lgit{4}n)^2\bigr).}
+\]
+\end{theorem}
+
+\begin{proof}
+Lemma~\ref{lem:counter} and Theorem~\ref{thm:comparator} give
+$C_{\rm forest}=O(\lambda(\OPT+n))$.
+Apply Theorem~\ref{thm:forest} to the exact word, with $K=H$,
+$N=n$, and $q\le6S$. The result is
+$O((\OPT+n)\lambda g(H))$, which is the displayed expression.
+\end{proof}
+
+There are two different losses in this derivation: the compatible
+balanced comparator pays $\lambda$, and the current splay comparison
+pays $g(H)$. They multiply. Replacing this product by $\lambda$ needs
+an additional upper-bound argument about the actual multi-splay
+rotations. One sufficient target is a single persistent potential with
+\[
+ \cost_{\MS}(i)+\Phi_i-\Phi_{i-1}
+ \le C\lambda\bigl(1+s_i+f_i\bigr),\qquad
+ \Phi_0-\inf_i\Phi_i=O(n\lambda),                       \tag{4}
+\]
+where $s_i,f_i$ are the exact standard-switch and owner-row changes.
+Equation (4) is unproved here.
+
+A weaker useful intermediate target is an $O(\OPT+n)$ comparator
+for the same entire forest word. Combined with Theorem~\ref{thm:forest}
+it would remove one factor $\lambda$, leaving
+$O((1+\lgit{3}n)(1+\lgit{4}n)^2)$. Independently optimal trees for
+individual path lifetimes do not supply such a comparator: their initial
+shapes and their boundary exposures must be transported through (2).
+
+\paragraph{Why several shortcuts fail.}
+Restarting (1) whenever a preferred path is born can charge
+$\Omega(mH)$ for repeated requests at the reference root, although
+their actual cost is $O(m)$ after initialization. A sum of functions of
+component sizes cannot repair this in a perfect reference: its path-size
+multiset is invariant. The classical forest sum-log-size potential has
+$\Theta(\log H)$ positive jumps even on constant-work exposed switches.
+These are obstructions to specific proof strategies, not lower bounds
+on multi-splay's competitive ratio. Details are in
+\href{order-and-potential.pdf}{\texttt{order-and-potential.pdf}} and
+\href{ClassicalPotentialObstruction.pdf}{\texttt{ClassicalPotentialObstruction.pdf}}.
+
+\paragraph{A modified algorithm does achieve the desired factor.}
+If one retains Cha-Cha's secondary preferred-path decomposition
+and replaces only its $O(\log H)$-sized balanced auxiliaries by splay
+trees, one global virtual sum-log-size potential proves
+$O(\lambda(\OPT+n))$. The cut keeps each child's state, the role
+exchange leaves the virtual potential unchanged, and the final graft
+increases it by at most $O(\log\log H)$. This is proved in
+\href{NestedSplayAuxiliaries.pdf}{\texttt{NestedSplayAuxiliaries.pdf}}.
+It is a different algorithm from standard multi-splay: the extra
+secondary decomposition is part of the construction.
+
+\section{Verification status and sources}
+
+The new endpoint embedding, order comparison, mixed forest account,
+compatible comparator, and modified nested algorithm were independently
+hand-audited during this session. The finite checks cover only explicitly
+listed combinatorial identities and potential calculations. No new
+Lean theorem asserting the composed multi-splay bound has been added.
+The precise existing checked dependencies are named in the detailed
+forest note; the arbitrary-secondary-hierarchy lower extension and
+the active-gap padding are hand arguments.
+
+The underlying manuscripts and primary literature are:
+\begin{itemize}
+\item The current local splay manuscript, \path{../splay/main.tex}, its
+split appendix, and \path{../splay/formalization/Splay/Accounting/}.
+The public main bound is in
+\href{https://arxiv.org/abs/2607.18498}{\emph{Splay trees are almost dynamically optimal}}.
+\item The current neighboring manuscript, \texttt{chacha.tex},
+in \path{../chacha/research/}.
+\item C.~C.~Wang, J.~Derryberry, and D.~D.~Sleator,
+\href{https://www.cs.cmu.edu/~jonderry/multi-splay.pdf}{\emph{$O(\log\log n)$-Competitive Dynamic Binary Search Trees}}, SODA 2006;
+and \href{https://www.csd.cmu.edu/sites/default/files/phd-thesis/CMU-CS-06-140.pdf}{Wang's thesis}, especially the exact switch and traversal conventions.
+\item S.-L.~Woo,
+\href{https://csd.cs.cmu.edu/sites/default/files/phd-thesis/CMU-CS-09-133.pdf}{\emph{Heterogeneous Decomposition of Degree-Balanced Search Trees and Its Applications}}, 2009.
+Its conditional multi-splay dynamic-finger corollary expressly includes
+splits and joins in the required splay comparison.
+\end{itemize}
+
+\end{document}

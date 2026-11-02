@@ -5,7 +5,7 @@ import MultiSplay.ComparatorForestRootPartition
 namespace MultiSplay.ComparatorForest
 
 open DynamicOptimality (RawTree BST)
-open TangoSquared.Primary (Key)
+open ChaCha.Primary (Key)
 open EndpointEncoding ClassicalSwitch
 
 theorem finish_toggle_nonroot (state : State) (reference : RawTree Nat) (address : Key)

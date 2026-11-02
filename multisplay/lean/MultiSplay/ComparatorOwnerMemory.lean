@@ -15,7 +15,7 @@ global memory.
 
 namespace MultiSplay.ClassicalSwitch
 
-open TangoSquared.Primary (Key)
+open ChaCha.Primary (Key)
 open EndpointEncoding (State below)
 
 /-- Once the entire nonpreferred prefix has been included, taking a longer
@@ -56,12 +56,12 @@ end MultiSplay.ClassicalSwitch
 
 namespace MultiSplay.ComparatorHistory
 
-open TangoSquared (DepthSplit)
-open TangoSquared.Primary (Key)
+open ChaCha (DepthSplit)
+open ChaCha.Primary (Key)
 open EndpointEncoding (State)
 open ClassicalSwitch (startDepth componentStart)
 open Secondary (Row)
-open TangoSquared.Paper20261030.Secondary (intervalUpdate spliceBits)
+open ChaCha.Paper20261030.Secondary (intervalUpdate spliceBits)
 open ComparatorSuffix (writeGenuine)
 open ComparatorStableSuffix (bits)
 

@@ -1,5 +1,5 @@
 import MultiSplay.ComparatorSuffixRestoration
-import TangoSquared.FragmentHierarchy
+import ChaCha.FragmentHierarchy
 
 /-!
 # Charging a suffix access only to genuine writes
@@ -12,9 +12,9 @@ depth nor the boundary-spine length appears in the access bound.
 
 namespace MultiSplay.ComparatorSuffix
 
-open TangoSquared
-open TangoSquared.PreferredProjection
-open TangoSquared.Paper20261030
+open ChaCha
+open ChaCha.PreferredProjection
+open ChaCha.Paper20261030
 open Secondary (intervalUpdate decodeDepth)
 open SecondaryDecomposition
 open ColoredStorage Auxiliary AuxiliaryComponent BoundaryObservations PathDecomposition

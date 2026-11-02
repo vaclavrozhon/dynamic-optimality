@@ -140,7 +140,7 @@ The generalization available here is through the persistent Splay interface.
 ----------------------------------------------
 
 Each preferred component receives a secondary source tree on reference
-DEPTHS, maintained using the already proved Tango-squared machinery. The
+DEPTHS, maintained using the already proved Cha-Cha machinery. The
 secondary reference is balanced on the depth alphabet 0,...,H. Actual
 switch pivots have depths in [0,H), while H is the terminal depth position.
 It has height O(log(H+1)); the stabilized bound for exposing and repairing
@@ -216,7 +216,7 @@ the reference on exactly n original keys. It gives, uniformly in X,
 
   |X| + S + V <= 2137120 * (OPT(X)+n).
 
-No equivalence of the classical and Tango-squared switch orders is assumed:
+No equivalence of the classical and Cha-Cha switch orders is assumed:
 the counter theorem already accounts for their difference, and the physical
 comparator executes the classical word itself.
 

@@ -14,7 +14,7 @@ nonpositive balance cannot introduce a duplicate key.
 namespace MultiSplay.ClassicalSwitch.Accounting
 
 open DynamicOptimality (RawTree)
-open TangoSquared.MTR.Tree (inorder)
+open ChaCha.MTR.Tree (inorder)
 open CommonForest
 
 variable {α : Type*} [DecidableEq α]

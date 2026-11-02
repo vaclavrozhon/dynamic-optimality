@@ -7,14 +7,14 @@ import Splay.Accounting.OfflineConnectedNormalization
 
 The splay development already proves that rotations outside the connected
 support of a request can be postponed. We translate its actual selected
-prefixes into Tango's marked hulls, preserving both the selected keys and
+prefixes into Cha-Cha's marked hulls, preserving both the selected keys and
 all untouched hanging subtrees. The existing hull simulation then gives
 an adjacent-pointer execution within a universal factor of the same OPT.
 -/
 
 namespace DynamicOptimality
 
-open TangoSquared TangoSquared.MTR TangoSquared.MTR.Pointer
+open ChaCha ChaCha.MTR ChaCha.MTR.Pointer
 open Splay.Accounting.OfflineConnectedSupport
 
 def markPrefix : {lower upper : Nat} → {t : DynamicOptimality.BST lower upper} →

@@ -12,7 +12,7 @@ the coupled local program and the global accounting history are constructed.
 namespace MultiSplay.DenseForest
 
 open DynamicOptimality (RawTree)
-open TangoSquared.MTR.Tree (inorder size)
+open ChaCha.MTR.Tree (inorder size)
 
 variable {α : Type*}
 

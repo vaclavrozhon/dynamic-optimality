@@ -11,7 +11,7 @@ not search within, rebuild, or charge the size of a detached path.
 
 namespace MultiSplay.ComparatorGuard
 
-open TangoSquared Paper20261030 ColoredStorage SourcePointer
+open ChaCha Paper20261030 ColoredStorage SourcePointer
 open CommonForest
 
 variable {α : Type*}

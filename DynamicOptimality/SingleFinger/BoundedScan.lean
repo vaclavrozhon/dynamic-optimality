@@ -11,7 +11,7 @@ access events. A caller must separately identify the requested source leaf.
 
 namespace DynamicOptimality.SingleFinger.BoundedScan
 
-open TangoSquared.Paper20261030 ColoredStorage SourcePointer SourceLocalProgram
+open ChaCha.Paper20261030 ColoredStorage SourcePointer SourceLocalProgram
 
 variable {α ρ : Type*}
 

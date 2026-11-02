@@ -6,7 +6,7 @@ import MultiSplay.CommonForest
 namespace MultiSplay.CommonForest
 
 open DynamicOptimality (RawTree)
-open TangoSquared.MTR.Tree (inorder)
+open ChaCha.MTR.Tree (inorder)
 
 variable {α : Type*}
 

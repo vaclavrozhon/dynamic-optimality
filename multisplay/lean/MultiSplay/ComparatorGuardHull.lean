@@ -1,6 +1,6 @@
 import MultiSplay.ComparatorGuardPreparation
 import MultiSplay.ComparatorPointerProgram
-import TangoSquared.Paper20261030.AuxiliaryPointer
+import ChaCha.Paper20261030.AuxiliaryPointer
 
 /-!
 # Actual guard walks and their shared rooted frontier
@@ -15,8 +15,8 @@ guards back through an earlier preparation trace.
 namespace MultiSplay.ComparatorGuard
 
 open DynamicOptimality (RawTree)
-open TangoSquared.MTR
-open TangoSquared.MTR.Tree (inorder size)
+open ChaCha.MTR
+open ChaCha.MTR.Tree (inorder size)
 open Pointer (MarkedTree Cursor Trace Step Frame)
 
 variable {α : Type*}
@@ -91,7 +91,7 @@ theorem GapRoute.roundTrip {tree : RawTree α} {index : Nat} {keys : List α}
           have back : Trace ⟨.node a key b,.left root right :: ancestors⟩ []
               ⟨.node (.node a key b) root right,ancestors⟩ 1 :=
             .step (.upLeft _ _ _ _) (.nil _)
-          have joined := TangoSquared.Paper20261030.Auxiliary.trace_append run back
+          have joined := ChaCha.Paper20261030.Auxiliary.trace_append run back
           refine ⟨cost+3,by simp only [List.length_cons]; omega,?_⟩
           simpa only [List.append_nil,Nat.add_assoc] using
             Trace.serve (x := root) rfl (Trace.step (.left a b right key root ancestors) joined)
@@ -105,7 +105,7 @@ theorem GapRoute.roundTrip {tree : RawTree α} {index : Nat} {keys : List α}
           have back : Trace ⟨.node a key b,.right left root :: ancestors⟩ []
               ⟨.node left root (.node a key b),ancestors⟩ 1 :=
             .step (.upRight _ _ _ _) (.nil _)
-          have joined := TangoSquared.Paper20261030.Auxiliary.trace_append run back
+          have joined := ChaCha.Paper20261030.Auxiliary.trace_append run back
           refine ⟨cost+3,by simp only [List.length_cons]; omega,?_⟩
           simpa only [List.append_nil,Nat.add_assoc] using
             Trace.serve (x := root) rfl (Trace.step (.right left a b root key ancestors) joined)
@@ -122,7 +122,7 @@ theorem two_gap_hull {tree : RawTree α} {first second : Nat}
       (∀ key ∈ secondKeys, key ∈ hull.skeleton.inorder) := by
   obtain ⟨firstCost,firstBound,firstRun⟩ := firstRoute.roundTrip []
   obtain ⟨secondCost,secondBound,secondRun⟩ := secondRoute.roundTrip []
-  have run := TangoSquared.Paper20261030.Auxiliary.trace_append firstRun secondRun
+  have run := ChaCha.Paper20261030.Auxiliary.trace_append firstRun secondRun
   obtain ⟨source,target,sourceTree,_,_,_,small,served⟩ := trace_hull run
   refine ⟨source,sourceTree,by omega,?_,?_⟩
   · intro key member

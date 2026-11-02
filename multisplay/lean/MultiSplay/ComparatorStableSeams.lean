@@ -10,7 +10,7 @@ adds a sentinel to the independent tail's actual key set.
 
 namespace MultiSplay.ComparatorStableSuffix
 
-open TangoSquared
+open ChaCha
 open Paper20261030
 open ColoredStorage Auxiliary AuxiliaryComponent BoundaryObservations PathDecomposition
 open SecondaryDecomposition

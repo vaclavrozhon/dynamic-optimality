@@ -7,7 +7,7 @@ shared pointer semantics, including rotations at the current cursor. -/
 
 namespace DynamicOptimality
 
-open TangoSquared.MTR TangoSquared.MTR.Pointer
+open ChaCha.MTR ChaCha.MTR.Pointer
 
 variable {α : Type*}
 

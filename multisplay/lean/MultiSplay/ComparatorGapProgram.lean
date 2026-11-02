@@ -1,5 +1,5 @@
 import MultiSplay.ComparatorPointerProgram
-import TangoSquared.Paper20261030.GapBSTRepresentation
+import ChaCha.Paper20261030.GapBSTRepresentation
 
 /-!
 # Comparator preparation on the actual gap keys
@@ -11,7 +11,7 @@ parent, and source metadata operations disappear from the physical trace.
 
 namespace MultiSplay.ComparatorGap
 
-open TangoSquared
+open ChaCha
 open Paper20261030
 open ColoredStorage
 open GapBST (gaps lastKey park setRoot_gaps setRoot_lastKey)

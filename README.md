@@ -6,7 +6,7 @@ Dynamic optimality asks whether an online binary search tree can serve every req
 
 Start with [the public theorem statements](DynamicOptimalityResults.lean), or read the [formalization map](FORMALIZATION.md) for the definitions and proof dependencies. The main source papers are [*Splay trees are almost dynamically optimal*](https://arxiv.org/abs/2607.18498) and the forthcoming public manuscript [*Dynamic Optimality to within O(log log log n)*](#chacha2026). Full references and [BibTeX entries](docs/references.bib) appear below.
 
-The [interactive dependency graph](docs/DEPENDENCY_GRAPH.md) lets you explore all repository declarations and their direct references, with a spring layout, module overview, and searchable theorem neighborhoods. [Download the standalone HTML](https://github.com/vaclavrozhon/dynamic-optimality/raw/refs/heads/main/docs/dependency-graph.html) and open it locally; it works offline.
+The [interactive dependency graph](https://vaclavrozhon.github.io/dynamic-optimality/proof-atlas.html) lets you explore all repository declarations and their direct references, with a spring layout, module overview, and searchable theorem neighborhoods. The [project page](https://vaclavrozhon.github.io/dynamic-optimality/) introduces the results and references. You can also [download the standalone HTML](https://github.com/vaclavrozhon/dynamic-optimality/raw/refs/heads/main/docs/dependency-graph.html) for offline use. See the [graph guide](docs/DEPENDENCY_GRAPH.md) for controls and rebuilding.
 
 ## What is proved
 
@@ -35,11 +35,11 @@ The **Greedy** theorem concerns the geometric algorithm: a touch is a key–time
 
 ### Cha-Cha
 
-The current manuscript calls the structure **Cha-Cha**. The Lean modules retain the earlier names `TangoSquared` and `Tango2`; they belong to this same development. The source is [Čech et al., *Dynamic Optimality to within O(log log log n)*](#chacha2026), an unpublished manuscript whose public version is forthcoming.
+The source is [Čech et al., *Dynamic Optimality to within O(log log log n)*](#chacha2026), an unpublished manuscript whose public version is forthcoming. Its algorithm is called **Cha-Cha**, and the Lean library uses the name `ChaCha`.
 
-[`TangoSquaredAll.lean`](TangoSquaredAll.lean) exports one fixed deterministic online BST strategy for every finite key universe and every supplied initial tree. Its physical trees contain exactly the original keys; its execution theorem certifies actual searches and ordinary rotations. Initialization is charged once. The final competitive theorem has no unproved implementation or lower-bound premise.
+[`ChaChaAll.lean`](ChaChaAll.lean) exports one fixed deterministic online BST strategy for every finite key universe and every supplied initial tree. Its physical trees contain exactly the original keys; its execution theorem certifies actual searches and ordinary rotations. Initialization is charged once. The final competitive theorem has no unproved implementation or lower-bound premise.
 
-The [proof guide](docs/tango2-proof-guide/guide.pdf) connects the argument to Lean. The [repair notes](tango_squared/lean/PROOF_REPAIRS_2026_10_30.md) record mathematical corrections and differences from the imported manuscript.
+The [proof guide](docs/chacha-proof-guide/guide.pdf) connects the argument to Lean. The [repair notes](chacha/lean/PROOF_REPAIRS_2026_10_30.md) record mathematical corrections and differences from the imported manuscript.
 
 ### Classical MultiSplay
 
@@ -128,6 +128,6 @@ The following distinguish source papers, algorithm definitions, and related work
 
 ## Source history
 
-This repository began with a source snapshot of the shared workspace on 1 November 2026. The original [splay Git history](https://github.com/vaclavrozhon/splay) remains separate; this repository includes substantial later work. See [provenance](docs/PROVENANCE.txt) and the [initial source hashes](docs/snapshots/2026-11-01.sources.sha256).
+This repository began with a source snapshot of the shared workspace on 1 November 2026. The original [splay Git history](https://github.com/vaclavrozhon/splay) remains separate; this repository includes substantial later work. See [provenance](docs/PROVENANCE.txt) and the [current source hashes](docs/snapshots/2026-11-02.sources.sha256).
 
 No license has yet been selected for this repository. Dependency licenses do not determine the license of these sources.

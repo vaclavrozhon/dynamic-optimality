@@ -6,7 +6,7 @@ Prefer Czech in conversation with the user. Write documentation and Lean comment
 
 - Read [README.md](README.md) and [FORMALIZATION.md](FORMALIZATION.md) before changing a public endpoint.
 - Reuse the existing `DynamicOptimality.BST`, `RawTree`, `OPT`, `Competitive`, `SearchRotation`, and `OnlineBST` interfaces. Do not introduce a replacement optimum or silently change an algorithm's cost model.
-- The completed Tango² target permits free computation and mathematical bookkeeping, with fixed noncomputable choices per current state and request. It charges the initial search depth plus one and actual ordinary rotations. A bounded local controller is a separate task.
+- The completed Cha-Cha target permits free computation and mathematical bookkeeping, with fixed noncomputable choices per current state and request. It charges the initial search depth plus one and actual ordinary rotations. A bounded local controller is a separate task.
 - Classical MultiSplay's composed bound is exported by `MultiSplay.Online.competitive`. It constructs its actual comparator. Any further theorem assuming a cheap comparator, representation invariant, or simulator remains an intermediate result until that assumption is proved for the actual algorithm.
 - Check quantifier order and uniformity of constants, exact tree endpoints and key sets, initialization costs, repeated requests, and empty cases. Finite examples supplement general proofs.
 

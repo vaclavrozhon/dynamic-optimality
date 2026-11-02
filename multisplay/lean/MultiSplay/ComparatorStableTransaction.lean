@@ -1,6 +1,6 @@
 import MultiSplay.ComparatorStableSplice
 import MultiSplay.ComparatorPrimaryAccess
-import TangoSquared.Paper20261030.DormantMemoryFrame
+import ChaCha.Paper20261030.DormantMemoryFrame
 
 /-! # A complete persistent suffix transaction
 
@@ -11,7 +11,7 @@ source traces. The original prefix is the same opaque source on both sides.
 
 namespace MultiSplay.ComparatorStableSuffix
 
-open TangoSquared
+open ChaCha
 open Paper20261030
 open ColoredStorage Auxiliary AuxiliaryComponent BoundaryObservations PathDecomposition
 open SecondaryDecomposition ComparatorSuffix

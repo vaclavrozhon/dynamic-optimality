@@ -1,4 +1,4 @@
-import TangoSquared.PointerModel
+import ChaCha.PointerModel
 import DynamicOptimality.Basic
 
 /-!
@@ -13,7 +13,7 @@ unvisited subtrees literally as opaque holes.
 namespace MultiSplay.ComparatorGuard
 
 open DynamicOptimality (RawTree)
-open TangoSquared.MTR
+open ChaCha.MTR
 open Pointer (MarkedTree)
 
 variable {α : Type*}

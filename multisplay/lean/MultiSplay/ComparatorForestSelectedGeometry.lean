@@ -6,7 +6,7 @@ import MultiSplay.ComparatorOwnerMemory
 namespace MultiSplay.ComparatorForest
 
 open DynamicOptimality (BST)
-open TangoSquared.Primary (Key)
+open ChaCha.Primary (Key)
 open EndpointEncoding ClassicalSwitch
 
 theorem Pair.geometry {lower upper : Nat} {state : State} {reference : BST lower upper}

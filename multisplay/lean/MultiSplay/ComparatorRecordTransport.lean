@@ -1,6 +1,6 @@
-import TangoSquared.Paper20261030.SecondaryDecomposition
-import TangoSquared.Paper20261030.SourceRecordMap
-import TangoSquared.Paper20261030.GapBSTRepresentation
+import ChaCha.Paper20261030.SecondaryDecomposition
+import ChaCha.Paper20261030.SourceRecordMap
+import ChaCha.Paper20261030.GapBSTRepresentation
 
 /-!
 # Reinterpreting ghost interval names without changing an actual BST
@@ -14,7 +14,7 @@ transported by proof, rather than postulated after the renaming.
 
 namespace MultiSplay.ComparatorRecords
 
-open TangoSquared
+open ChaCha
 open Paper20261030
 open Std Std.DTreeMap.Internal Std.DTreeMap.Internal.Impl
 open ColoredStorage Auxiliary Auxiliary.Metadata AuxiliaryComponent BoundaryObservations PathDecomposition

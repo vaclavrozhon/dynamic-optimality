@@ -12,7 +12,7 @@ model reuses the shared raw tree and does not introduce a different OPT.
 
 namespace DynamicOptimality.SearchRotation
 
-open TangoSquared.MTR
+open ChaCha.MTR
 
 /-- One ordinary rotation at any subtree of the current tree. -/
 inductive Rotation {α : Type*} : RawTree α → RawTree α → Prop

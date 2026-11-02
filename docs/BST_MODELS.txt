@@ -33,8 +33,8 @@ The five models
    requested key when serving it. Its final position is unrestricted;
    the next access starts at the resulting tree's root. This counts
    actual operations, including repeated movements. Definition:
-   TangoSquared.MTR.Pointer.Access in
-   tango_squared/lean/TangoSquared/PointerModel.lean; ModelCosts.pointer.
+   ChaCha.MTR.Pointer.Access in
+   chacha/lean/ChaCha/PointerModel.lean; ModelCosts.pointer.
 
 4. Rooted hull. Select a connected collection of nodes containing the
    root and the requested key. Replace their tree by any BST on those
@@ -42,8 +42,8 @@ The five models
    gap. Here a gap is a position between consecutive selected keys, or
    before the first or after the last key. Charge the number of selected
    nodes. The final root is unrestricted. Definition:
-   TangoSquared.MTR.HullAccess in
-   tango_squared/lean/TangoSquared/BSTExecution.lean; ModelCosts.hull.
+   ChaCha.MTR.HullAccess in
+   chacha/lean/ChaCha/BSTExecution.lean; ModelCosts.hull.
 
 5. Geometry. Positive-time row t contains the t-th request and any other
    touched keys.

@@ -14,7 +14,7 @@ Result: exit status 0.
     Build completed successfully (10814 jobs).
 
   lake env lean AuditAll.lean
-    Audited shared, splay, Greedy, Tango-squared and MultiSplay declarations:
+    Audited shared, splay, Greedy, Cha-Cha and MultiSplay declarations:
       61003
     Declarations using nonstandard axioms: []
 
@@ -53,3 +53,7 @@ outside this result. See BST_MODELS.txt for definitions and constants.
 Documentation checks also passed: all local Markdown targets in README.md
 and FORMALIZATION.md exist; BibTeX 0.99d processed every entry in
 references.bib using plain.bst without errors or warnings.
+
+Historical record: names and paths above use the current Cha-Cha spelling.
+The original version is preserved in commit a2d6810; the complete post-rename
+build and audit are recorded in docs/verification-chacha-rename.txt.

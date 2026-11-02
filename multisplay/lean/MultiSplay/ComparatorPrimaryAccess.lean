@@ -1,6 +1,6 @@
 import MultiSplay.ComparatorPrimaryProjection
 import MultiSplay.ComparatorPreparedAccess
-import TangoSquared.Paper20261030.DecompositionLeaves
+import ChaCha.Paper20261030.DecompositionLeaves
 
 /-! # Stable suffix access on the actual preferred-path keys
 
@@ -12,7 +12,7 @@ program has the exact old and new original-key trees as endpoints.
 
 namespace MultiSplay.ComparatorPrimary
 
-open TangoSquared
+open ChaCha
 open Paper20261030
 open ColoredStorage Auxiliary AuxiliaryComponent BoundaryObservations PathDecomposition
 open SecondaryDecomposition

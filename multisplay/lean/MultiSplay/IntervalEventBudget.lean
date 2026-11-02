@@ -1,12 +1,12 @@
 import MultiSplay.IntervalWitnesses
-import TangoSquared.PeriodicAccounting
+import ChaCha.PeriodicAccounting
 
 /-! # Actual event budgets for arbitrary secondary interval hierarchies -/
 
 namespace MultiSplay.IntervalLower
 
-open TangoSquared
-open TangoSquared.Primary TangoSquared.Witnesses TangoSquared.MTR TangoSquared.MTR.Tree TangoSquared.NormalizedWords
+open ChaCha
+open ChaCha.Primary ChaCha.Witnesses ChaCha.MTR ChaCha.MTR.Tree ChaCha.NormalizedWords
 
 theorem eventSum_budget {H : Nat} {hierarchy : DepthTree 0 H} (qs : Finset Gadget) (valid : ∀ q ∈ qs, Valid hierarchy q)
     (t : Tree Key) (history xs : List Key)

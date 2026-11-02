@@ -11,7 +11,7 @@ allows the single structural departure separately.
 
 namespace MultiSplay.ComparatorStableSuffix
 
-open TangoSquared
+open ChaCha
 open Paper20261030
 open ColoredStorage Auxiliary AuxiliaryComponent BoundaryObservations PathDecomposition
 open SecondaryDecomposition

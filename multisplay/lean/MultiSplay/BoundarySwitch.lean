@@ -6,7 +6,7 @@ The empty components are real empty child domains, not extra physical keys. -/
 namespace MultiSplay.CommonForest
 
 open DynamicOptimality (RawTree)
-open TangoSquared.MTR.Tree (inorder)
+open ChaCha.MTR.Tree (inorder)
 
 variable {α : Type*}
 

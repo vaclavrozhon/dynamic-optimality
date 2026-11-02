@@ -4,7 +4,7 @@ import MultiSplay.ComparatorGuardPorts
 
 namespace MultiSplay.ComparatorGuard
 
-open TangoSquared Paper20261030 ColoredStorage PreferredProjection PrimaryWings
+open ChaCha Paper20261030 ColoredStorage PreferredProjection PrimaryWings
 open ComparatorPrimary (signature)
 
 local instance : LinearOrder (Option Bool) := inferInstanceAs (LinearOrder (WithBot Bool))

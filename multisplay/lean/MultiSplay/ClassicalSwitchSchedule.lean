@@ -12,7 +12,7 @@ also covers a reference leaf: its mandatory final switch is never suppressed.
 
 namespace MultiSplay.ClassicalSwitch
 
-open TangoSquared.Primary (Key branch)
+open ChaCha.Primary (Key branch)
 open EndpointEncoding
 
 theorem applySwitches_append (state : State) (first rest : List Key) :

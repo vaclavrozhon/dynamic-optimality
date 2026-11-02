@@ -7,7 +7,7 @@ Each context has depth at most two; no queue interior is traversed.
 
 namespace DynamicOptimality.SingleFinger.SourceBoundary
 
-open TangoSquared.Paper20261030 ColoredStorage SourcePointer SourceLocalProgram
+open ChaCha.Paper20261030 ColoredStorage SourcePointer SourceLocalProgram
 open DynamicOptimality.LocalProgram (Move)
 open SourceSpine SourceCounted
 

@@ -14,7 +14,7 @@ here or in the imported modules.
 namespace MultiSplay.ComparatorForest
 
 open DynamicOptimality (RawTree BST OPT Competitive)
-open TangoSquared
+open ChaCha
 open EndpointEncoding ClassicalSwitch CommonForest
 
 theorem comparator_estimate_of_services (scale : Nat)

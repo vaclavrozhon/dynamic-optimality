@@ -1,5 +1,5 @@
 import DynamicOptimality.SingleFinger.SourceCounted
-import TangoSquared.Paper20261030.SourceInorderLabels
+import ChaCha.Paper20261030.SourceInorderLabels
 
 /-! The counted kernels preserve the exact inorder word of application
 records (including leaf records). This applies to every execution prefix,
@@ -8,7 +8,7 @@ not only executions obtained from the structural deque lemmas.
 
 namespace DynamicOptimality.SingleFinger.SourceCounted
 
-open TangoSquared.Paper20261030 ColoredStorage SourcePointer SourceLocalProgram
+open ChaCha.Paper20261030 ColoredStorage SourcePointer SourceLocalProgram
 
 variable {α ρ ι : Type*}
 

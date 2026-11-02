@@ -12,8 +12,8 @@ comparator receive one state-determined word, independently of their shapes.
 namespace MultiSplay.ClassicalSwitch
 
 open DynamicOptimality (RawTree)
-open TangoSquared.MTR.Tree (inorder rootKey)
-open TangoSquared.Primary (Key)
+open ChaCha.MTR.Tree (inorder rootKey)
+open ChaCha.Primary (Key)
 open EndpointEncoding CommonForest
 
 variable {α : Type*}

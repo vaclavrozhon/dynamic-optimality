@@ -15,7 +15,7 @@ silently assumed to follow from a list of forest component domains.
 namespace MultiSplay.Global
 
 open DynamicOptimality DynamicOptimality.SearchRotation
-open TangoSquared.MTR
+open ChaCha.MTR
 
 theorem indexed_hasRoot {lower upper key : Nat} (tree : BST lower upper)
     (root : tree.toRaw.rootKey = some key) : tree.HasRoot key := by

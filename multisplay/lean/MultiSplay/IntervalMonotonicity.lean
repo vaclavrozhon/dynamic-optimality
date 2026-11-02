@@ -10,8 +10,8 @@ primary counter and concrete deletion-charge records are unchanged.
 
 namespace MultiSplay.IntervalLower
 
-open TangoSquared
-open TangoSquared.Primary
+open ChaCha
+open ChaCha.Primary
 
 theorem creation_separates {H : Nat} {hierarchy : DepthTree 0 H} {q : Gadget} (hq : q ∈ gadgets hierarchy)
     {p x z : Key} (hp : p.length = H) (hx : x.length = H) (hz : z.length = H)
@@ -92,7 +92,7 @@ theorem charged_node_exists {H : Nat} {hierarchy : DepthTree 0 H} {q : Gadget} {
     before := before, after := after, p := p, z := z,
     leftNeighbor := hl, rightNeighbor := hr,
     nested := prefix_take_lca (of_decide_eq_true hup) hux,
-    wp := TangoSquared.prefix_of_branch_some hpa, wz := TangoSquared.prefix_of_branch_some hza,
+    wp := ChaCha.prefix_of_branch_some hpa, wz := ChaCha.prefix_of_branch_some hza,
     a := a, b := b, pBranch := hpa, xBranch := hxb, zBranch := hza,
     opposite := hab, separated := hsep }⟩⟩
   rw [mem_owners, List.length_take, hx]

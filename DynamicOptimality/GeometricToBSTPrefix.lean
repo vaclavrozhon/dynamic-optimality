@@ -11,8 +11,8 @@ max-heap of last-touch times. All holes retain their old heap invariant.
 
 namespace DynamicOptimality.Geometry
 
-open TangoSquared TangoSquared.MTR TangoSquared.MTR.Tree
-open TangoSquared.MTR.Pointer TangoSquared.MTR.Tree.PriorityHull
+open ChaCha ChaCha.MTR ChaCha.MTR.Tree
+open ChaCha.MTR.Pointer ChaCha.MTR.Tree.PriorityHull
 
 def markRow (row : Finset Nat) : RawTree Nat → MarkedTree Nat
   | .empty => .hole .empty
@@ -31,10 +31,10 @@ def markRow (row : Finset Nat) : RawTree Nat → MarkedTree Nat
 theorem cold_root_cold_subtree {n root : Nat} {height : Nat → Int}
     {time : Int} {row : Finset Nat} {left right : RawTree Nat}
     (heap : Heap (update height time row) (.node left root right))
-    (bounded : ∀ key ∈ (TangoSquared.MTR.Tree.node left root right).inorder, key < n)
+    (bounded : ∀ key ∈ (ChaCha.MTR.Tree.node left root right).inorder, key < n)
     (above : ∀ key, key < n → height key < time)
     (cold : root ∉ row) :
-    ∀ key ∈ (TangoSquared.MTR.Tree.node left root right).inorder, key ∉ row := by
+    ∀ key ∈ (ChaCha.MTR.Tree.node left root right).inorder, key ∉ row := by
   intro key member selected
   have rootBound := bounded root (by simp [inorder])
   have entire : Bounded (update height time row) (update height time row root)

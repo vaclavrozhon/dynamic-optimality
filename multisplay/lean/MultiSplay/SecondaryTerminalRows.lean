@@ -10,8 +10,8 @@ never receives a left write needs no first-head allowance.
 
 namespace MultiSplay.Secondary
 
-open TangoSquared (changesFrom edgeChange)
-open TangoSquared.Primary (Key)
+open ChaCha (changesFrom edgeChange)
+open ChaCha.Primary (Key)
 open EndpointEncoding
 
 theorem no_left_changes {word : List Bool} (absent : false ∉ word) : changesFrom true word = 0 := by
@@ -20,7 +20,7 @@ theorem no_left_changes {word : List Bool} (absent : false ∉ word) : changesFr
   | cons bit rest ih =>
       cases bit
       · simp at absent
-      · simp only [TangoSquared.changesFrom_cons,TangoSquared.edgeChange_self,Nat.zero_add]
+      · simp only [ChaCha.changesFrom_cons,ChaCha.edgeChange_self,Nat.zero_add]
         exact ih (fun member => absent (List.mem_cons_of_mem _ member))
 
 theorem increasing_word_cost_le_two (initial : Bool) {word : List Bool} (sorted : word.Pairwise (· ≤ ·)) :

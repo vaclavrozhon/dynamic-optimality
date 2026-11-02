@@ -16,7 +16,7 @@ or charged program.
 namespace MultiSplay.ComparatorForest
 
 open DynamicOptimality (BST RawTree)
-open TangoSquared
+open ChaCha
 open Primary (Key)
 open EndpointEncoding ClassicalSwitch
 
@@ -88,7 +88,7 @@ end MultiSplay.ComparatorForest
 namespace MultiSplay.ComparatorGuard
 
 open DynamicOptimality (BST)
-open TangoSquared.Primary (Key)
+open ChaCha.Primary (Key)
 open EndpointEncoding ClassicalSwitch
 open ComparatorForest (indexedAt pack)
 
@@ -106,7 +106,7 @@ end MultiSplay.ComparatorGuard
 namespace MultiSplay.ComparatorForest
 
 open DynamicOptimality (BST RawTree)
-open TangoSquared
+open ChaCha
 open Primary (Key)
 open EndpointEncoding ClassicalSwitch
 
@@ -168,10 +168,10 @@ theorem projectedTree_primary_eq {lower upper : Nat} (state : State) (family : F
     projectedTree state family slot =
       ComparatorPrimary.projectedTree (restrict state slot.rootAddress) primary
         (startDepth state slot.endpoint)
-        (ComparatorRecords.erase (TangoSquared.Paper20261030.BoundaryObservations.closed (family slot.endpoint))) := by
+        (ComparatorRecords.erase (ChaCha.Paper20261030.BoundaryObservations.closed (family slot.endpoint))) := by
   have transported := congrArg (fun indexed : IndexedTree => ComparatorPrimary.projectedTree
     (restrict state slot.rootAddress) indexed.2.2 (startDepth state slot.endpoint)
-    (ComparatorRecords.erase (TangoSquared.Paper20261030.BoundaryObservations.closed (family slot.endpoint)))) same
+    (ComparatorRecords.erase (ChaCha.Paper20261030.BoundaryObservations.closed (family slot.endpoint)))) same
   simpa only [projectedTree,pack] using transported
 
 open Paper20261030 ColoredStorage PrimaryWings

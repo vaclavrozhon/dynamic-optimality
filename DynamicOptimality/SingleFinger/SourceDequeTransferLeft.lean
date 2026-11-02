@@ -8,7 +8,7 @@ All traversals occur along the two constant-depth external ports.
 
 namespace DynamicOptimality.SingleFinger.SourceDequeTransferLeft
 
-open TangoSquared.Paper20261030 ColoredStorage SourcePointer SourceLocalProgram
+open ChaCha.Paper20261030 ColoredStorage SourcePointer SourceLocalProgram
 open SourceSpine SourceCounted SourceBoundary SourceOpenDeque
 
 variable {α ρ : Type*}

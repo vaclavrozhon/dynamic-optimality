@@ -6,8 +6,8 @@ ordering hypothesis or additional keys are needed for the transformation. -/
 
 namespace DynamicOptimality
 
-open TangoSquared TangoSquared.MTR TangoSquared.MTR.Pointer
-open TangoSquared.Paper20261030.Auxiliary
+open ChaCha ChaCha.MTR ChaCha.MTR.Pointer
+open ChaCha.Paper20261030.Auxiliary
 
 variable {α : Type*}
 

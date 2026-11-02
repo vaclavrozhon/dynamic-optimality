@@ -5,7 +5,7 @@ retained while its cells are transferred into an adjacent deque. -/
 
 namespace DynamicOptimality.SingleFinger.SourceDeque
 
-open TangoSquared.Paper20261030 ColoredStorage SourceSpine
+open ChaCha.Paper20261030 ColoredStorage SourceSpine
 
 variable {α ρ : Type*}
 

@@ -9,7 +9,7 @@ state at that emission, including every preceding deeper switch.
 
 namespace MultiSplay.ClassicalSwitch
 
-open TangoSquared.Primary (Key branch)
+open ChaCha.Primary (Key branch)
 open EndpointEncoding
 
 theorem rootPreferred_nil (state : State) : RootPreferred state [] := by

@@ -6,7 +6,7 @@ the interpreter has no tree-valued argument or direct subtree access. -/
 
 namespace DynamicOptimality.LocalCommandList
 
-open TangoSquared.MTR TangoSquared.Paper20261030.Auxiliary LocalProgram
+open ChaCha.MTR ChaCha.Paper20261030.Auxiliary LocalProgram
 
 variable {α ρ : Type*}
 

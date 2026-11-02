@@ -9,13 +9,13 @@ The two projections of `Program` are actual executions of the existing
 projection has exactly `splayCost + boundaries` cost. Its comparator charges
 each rotation at depth d by d+1 and each search or structural event by one.
 The initial allowance counts physical keys and component handles, including
-empty components. No part of this comparison uses a Tango-squared upper bound.
+empty components. No part of this comparison uses a Cha-Cha upper bound.
 -/
 
 namespace MultiSplay.PackedSplay
 
 open Splay.Accounting
-open TangoSquared.MTR.Tree (size)
+open ChaCha.MTR.Tree (size)
 
 variable {m : Nat}
 

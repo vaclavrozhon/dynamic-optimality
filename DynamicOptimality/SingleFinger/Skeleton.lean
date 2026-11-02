@@ -17,7 +17,7 @@ obligation; a value of this datatype alone is not a simulator invariant.
 
 namespace DynamicOptimality.SingleFinger.Skeleton
 
-open TangoSquared.Paper20261030 ColoredStorage SourcePointer
+open ChaCha.Paper20261030 ColoredStorage SourcePointer
 open SourceSpine SourceOpenDeque SourceBoundary
 
 variable {α ρ : Type*}

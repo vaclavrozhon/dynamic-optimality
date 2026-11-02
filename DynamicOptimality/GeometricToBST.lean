@@ -16,8 +16,8 @@ existence theorem is offline: its tree choices can depend on later rows.
 
 namespace DynamicOptimality.Geometry
 
-open TangoSquared TangoSquared.MTR TangoSquared.MTR.Tree
-open TangoSquared.MTR.Pointer TangoSquared.MTR.Tree.PriorityHull
+open ChaCha ChaCha.MTR ChaCha.MTR.Tree
+open ChaCha.MTR.Pointer ChaCha.MTR.Tree.PriorityHull
 open GreedyMerge.Geometry
 
 theorem row_repair {n request : Nat} {height : Nat → Int} {time : Int}

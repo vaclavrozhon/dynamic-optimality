@@ -14,8 +14,8 @@ No navigation cost or component-boundary crossing is introduced.
 namespace MultiSplay.Global
 
 open DynamicOptimality DynamicOptimality.SearchRotation
-open TangoSquared.MTR
-open TangoSquared.MTR.Tree (graft size)
+open ChaCha.MTR
+open ChaCha.MTR.Tree (graft size)
 
 variable {α : Type*}
 

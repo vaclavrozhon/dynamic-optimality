@@ -15,7 +15,7 @@ giving a constant-factor comparison with the same shared offline optimum.
 
 namespace DynamicOptimality.UniverseExtension
 
-open TangoSquared.MTR SearchRotation
+open ChaCha.MTR SearchRotation
 
 /-- A fixed tree on an arbitrary finite interval. -/
 def intervalTree (lower : Nat) : (count : Nat) → BST lower (lower + count)

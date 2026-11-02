@@ -5,7 +5,7 @@ import MultiSplay.ComparatorForestMemory
 namespace MultiSplay.ComparatorForest
 
 open DynamicOptimality (RawTree BST)
-open TangoSquared
+open ChaCha
 open EndpointEncoding
 
 def Maintained {lower upper : Nat} (reference : BST lower upper)

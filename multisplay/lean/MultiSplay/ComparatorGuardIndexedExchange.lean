@@ -5,7 +5,7 @@ import MultiSplay.ComparatorGuardBoundaries
 
 namespace MultiSplay.ComparatorGuard
 
-open DynamicOptimality TangoSquared Paper20261030
+open DynamicOptimality ChaCha Paper20261030
 open EndpointEncoding ClassicalSwitch ColoredStorage PreferredProjection PrimaryWings
 open ComparatorPrimary (routing signature projected)
 open Primary (Key)

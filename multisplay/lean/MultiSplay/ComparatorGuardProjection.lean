@@ -9,7 +9,7 @@ the contents of the prefix and tail blocks remain opaque.
 
 namespace MultiSplay.ComparatorGuard
 
-open TangoSquared Paper20261030
+open ChaCha Paper20261030
 open ColoredStorage PrimaryPhysical PrimaryWings
 
 local instance : LinearOrder (Option Bool) := inferInstanceAs (LinearOrder (WithBot Bool))

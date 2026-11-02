@@ -12,8 +12,8 @@ namespace MultiSplay.Layered
 
 open Splay.Tree (BST)
 open DynamicOptimality (RawTree)
-open TangoSquared.MTR.Tree (inorder)
-open TangoSquared.Paper20261030.Auxiliary (Rearranges)
+open ChaCha.MTR.Tree (inorder)
+open ChaCha.Paper20261030.Auxiliary (Rearranges)
 open CommonForest (RootAccess)
 
 variable {α : Type*}

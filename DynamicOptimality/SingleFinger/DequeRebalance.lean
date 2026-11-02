@@ -11,7 +11,7 @@ remain in their inorder gaps. Every routine is the same counted local program
 
 namespace DynamicOptimality.SingleFinger.Deque
 
-open TangoSquared.MTR TangoSquared.Paper20261030.Auxiliary LocalProgram
+open ChaCha.MTR ChaCha.Paper20261030.Auxiliary LocalProgram
 open Spine Counted
 
 variable {κ α ρ : Type*}

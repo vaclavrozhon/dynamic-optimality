@@ -14,8 +14,8 @@ namespace MultiSplay.SparseHeavy
 
 open DynamicOptimality (RawTree)
 open Splay.Tree (BST)
-open TangoSquared.MTR.Tree (inorder)
-open TangoSquared.Paper20261030.Auxiliary (Rearranges)
+open ChaCha.MTR.Tree (inorder)
+open ChaCha.Paper20261030.Auxiliary (Rearranges)
 open CommonForest (RootAccess)
 
 variable {α : Type*}
@@ -46,7 +46,7 @@ theorem service_trace {capacity : Nat} (state : State capacity α)
   | empty => simp [State.source, DynamicOptimality.BST.toRaw, Auxiliary.map] at root
   | node l r =>
       simp only [State.source, DynamicOptimality.BST.toRaw, Auxiliary.map,
-        TangoSquared.MTR.Tree.node.injEq] at root
+        ChaCha.MTR.Tree.node.injEq] at root
       obtain ⟨split⟩ := Heavy.exists_split representation
       obtain ⟨joined⟩ := Heavy.exists_join split.leftRep split.rightRep fits
       let target := joined.actual
@@ -88,8 +88,8 @@ namespace MultiSplay.SparseRib
 
 open DynamicOptimality (RawTree)
 open Splay.Tree (BST)
-open TangoSquared.MTR.Tree (inorder)
-open TangoSquared.Paper20261030.Auxiliary (Rearranges)
+open ChaCha.MTR.Tree (inorder)
+open ChaCha.Paper20261030.Auxiliary (Rearranges)
 open CommonForest (RootAccess)
 
 variable {α : Type*}
@@ -120,7 +120,7 @@ theorem service_trace {capacity : Nat} (state : State capacity α)
   | empty => simp [State.source, DynamicOptimality.BST.toRaw, Auxiliary.map] at root
   | node l r =>
       simp only [State.source, DynamicOptimality.BST.toRaw, Auxiliary.map,
-        TangoSquared.MTR.Tree.node.injEq] at root
+        ChaCha.MTR.Tree.node.injEq] at root
       obtain ⟨split⟩ := Rib.exists_split representation
       obtain ⟨target, finalRep, joinWork, joinPath, joinWorkBound, joinBound⟩ :=
         Splay.Accounting.OfflineConnectedSupport.RibRepresentation.exists_join side

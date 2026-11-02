@@ -4,7 +4,7 @@ import MultiSplay.ComparatorGuardBlocks
 
 namespace MultiSplay.ComparatorGuard
 
-open TangoSquared Paper20261030 ColoredStorage
+open ChaCha Paper20261030 ColoredStorage
 open CommonForest
 
 variable {α : Type*}

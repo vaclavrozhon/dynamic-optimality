@@ -1,7 +1,7 @@
 import DynamicOptimality.PaddingSize
 import Splay.Analysis.IteratedLog
 
-/-! The explicit padded Tango² factor is bounded by the same stabilized
+/-! The explicit padded Cha-Cha factor is bounded by the same stabilized
 third logarithm used by the other shared competitive statements. -/
 
 namespace DynamicOptimality.Padding

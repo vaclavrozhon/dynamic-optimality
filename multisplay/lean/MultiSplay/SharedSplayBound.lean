@@ -10,7 +10,7 @@ maintenance cost. In particular, reserving inactive universe elements adds no
 cost. The constant is chosen before the value cap or the component sizes.
 
 This uses the original interface activity theorem. No E(G) improvement is
-assumed, and no Tango2 upper-bound theorem is imported.
+assumed, and no ChaCha upper-bound theorem is imported.
 -/
 
 namespace MultiSplay.SharedSplay

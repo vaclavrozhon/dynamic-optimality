@@ -1,5 +1,5 @@
 import DynamicOptimality.OnlineBST
-import TangoSquared.Paper20261030.OnlineSearchRotationInitializationCore
+import ChaCha.Paper20261030.OnlineSearchRotationInitializationCore
 
 /-!
 # Starting an online BST strategy from an arbitrary supplied tree
@@ -29,9 +29,9 @@ theorem indexed_inorder (tree : BST 0 n) : tree.toRaw.inorder = List.range n := 
 /-- The initialization is fixed before the first request is supplied. -/
 noncomputable def fixedInitialization (source : OnlineBST n) (canonical : source.State)
     (before : BST 0 n) :
-    TangoSquared.Paper20261030.OnlineSearchRotationInitialization.Initialization
+    ChaCha.Paper20261030.OnlineSearchRotationInitialization.Initialization
       before.toRaw (source.tree canonical) :=
-  TangoSquared.Paper20261030.OnlineSearchRotationInitialization.initialization
+  ChaCha.Paper20261030.OnlineSearchRotationInitialization.initialization
     before.toRaw (source.tree canonical)
     ((indexed_inorder before).trans (source.tree_word canonical).symm)
 
@@ -40,7 +40,7 @@ structure FirstTransition (source : OnlineBST n) (canonical : source.State)
   cost : Nat
   canonicalDepth : Nat
   canonicalCount : Nat
-  canonicalSearch : TangoSquared.MTR.Tree.searchDepth request.val (source.tree canonical) = some canonicalDepth
+  canonicalSearch : ChaCha.MTR.Tree.searchDepth request.val (source.tree canonical) = some canonicalDepth
   canonicalRun : Rotations (source.tree canonical)
     (source.tree (source.advance canonical request)) canonicalCount
   canonicalCost : source.accessCost canonical request = canonicalDepth + 1 + canonicalCount
@@ -80,7 +80,7 @@ any endpoint or charge. -/
 theorem FirstTransition.canonicalCount_eq {source : OnlineBST n} {canonical : source.State}
     {before : BST 0 n} {request : Fin n}
     (transition : FirstTransition source canonical before request) {depth count : Nat}
-    (search : TangoSquared.MTR.Tree.searchDepth request.val (source.tree canonical) = some depth)
+    (search : ChaCha.MTR.Tree.searchDepth request.val (source.tree canonical) = some depth)
     (paid : source.accessCost canonical request = depth+1+count) :
     transition.canonicalCount = count := by
   have same := Option.some.inj (transition.canonicalSearch.symm.trans search)

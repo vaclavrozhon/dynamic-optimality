@@ -11,8 +11,8 @@ execution that starts and ends at the component root. No request is inserted.
 
 namespace MultiSplay
 
-open TangoSquared.MTR TangoSquared.MTR.Tree
-open TangoSquared.Paper20261030.Auxiliary (Rearranges rearranges_refl)
+open ChaCha.MTR ChaCha.MTR.Tree
+open ChaCha.Paper20261030.Auxiliary (Rearranges rearranges_refl)
 open Splay.Accounting.OfflineConnectedSupport (HasSupportedPath)
 
 theorem restrictedSteps_rearranges {α : Type*} {a b : DynamicOptimality.RawTree α} {count : Nat}
@@ -36,7 +36,7 @@ theorem supported_rearranges {lower upper support rotations : Nat}
   let markedB := DynamicOptimality.markPrefix b
   have sameGaps : markedA.gapArray = markedB.gapArray := by
     funext i
-    simp only [markedA, markedB, TangoSquared.MTR.Pointer.MarkedTree.gapArray, words.1]
+    simp only [markedA, markedB, ChaCha.MTR.Pointer.MarkedTree.gapArray, words.1]
   obtain ⟨count, countBound, steps⟩ :=
     graft_simulation_linear markedA.skeleton markedB.skeleton words.2 markedA.gapArray 0
   have source : graft markedA.skeleton markedA.gapArray 0 =

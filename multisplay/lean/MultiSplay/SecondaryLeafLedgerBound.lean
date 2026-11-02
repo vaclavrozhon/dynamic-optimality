@@ -11,8 +11,8 @@ paid by initialized primary flips.
 
 namespace MultiSplay.Secondary
 
-open TangoSquared (DepthTree Gadget changesFrom)
-open TangoSquared.Primary
+open ChaCha (DepthTree Gadget changesFrom)
+open ChaCha.Primary
 open EndpointEncoding
 
 theorem rowGadget_injective : Function.Injective rowGadget := by
@@ -72,7 +72,7 @@ theorem encoded_leafLedger_bound {height : Nat} (hierarchy : DepthTree 0 (2*heig
     (inside : ∀ address ∈ addresses, address.length < height) :
     leafLedger hierarchy (fun _ => true) leafState (encode height nodeState addresses) ≤
       2*IntervalLower.secondaryDemands hierarchy (encode height nodeState addresses) +
-        2*TangoSquared.primaryCount (2*height) (encode height nodeState addresses) + 18*(2^height-1) := by
+        2*ChaCha.primaryCount (2*height) (encode height nodeState addresses) + 18*(2^height-1) := by
   have ledger := leafLedger_bound hierarchy leafState (encode height nodeState addresses) (encode_on_leaves nodeState inside)
   have primary := encoded_leafCost_le_primary right nodeState inside
   have support := encoded_left_rows_card hierarchy right nodeState inside

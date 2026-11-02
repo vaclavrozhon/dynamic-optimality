@@ -13,7 +13,7 @@ unique keys. Its existence is not an extra algorithmic assumption.
 namespace MultiSplay.ClassicalSwitch
 
 open DynamicOptimality (RawTree)
-open TangoSquared.MTR.Tree (inorder rootKey)
+open ChaCha.MTR.Tree (inorder rootKey)
 open CommonForest
 
 variable {α : Type*}

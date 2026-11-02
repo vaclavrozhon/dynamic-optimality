@@ -3,7 +3,7 @@ import MultiSplay.AuxiliarySplay
 namespace MultiSplay.Auxiliary
 
 open DynamicOptimality (RawTree)
-open TangoSquared.MTR.Tree (inorder)
+open ChaCha.MTR.Tree (inorder)
 
 variable {α : Type*}
 

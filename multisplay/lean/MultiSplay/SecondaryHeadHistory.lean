@@ -11,8 +11,8 @@ No independently supplied head history or charging assumption is used.
 
 namespace MultiSplay.Secondary
 
-open TangoSquared (Gadget transitionLabel transitionWord transitionsFrom changesFrom)
-open TangoSquared.Primary
+open ChaCha (Gadget transitionLabel transitionWord transitionsFrom changesFrom)
+open ChaCha.Primary
 open EndpointEncoding
 
 def rowGadget (row : Row) : Gadget := ⟨row.1,row.2⟩
@@ -135,7 +135,7 @@ theorem leafRow_demand_bound {height : Nat} {row : Row} (state : State) (initial
       2*(rowGadget row).count leaves + 2*rowResets row state leaves + 3 := by
   have blocks := write_blocks_head_bound initial (leafBlocks row state leaves) (leafBlocks_increasing row state leaves)
   obtain ⟨first,heads⟩ := headHistory_first state length cut nonterminal leaves heights
-  have bound := TangoSquared.FlipAccounting.exceptional_head_bound initial first
+  have bound := ChaCha.FlipAccounting.exceptional_head_bound initial first
     (transitionWord (rowGadget row).coarse (rowGadget row).fine (ownerWord row.2 leaves))
   rw [leafBlocks_flatten] at blocks
   change changesFrom initial (leafRow row state leaves) ≤ changesFrom initial (headHistory row state leaves) +

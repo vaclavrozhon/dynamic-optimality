@@ -5,7 +5,7 @@ import MultiSplay.DenseForestExecution
 namespace MultiSplay.DenseForest
 
 open DynamicOptimality (RawTree)
-open TangoSquared.MTR.Tree (inorder)
+open ChaCha.MTR.Tree (inorder)
 open Splay.Accounting (articleParameters)
 
 variable {α : Type*} {height slack : Nat}

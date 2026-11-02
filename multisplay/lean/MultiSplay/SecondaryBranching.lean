@@ -1,5 +1,5 @@
 import MultiSplay.SecondaryVariation
-import TangoSquared.FragmentHierarchy
+import ChaCha.FragmentHierarchy
 
 /-!
 # Counting secondary intervals changed by reversing ancestor emissions
@@ -11,7 +11,7 @@ The statement allows arbitrary interval splits and does not use balancing.
 
 namespace MultiSplay.Secondary
 
-open TangoSquared (DepthSplit DepthTree)
+open ChaCha (DepthSplit DepthTree)
 
 def inInterval (lower upper : Nat) (depths : List Nat) : List Nat :=
   depths.filter (fun depth => decide (lower ≤ depth ∧ depth ≤ upper))

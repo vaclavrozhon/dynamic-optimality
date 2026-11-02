@@ -5,7 +5,7 @@ import MultiSplay.ComparatorForestInitialization
 namespace MultiSplay.ComparatorForest
 
 open DynamicOptimality
-open TangoSquared.Primary (Key)
+open ChaCha.Primary (Key)
 open EndpointEncoding ClassicalSwitch
 
 def externalAddresses : RawTree Nat → List Key

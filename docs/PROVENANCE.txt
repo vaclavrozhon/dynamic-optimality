@@ -4,7 +4,7 @@ Source provenance
 This repository starts from the current shared dynamic-optimality Lean
 workspace on 1 November 2026. It is a source snapshot, not an export of
 the old splay Git HEAD. It includes the subsequently completed Greedy,
-Tango-squared, shared model, and MultiSplay intermediate developments.
+Cha-Cha, shared model, and MultiSplay intermediate developments.
 
 The original splay history remains separately available at:
   https://github.com/vaclavrozhon/splay
@@ -16,9 +16,11 @@ Do not identify this snapshot with that upstream commit.
 
 The original working directory and its splay Git metadata were preserved.
 Registered Lean modules and their current root configuration were copied
-without changing proof contents. The initial content hashes are recorded
-in snapshots/2026-11-01.sources.sha256. That file is a historical baseline;
-later proof commits are expected to change these sources.
+without changing proof contents. The original source hashes remain archived unchanged in the initial commit:
+  https://github.com/vaclavrozhon/dynamic-optimality/blob/04a18b9c9a71a26732c7befaa390b253924b8c90/docs/snapshots/2026-11-01.sources.sha256
+The current renamed source hashes are recorded in
+snapshots/2026-11-02.sources.sha256. These records identify source snapshots;
+builds and axiom audits are recorded separately.
 
 The snapshot excludes dependency/build caches, experimental datasets,
 broken compatibility symlinks, local machine state, archived downloads,
@@ -27,3 +29,9 @@ Lean dependencies from their upstream repositories.
 
 The source owners have not yet selected a license for this new repository.
 No license is inferred from Mathlib or another dependency.
+
+On 2 November 2026, the algorithm library, modules, and declarations were
+renamed to ChaCha to match the current manuscript. This was a consistent
+identifier/path substitution; theorem statements and proofs retain their
+mathematical content. Post-rename build and audit results are recorded in
+verification-chacha-rename.txt.

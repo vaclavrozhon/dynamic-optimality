@@ -16,7 +16,7 @@ end MultiSplay.OrdinalShift
 namespace MultiSplay.Alphabet
 
 open Splay.Tree (BST)
-open TangoSquared.MTR.Tree (inorder)
+open ChaCha.MTR.Tree (inorder)
 
 theorem exists_dense {lower upper : Nat} (source : BST lower upper) :
     ∃ dense : BST 0 source.size,

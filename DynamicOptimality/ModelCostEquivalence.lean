@@ -17,7 +17,7 @@ and need not preserve the final tree of an arbitrary-rotation execution.
 
 namespace DynamicOptimality
 
-open TangoSquared TangoSquared.MTR
+open ChaCha ChaCha.MTR
 
 abbrev CostRelation := {n : Nat} → List (Fin n) → Nat → Prop
 

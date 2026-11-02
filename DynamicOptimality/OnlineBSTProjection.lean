@@ -13,8 +13,8 @@ fixed source transition remains a function of the current state and key.
 namespace DynamicOptimality.OnlineBST
 
 theorem tree_ordered {n : Nat} (strategy : OnlineBST n) (state : strategy.State) :
-    TangoSquared.MTR.Tree.Ordered (strategy.tree state) := by
-  unfold TangoSquared.MTR.Tree.Ordered
+    ChaCha.MTR.Tree.Ordered (strategy.tree state) := by
+  unfold ChaCha.MTR.Tree.Ordered
   rw [strategy.tree_word]
   exact List.pairwise_lt_range
 

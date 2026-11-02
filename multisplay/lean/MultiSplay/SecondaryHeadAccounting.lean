@@ -10,7 +10,7 @@ per mixed block, including the boundary with the following query.
 
 namespace MultiSplay.Secondary
 
-open TangoSquared (changesFrom edgeChange)
+open ChaCha (changesFrom edgeChange)
 
 theorem increasing_changes_le (initial : Bool) (word : List Bool)
     (sorted : word.Pairwise (· ≤ ·)) (lower : ∀ bit ∈ word, initial ≤ bit) :
@@ -39,7 +39,7 @@ theorem constant_prefix_changes (bit : Bool) (word tail : List Bool)
   | cons value rest ih =>
       have same := constant value (by simp)
       subst value
-      simpa only [List.cons_append,TangoSquared.changesFrom_cons,TangoSquared.edgeChange_self,Nat.zero_add] using
+      simpa only [List.cons_append,ChaCha.changesFrom_cons,ChaCha.edgeChange_self,Nat.zero_add] using
         ih (fun value member => constant value (List.mem_cons_of_mem _ member))
 
 theorem remove_block_tail (initial : Bool) (word tail : List Bool)
@@ -52,15 +52,15 @@ theorem remove_block_tail (initial : Bool) (word tail : List Bool)
       by_cases mixed : Mixed (bit::rest)
       · obtain ⟨head,increasing⟩ := List.pairwise_cons.mp sorted
         have inside := increasing_changes_le bit rest increasing head
-        have boundary := TangoSquared.FlipAccounting.changesFrom_initial_le (rest.getLastD bit) bit tail
-        simp only [List.cons_append,TangoSquared.changesFrom_cons,List.head?_cons,Option.toList_some,
+        have boundary := ChaCha.FlipAccounting.changesFrom_initial_le (rest.getLastD bit) bit tail
+        simp only [List.cons_append,ChaCha.changesFrom_cons,List.head?_cons,Option.toList_some,
           List.singleton_append,List.nil_append,if_pos mixed]
         rw [changesFrom_append]
         cases bit <;> simp only [Bool.false_eq_true,if_false,if_true] at inside <;> omega
       · have constant : ∀ value ∈ rest, value = bit := by
           intro value member
           cases bit <;> cases value <;> simp_all [Mixed]
-        simp only [List.cons_append,TangoSquared.changesFrom_cons,List.head?_cons,Option.toList_some,
+        simp only [List.cons_append,ChaCha.changesFrom_cons,List.head?_cons,Option.toList_some,
           List.singleton_append,List.nil_append,if_neg mixed,Nat.mul_zero,Nat.add_zero]
         rw [constant_prefix_changes bit rest tail constant]
 
@@ -79,11 +79,11 @@ theorem write_blocks_head_bound (initial : Bool) (blocks : List (List Bool))
       | cons bit suffix =>
           have later := ih bit tailSorted
           simp only [List.flatten_cons,List.filterMap_cons,List.head?_cons,List.map_cons,List.sum_cons]
-          simp only [List.head?_cons,Option.toList_some,List.singleton_append,TangoSquared.changesFrom_cons] at first
-          simp only [TangoSquared.changesFrom_cons]
+          simp only [List.head?_cons,Option.toList_some,List.singleton_append,ChaCha.changesFrom_cons] at first
+          simp only [ChaCha.changesFrom_cons]
           omega
 
-theorem rowDepths_writes_increasing (row : Row) (state : EndpointEncoding.State) (leaf : TangoSquared.Primary.Key) :
+theorem rowDepths_writes_increasing (row : Row) (state : EndpointEncoding.State) (leaf : ChaCha.Primary.Key) :
     ((rowDepths row state leaf).map (fun depth => decide (row.1.cut < depth))).Pairwise (· ≤ ·) := by
   rw [List.pairwise_map]
   apply (rowDepths_increasing row state leaf).imp

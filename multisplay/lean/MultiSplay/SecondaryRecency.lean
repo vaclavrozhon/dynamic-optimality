@@ -1,5 +1,5 @@
 import MultiSplay.EndpointLedgerSupport
-import TangoSquared.NormalizedWords
+import ChaCha.NormalizedWords
 
 /-!
 # The first changed depth after an owner-local request
@@ -12,7 +12,7 @@ and that ancestor changes whenever the two requested leaves are distinct.
 
 namespace MultiSplay.Secondary
 
-open TangoSquared.Primary
+open ChaCha.Primary
 open EndpointEncoding
 
 def Remembers (state : State) (owner previous : Key) : Prop :=
@@ -68,7 +68,7 @@ theorem remembered_lca_changes {state : State} {owner previous leaf : Key}
     (properLeaf : lcaDepth previous leaf < leaf.length) :
     leaf.take (lcaDepth previous leaf) ∈ ancestorEmissions state leaf := by
   obtain ⟨left,right,different,before,after⟩ :=
-    TangoSquared.NormalizedWords.branches_at_proper_lca properPrevious properLeaf
+    ChaCha.NormalizedWords.branches_at_proper_lca properPrevious properLeaf
   have old := remembered _ left (prefix_take_lca ownerPrevious ownerLeaf) before
   have notLeaf : leaf.take (lcaDepth previous leaf) ≠ leaf := by
     intro same

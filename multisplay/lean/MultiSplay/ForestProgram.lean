@@ -12,7 +12,7 @@ This charge bounds their ordinary pointer cost up to a universal constant.
 namespace MultiSplay.CommonForest
 
 open DynamicOptimality (RawTree)
-open TangoSquared.MTR.Tree (inorder)
+open ChaCha.MTR.Tree (inorder)
 
 variable {α : Type*}
 

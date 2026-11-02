@@ -12,9 +12,9 @@ its relative reference address, so its preference state is obtained by
 namespace MultiSplay.ClassicalSwitch
 
 open DynamicOptimality (RawTree)
-open TangoSquared.MTR.Tree (inorder size)
-open TangoSquared.MTR.Pointer (MarkedTree)
-open TangoSquared.Primary (Key)
+open ChaCha.MTR.Tree (inorder size)
+open ChaCha.MTR.Pointer (MarkedTree)
+open ChaCha.Primary (Key)
 open EndpointEncoding
 
 variable {α : Type*}

@@ -5,7 +5,7 @@ import MultiSplay.ClassicalSwitchAccountingInventory
 namespace MultiSplay.ClassicalSwitch.Accounting
 
 open DynamicOptimality (RawTree)
-open TangoSquared.Primary (Key)
+open ChaCha.Primary (Key)
 open EndpointEncoding CommonForest
 
 variable {α : Type*} [DecidableEq α]

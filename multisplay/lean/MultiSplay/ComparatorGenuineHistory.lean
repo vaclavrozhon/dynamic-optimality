@@ -13,8 +13,8 @@ of the already bounded actual emission word, with the same initial bit.
 
 namespace MultiSplay.ComparatorHistory
 
-open TangoSquared (DepthTree DepthSplit edgeChange changesFrom)
-open TangoSquared.Primary (Key level mem_level)
+open ChaCha (DepthTree DepthSplit edgeChange changesFrom)
+open ChaCha.Primary (Key level mem_level)
 open EndpointEncoding (State actualEmissions nodeStep)
 open ClassicalSwitch (schedule startDepth)
 open Secondary (Row rows project actualRow actualLedger)
@@ -91,7 +91,7 @@ theorem ledger_le_actual {a b : Nat} (reference : DepthTree a b) (initial : Row 
     ledger reference initial state addresses ≤ actualLedger reference initial state addresses := by
   apply Finset.sum_le_sum
   intro row _
-  exact TangoSquared.changesFrom_sublist (rowWord_sublist row state addresses) (initial row)
+  exact ChaCha.changesFrom_sublist (rowWord_sublist row state addresses) (initial row)
 
 def update (entry : State × Key) (memory : Row → Bool) : Row → Bool :=
   fun row => (write row entry).getD (memory row)
@@ -106,10 +106,10 @@ theorem update_local (entry : State × Key) (memory : Row → Bool) (path : Key)
   by_cases inside : split.lo ≤ entry.2.length ∧ entry.2.length ≤ split.hi
   · have same := take_eq_of_prefix continuation inside.1
     simp only [update,write,project,ComparatorSuffix.writeGenuine,
-      TangoSquared.Paper20261030.Secondary.intervalUpdate,if_pos inside,same,ite_true]
+      ChaCha.Paper20261030.Secondary.intervalUpdate,if_pos inside,same,ite_true]
     split <;> rfl
   · simp only [update,write,project,ComparatorSuffix.writeGenuine,
-      TangoSquared.Paper20261030.Secondary.intervalUpdate,if_neg inside,ite_self]
+      ChaCha.Paper20261030.Secondary.intervalUpdate,if_neg inside,ite_self]
     rfl
 
 theorem update_other_owner (entry : State × Key) (memory : Row → Bool)
@@ -136,13 +136,13 @@ theorem eventCost_eq_genuine {a b : Nat} (reference : DepthTree a b)
   · rw [Finset.sum_eq_single (entry.2.take split.lo)]
     · rw [take_eq_of_prefix continuation lower,update_local entry memory path continuation split]
     · intro owner _ different
-      rw [update_other_owner entry memory ⟨split,owner⟩ different, TangoSquared.edgeChange_self]
+      rw [update_other_owner entry memory ⟨split,owner⟩ different, ChaCha.edgeChange_self]
     · intro absent
       exact False.elim (absent ((mem_level _ _).mpr (List.length_take_of_le lower)))
   · have inactive (owner : Key) : update entry memory ⟨split,owner⟩ = memory ⟨split,owner⟩ := by
       simp [update,write,project,lower]
-    simp only [inactive,TangoSquared.edgeChange_self,Finset.sum_const_zero]
-    simp [ComparatorSuffix.writeGenuine,TangoSquared.Paper20261030.Secondary.intervalUpdate,lower]
+    simp only [inactive,ChaCha.edgeChange_self,Finset.sum_const_zero]
+    simp [ComparatorSuffix.writeGenuine,ChaCha.Paper20261030.Secondary.intervalUpdate,lower]
 
 def runCost {a b : Nat} (reference : DepthTree a b) (memory : Row → Bool) :
     List (State × Key) → Nat

@@ -1,5 +1,5 @@
-import TangoSquared.TurnAccounting
-import TangoSquared.FlipAccounting
+import ChaCha.TurnAccounting
+import ChaCha.FlipAccounting
 
 /-!
 # The cost of reversing the ancestor block in one secondary row
@@ -12,7 +12,7 @@ can be summed over successive changes of query order without resetting bits.
 
 namespace MultiSplay.Secondary
 
-open TangoSquared (edgeChange changesFrom changesFrom_cons changesFrom_nil)
+open ChaCha (edgeChange changesFrom changesFrom_cons changesFrom_nil)
 
 theorem changesFrom_append (initial : Bool) (first last : List Bool) :
     changesFrom initial (first++last) = changesFrom initial first + changesFrom (first.getLastD initial) last := by
@@ -27,13 +27,13 @@ instance (word : List Bool) : Decidable (Mixed word) := inferInstanceAs (Decidab
 theorem reversal_walk (first last : Bool) (word : List Bool) :
     changesFrom first (word++[last]) = changesFrom last (word.reverse++[first]) := by
   induction word generalizing first with
-  | nil => simp [changesFrom, TangoSquared.edgeChange_comm]
+  | nil => simp [changesFrom, ChaCha.edgeChange_comm]
   | cons head tail ih =>
       simp only [List.cons_append, List.reverse_cons, List.append_assoc, List.nil_append, changesFrom_cons]
-      rw [TangoSquared.changesFrom_append_cons last tail.reverse head [first]]
+      rw [ChaCha.changesFrom_append_cons last tail.reverse head [first]]
       simp only [changesFrom_cons, changesFrom_nil, Nat.add_zero]
       rw [ih]
-      rw [TangoSquared.edgeChange_comm first head]
+      rw [ChaCha.edgeChange_comm first head]
       omega
 
 theorem endpoint_change (first left right : Bool) (word : List Bool) :
@@ -48,13 +48,13 @@ theorem endpoint_change (first left right : Bool) (word : List Bool) :
 theorem reversal_boundary (first last : Bool) (word : List Bool) :
     changesFrom first (word.reverse++[last]) ≤ changesFrom first (word++[last])+2 := by
   rw [← reversal_walk last first word]
-  have initial := TangoSquared.FlipAccounting.changesFrom_initial_le last first (word++[first])
+  have initial := ChaCha.FlipAccounting.changesFrom_initial_le last first (word++[first])
   have final := endpoint_change first first last word
   omega
 
 theorem reversal_initial (first : Bool) (word : List Bool) :
     changesFrom first word.reverse ≤ changesFrom first word+1 := by
-  have initialPart := TangoSquared.changesFrom_sublist (List.sublist_append_left word.reverse [first]) first
+  have initialPart := ChaCha.changesFrom_sublist (List.sublist_append_left word.reverse [first]) first
   rw [← reversal_walk first first word] at initialPart
   rw [changesFrom_append] at initialPart
   have edge : edgeChange (word.getLastD first) first ≤ 1 := by unfold edgeChange; split <;> omega
@@ -71,8 +71,8 @@ theorem contextual_reversal (initial : Bool) (front word back : List Bool) :
       have bound := reversal_initial (front.getLastD initial) word
       omega
   | cons last rest =>
-      rw [TangoSquared.changesFrom_append_cons (front.getLastD initial) word.reverse last rest,
-        TangoSquared.changesFrom_append_cons (front.getLastD initial) word last rest]
+      rw [ChaCha.changesFrom_append_cons (front.getLastD initial) word.reverse last rest,
+        ChaCha.changesFrom_append_cons (front.getLastD initial) word last rest]
       have bound := reversal_boundary (front.getLastD initial) last word
       omega
 

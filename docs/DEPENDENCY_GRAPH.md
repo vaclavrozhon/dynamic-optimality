@@ -1,6 +1,6 @@
 # Explore the Lean dependency graph
 
-Download [dependency-graph.html](https://github.com/vaclavrozhon/dynamic-optimality/raw/refs/heads/main/docs/dependency-graph.html) and open the saved file in a current browser. It is one self-contained HTML file: the graph data, drawing code, and spring simulation are included. It works offline and needs no server or account.
+Open the [interactive graph](https://vaclavrozhon.github.io/dynamic-optimality/proof-atlas.html) on the [project website](https://vaclavrozhon.github.io/dynamic-optimality/). You can also download [dependency-graph.html](https://github.com/vaclavrozhon/dynamic-optimality/raw/refs/heads/main/docs/dependency-graph.html) and open the saved file in a current browser. It is one self-contained HTML file: the graph data, drawing code, and spring simulation are included. It works offline and needs no server or account.
 
 The current snapshot contains **63,307 declarations**, including **39,435 theorems**, and **541,141 direct dependency edges** across all **2,224 registered modules**. Ten modules contain no declarations; the module overview therefore has 2,214 nodes. See the [verification record](verification-dependency-graph.txt).
 
@@ -19,12 +19,12 @@ Search for a full declaration name, such as:
 ```text
 DynamicOptimality.Results.splay
 DynamicOptimality.Results.greedy
-DynamicOptimality.Results.tango2
+DynamicOptimality.Results.chacha
 DynamicOptimality.Results.multisplay
 DynamicOptimality.Results.bst_models_equivalent
 ```
 
-The Lean name `tango2` is historical; the current paper calls the algorithm Cha-Cha. A selected node shows its dependencies, declarations using it, and a link to the source at the recorded Git commit. The graph layout is a visual aid: springs pull related nodes together, while repulsion separates them. Distances, positions, and apparent clusters are not additional mathematical claims.
+The Cha-Cha endpoint is `DynamicOptimality.Results.chacha`. A selected node shows its dependencies, declarations using it, and a link to the source at the recorded Git commit. The graph layout is a visual aid: springs pull related nodes together, while repulsion separates them. Distances, positions, and apparent clusters are not additional mathematical claims.
 
 Choose **All declarations** to see the whole graph, or filter **Declaration kind → Theorems**. Zoom with the scroll wheel, pan by dragging the background, and move a node by dragging it. Canvas labels are shortened; hovering or selecting reveals the full name. **PNG** saves the current view. Large views initially draw a counted sample of edges while the simulation still uses every edge; **Draw every visible edge** disables that drawing sample. Node and dependency counts are never reduced silently.
 

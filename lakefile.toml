@@ -1,6 +1,6 @@
 name = "DynamicOptimality"
 version = "0.1.0"
-defaultTargets = ["DynamicOptimality", "Splay", "TangoSquared", "TangoSquaredPaper20261030", "TangoSquaredAbstract", "TangoSquaredAll", "Greedy", "MultiSplay", "DynamicOptimalityResults"]
+defaultTargets = ["DynamicOptimality", "Splay", "ChaCha", "ChaChaPaper20261030", "ChaChaAbstract", "ChaChaAll", "Greedy", "MultiSplay", "DynamicOptimalityResults"]
 
 [[require]]
 name = "mathlib"
@@ -12,12 +12,12 @@ name = "Splay"
 srcDir = "splay/formalization"
 
 [[lean_lib]]
-name = "TangoSquared"
-srcDir = "tango_squared/lean"
+name = "ChaCha"
+srcDir = "chacha/lean"
 
 [[lean_lib]]
-name = "TangoSquaredPaper20261030"
-srcDir = "tango_squared/lean"
+name = "ChaChaPaper20261030"
+srcDir = "chacha/lean"
 
 [[lean_lib]]
 name = "DynamicOptimality"
@@ -26,10 +26,10 @@ name = "DynamicOptimality"
 name = "DynamicOptimalityResults"
 
 [[lean_lib]]
-name = "TangoSquaredAbstract"
+name = "ChaChaAbstract"
 
 [[lean_lib]]
-name = "TangoSquaredAll"
+name = "ChaChaAll"
 
 # Existing Greedy research modules keep their source paths and import names.
 

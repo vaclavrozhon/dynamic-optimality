@@ -1,5 +1,5 @@
 import MultiSplay.EndpointEmissionEmbedding
-import TangoSquared.Words
+import ChaCha.Words
 
 /-!
 # Embedding the complete initialized secondary ledger
@@ -11,8 +11,8 @@ as chronological subsequences, with the same prescribed initial bits.
 
 namespace MultiSplay.Secondary
 
-open TangoSquared (DepthTree changesFrom changesFrom_sublist)
-open TangoSquared.Primary (Key)
+open ChaCha (DepthTree changesFrom changesFrom_sublist)
+open ChaCha.Primary (Key)
 open EndpointEncoding
 
 /-- The chronological writes of a leaf-query process, including completion. -/

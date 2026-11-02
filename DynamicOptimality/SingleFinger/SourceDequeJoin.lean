@@ -12,7 +12,7 @@ The persistent imbalance potential is retained in the output inequality.
 
 namespace DynamicOptimality.SingleFinger.SourceDequeJoin
 
-open TangoSquared.Paper20261030 ColoredStorage SourcePointer SourceLocalProgram
+open ChaCha.Paper20261030 ColoredStorage SourcePointer SourceLocalProgram
 open SourceSpine SourceCounted SourceBoundary SourceOpenDeque
 
 variable {α ρ : Type*}

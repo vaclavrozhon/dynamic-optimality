@@ -12,7 +12,7 @@ namespace MultiSplay.Alphabet
 
 open DynamicOptimality (RawTree)
 open Splay.Tree (BST)
-open TangoSquared.MTR.Tree (size)
+open ChaCha.MTR.Tree (size)
 
 /-- Encode a physical component without changing a single edge or key. -/
 theorem exists_encoding {α : Type*} [Inhabited α] (physical : RawTree α) :
@@ -29,7 +29,7 @@ theorem exists_encoding {α : Type*} [Inhabited α] (physical : RawTree α) :
       refine ⟨leftUpper + 1 + rightUpper, .node leftTree shiftedRight, alphabet, ?_, ?_⟩
       · simp only [alphabet, DynamicOptimality.BST.toRaw, Auxiliary.map, join_left, join_right, join_root]
         rw [leftEq]
-        exact congrArg (fun tree => TangoSquared.MTR.Tree.node left key tree)
+        exact congrArg (fun tree => ChaCha.MTR.Tree.node left key tree)
           ((OrdinalShift.tree_alphabet (leftUpper + 1) rightTree rightAlphabet).trans rightEq)
       · simp [size, leftSize, rightSize]
 

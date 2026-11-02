@@ -1,5 +1,5 @@
 import MultiSplay.ComparatorReconfiguration
-import TangoSquared.PointerModel
+import ChaCha.PointerModel
 
 /-!
 # Turning an actual pointer rearrangement into comparator preparation
@@ -11,8 +11,8 @@ the common-forest metric, even when the original rotations occurred deeply.
 
 namespace MultiSplay.CommonForest
 
-open TangoSquared.MTR
-open TangoSquared.MTR.Tree
+open ChaCha.MTR
+open ChaCha.MTR.Tree
 
 variable {α : Type*}
 

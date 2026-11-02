@@ -14,8 +14,8 @@ without rebuilding or rotating any opaque foreign subtree.
 namespace MultiSplay.Global
 
 open DynamicOptimality DynamicOptimality.SearchRotation
-open TangoSquared.MTR
-open TangoSquared.MTR.Tree (graft size)
+open ChaCha.MTR
+open ChaCha.MTR.Tree (graft size)
 
 variable {α : Type*}
 

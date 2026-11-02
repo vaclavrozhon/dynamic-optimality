@@ -7,9 +7,9 @@ import Mathlib.Data.List.Forall2
 namespace MultiSplay.Global.Preferred
 
 open DynamicOptimality (RawTree)
-open TangoSquared.MTR
+open ChaCha.MTR
 open Pointer (MarkedTree)
-open TangoSquared.Primary (Key)
+open ChaCha.Primary (Key)
 open EndpointEncoding ClassicalSwitch
 
 variable {α : Type*}

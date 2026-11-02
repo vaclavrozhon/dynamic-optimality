@@ -7,12 +7,12 @@ parent, and every descent is paired with a return along the same edge. -/
 
 namespace DynamicOptimality.LocalSnapshot
 
-open TangoSquared.MTR TangoSquared.Paper20261030.Auxiliary LocalProgram
+open ChaCha.MTR ChaCha.Paper20261030.Auxiliary LocalProgram
 
 variable {α ρ : Type*}
 
 abbrev Record (α ρ : Type*) := NodeRecord α (fun _ => ρ)
-abbrev Snapshot (α ρ : Type*) := TangoSquared.Paper20261030.Auxiliary.Snapshot α (fun _ => ρ)
+abbrev Snapshot (α ρ : Type*) := ChaCha.Paper20261030.Auxiliary.Snapshot α (fun _ => ρ)
 
 def node (entry : Record α ρ) (left right : Snapshot α ρ) : Snapshot α ρ :=
   .node entry.1 entry.2.1 entry.2.2 left right
@@ -116,10 +116,10 @@ theorem tour (depth : Nat) (tree : RawTree (Record α ρ)) (nonempty : tree ≠ 
               afterLeft depth view.entry view.rightEmpty .empty stack
               else .left depth view.entry view.rightEmpty stack)
               (view := ⟨entry,true,empty right⟩) <;> rfl
-          simpa only [capture_records_node,capture,node,TangoSquared.Paper20261030.Auxiliary.Snapshot.records,
+          simpa only [capture_records_node,capture,node,ChaCha.Paper20261030.Auxiliary.Snapshot.records,
             List.nil_append,Option.toList_some,List.singleton_append] using Steps.next read rest
         · rw [capture_records_node]
-          simp only [capture,TangoSquared.Paper20261030.Auxiliary.Snapshot.records,List.nil_append,List.length_cons]
+          simp only [capture,ChaCha.Paper20261030.Auxiliary.Snapshot.records,List.nil_append,List.length_cons]
           omega
       | node a x b =>
         obtain ⟨leftCost,child,leftBound⟩ := ih (.node a x b) (by simp)
@@ -143,22 +143,22 @@ theorem tour (depth : Nat) (tree : RawTree (Record α ρ)) (nonempty : tree ≠ 
         refine ⟨1+(1+leftCost+1+rightCost),?_,?_⟩
         · simpa only [Option.toList_none,Option.toList_some,List.nil_append,List.append_nil,
             List.singleton_append,capture_records_node,capture,node,
-            TangoSquared.Paper20261030.Auxiliary.Snapshot.records,Nat.add_comm,Nat.add_left_comm,Nat.add_assoc]
+            ChaCha.Paper20261030.Auxiliary.Snapshot.records,Nat.add_comm,Nat.add_left_comm,Nat.add_assoc]
             using read.prefix.append (((down.prefix.append child).append up.prefix).append rest)
         · rw [capture_records_node]
           simp only [List.length_cons,List.length_append]
           omega
 
 theorem capture_recordTree (depth : Nat) (tree : Std.DTreeMap.Internal.Impl α (fun _ => ρ)) :
-    capture depth (recordTree tree) = TangoSquared.Paper20261030.Auxiliary.capture depth tree := by
+    capture depth (recordTree tree) = ChaCha.Paper20261030.Auxiliary.capture depth tree := by
   induction depth generalizing tree with
   | zero => rfl
-  | succ depth ih => cases tree <;> simp [recordTree,capture,TangoSquared.Paper20261030.Auxiliary.capture,node,ih]
+  | succ depth ih => cases tree <;> simp [recordTree,capture,ChaCha.Paper20261030.Auxiliary.capture,node,ih]
 
 theorem records_bound (depth : Nat) (tree : RawTree (Record α ρ)) :
     (capture depth tree).records.length+1 ≤ 2^depth := by
   induction depth generalizing tree with
-  | zero => simp [capture,TangoSquared.Paper20261030.Auxiliary.Snapshot.records]
+  | zero => simp [capture,ChaCha.Paper20261030.Auxiliary.Snapshot.records]
   | succ depth ih =>
     cases tree with
     | empty =>

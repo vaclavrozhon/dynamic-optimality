@@ -9,7 +9,7 @@ Run from the repository root:
 For the complete shared project, run `lake build`.
 
 The root Lake project uses the same Lean and Mathlib 4.32.1 environment
-as Splay and Tango squared. The 168 older Greedy modules retain their
+as Splay and Cha-Cha. The 168 older Greedy modules retain their
 source locations and import names. Six libraries register those sources:
 GreedyGeometry, GreedyFringe, GreedyAccess, GreedyHistory, GreedyAccounting,
 and GreedyPorts. The public Greedy entry point imports them and the new

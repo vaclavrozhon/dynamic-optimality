@@ -7,8 +7,8 @@ Every read, write, adjacent move, and rotation costs one. -/
 
 namespace DynamicOptimality.LocalProgram
 
-open TangoSquared.MTR
-open TangoSquared.Paper20261030.Auxiliary
+open ChaCha.MTR
+open ChaCha.Paper20261030.Auxiliary
 
 variable {α ρ σ : Type*}
 

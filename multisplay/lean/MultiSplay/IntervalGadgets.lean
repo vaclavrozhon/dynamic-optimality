@@ -1,12 +1,12 @@
 import MultiSplay.IntervalWitnesses
-import TangoSquared.GadgetAggregation
+import ChaCha.GadgetAggregation
 
 /-! # Concrete owner gadgets of an arbitrary binary interval hierarchy -/
 
 namespace MultiSplay.IntervalLower
 
-open TangoSquared
-open TangoSquared.Primary
+open ChaCha
+open ChaCha.Primary
 
 def allGadgets {H : Nat} (hierarchy : DepthTree 0 H) : Finset Gadget :=
   ((hierarchy.nodes ×ˢ owners H).filter (fun pair => pair.2.length = pair.1.lo)).image

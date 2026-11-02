@@ -10,7 +10,7 @@ decrease. The endpoint is the restriction of the actual output tree. -/
 
 namespace DynamicOptimality.SearchRotation.Prefix
 
-open TangoSquared.MTR
+open ChaCha.MTR
 
 def prune (n : Nat) : RawTree Nat → RawTree Nat
   | .empty => .empty

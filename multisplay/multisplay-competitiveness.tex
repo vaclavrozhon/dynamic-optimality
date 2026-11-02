@@ -19,13 +19,13 @@
 \hypersetup{pdftitle={A smaller competitive ratio for standard multi-splay},
 pdfauthor={Research note, 2 October 2026}}
 \title{A smaller competitive ratio for standard multi-splay\\
-\large A comparison with the Tango-squared construction}
+\large A comparison with the Cha-Cha construction}
 \author{Research note}
 \date{2 October 2026}
 \begin{document}
 \maketitle
 \begin{abstract}
-We explain a hand derivation, from the current Splay and Tango-squared
+We explain a hand derivation, from the current Splay and Cha-Cha
 proofs, of the bound
 \[
  \cost_{\MS}(X)=O\!\left((\OPT(X)+n)
@@ -34,9 +34,9 @@ proofs, of the bound
 for the unchanged standard multi-splay algorithm. The proof represents
 its exact switches as one persistent word of splits and joins, extends
 the Splay comparison accounting to this common forest, and constructs
-a compatible comparator using the Tango-squared representation.
+a compatible comparator using the Cha-Cha representation.
 We include the endpoint and switch-order reductions needed for ordinary
-node queries. The proof uses the existing Tango-squared lower bound
+node queries. The proof uses the existing Cha-Cha lower bound
 and physical unfolding lemmas. The new composition is a hand proof,
 not a newly Lean-verified theorem. It does not establish the stronger
 $O(\lgit{3}n)$ ratio for standard multi-splay.
@@ -60,8 +60,8 @@ $\lambda=\Theta(1+\lgit{3}n)$ and
 $g(H)=O((1+\lgit{3}n)(1+\lgit{4}n)^2)$.
 
 \begin{theorem}[Main bound]\label{thm:main}
-Using the Splay accounting proof of \cite{Splay} and the Tango-squared
-lower-bound and unfolding proofs of \cite{Tango2}, standard multi-splay
+Using the Splay accounting proof of \cite{Splay} and the Cha-Cha
+lower-bound and unfolding proofs of \cite{ChaCha}, standard multi-splay
 with reference $P$ satisfies
 \begin{equation}\label{eq:main}
  \cost_{\MS}(X)
@@ -87,7 +87,7 @@ executions, but no free jump to an interior node. Its comparator is
 offline. It may perform paid root-starting work in any live component
 between prescribed operations. The original multi-splay traversal is
 charged separately to its exact splays in Section~\ref{sec:word}.
-As in the Tango-squared proof, computation on already read topology
+As in the Cha-Cha proof, computation on already read topology
 is free; the argument is not a uniform word-RAM running-time claim.
 
 \paragraph{The three estimates.}
@@ -106,7 +106,7 @@ The factors $\lambda$ and $g(H)$ multiply. This is the precise reason
 the resulting ratio has two leading triple-log factors.
 
 \paragraph{Imported results.}
-From \cite{Tango2} we use the dynamic lower bound
+From \cite{ChaCha} we use the dynamic lower bound
 $m+P+D\le2888\OPT$. Here $P(Z)$ counts first-access-free primary
 alternations, and $D_B(Z)$ counts completed nontrivial episodes in
 the depth hierarchy $B$, as defined there. The function $P(Z)$ is
@@ -121,7 +121,7 @@ mixed-forest extension using the existing heavy and rib root-operation
 interfaces. Merely invoking the fixed-universe Splay theorem would
 not justify that extension.
 
-In the 2 October version of \cite{Tango2}, the relevant statements are
+In the 2 October version of \cite{ChaCha}, the relevant statements are
 Theorem~2.1 (dynamic lower bound), Lemma~3.1 (flip conversion),
 Lemmas~4.3--4.4 (unfolding and rooted-hull transfer),
 Lemmas~4.6--4.7 (terminal substitution and the suffix invariant),
@@ -295,7 +295,7 @@ $x_i$. Process $E_i$ in increasing order. Let $F_{\MS}$ count changes of
 these bits. There is no extra completion emission $H$ in $E_i$.
 
 \begin{theorem}\label{end:thm:endpoint}
-Assume the dynamic lower-bound theorem in the local Tango-squared
+Assume the dynamic lower-bound theorem in the local Cha-Cha
 manuscript. Then, for the perfect reference above,
 \[
  |X|+S_{\MS}(X)+F_{\MS}(X)=O(\OPT(X)+n).
@@ -311,7 +311,7 @@ the entire endpoint-aware history into a legitimate leaf-query history.
 
 \subsection{The lower bound permits arbitrary interval hierarchies}
 
-The Tango-squared manuscript defines a midpoint hierarchy, but its
+The Cha-Cha manuscript defines a midpoint hierarchy, but its
 dynamic lower-bound proof uses only the following properties of that
 hierarchy:
 \begin{enumerate}
@@ -459,7 +459,7 @@ For the encoded history,
 \]
 \end{lemma}
 \begin{proof}
-The initialized-flip conversion in the Tango-squared manuscript gives
+The initialized-flip conversion in the Cha-Cha manuscript gives
 the more precise intermediate estimate
 \begin{equation}\label{end:eq:precise}
  F_{B'}(Z)\le 2D_{B'}(Z)+3Q_L+2(P(Z)+I_0),
@@ -579,14 +579,14 @@ It does not
 silently identify $2^H$ with $n$ for a general balanced reference.
 
 
-\section{A compatible Tango-squared comparator}\label{sec:comparator}
+\section{A compatible Cha-Cha comparator}\label{sec:comparator}
 
 First let $P$ be perfect, with $n=2^H-1$ keys. View it as a routing
 tree on its $n+1$ external gaps. Its internal routing separators are
 exactly the original stored keys; this viewpoint adds no physical key.
 For a primary path starting at depth $a$, use the depth-exit alphabet
 $[a,H]$. Its virtual routing labels are $a,\ldots,H-1$. The unfolding
-of \cite{Tango2} uses precisely the original nodes on that path.
+of \cite{ChaCha} uses precisely the original nodes on that path.
 Other primary paths are separate components.
 
 The forest word supplies the selected component and the switch pivot.
@@ -606,7 +606,7 @@ For brevity in this section $S=S_{\MS}$ and
 $F_{\rm act}=F_{\MS}^{\rm actual}$ are the counters from
 Section~\ref{sec:endpoint}.
 
-As in \cite{Tango2}, the virtual topology, marks, and genuine bits of
+As in \cite{ChaCha}, the virtual topology, marks, and genuine bits of
 a path occupy $O(H)$ bits stored in its physical root header. Every
 use of that header follows a paid visit to the root. Computation on
 this already read information is free in the stated model.
@@ -1188,7 +1188,7 @@ Substituting $H=\lceil\log_2(n+1)\rceil$ gives~\eqref{eq:main}.
 \end{proof}
 
 \paragraph{What is needed for the stronger ratio.}
-The present derivation pays $\lambda$ for the compatible Tango-squared
+The present derivation pays $\lambda$ for the compatible Cha-Cha
 comparator and $g(H)$ for the splay forest; neither loss disappears
 under composition. An $O(\OPT+n)$ comparator for the same complete
 word would remove the first loss and give
@@ -1211,13 +1211,13 @@ execution.
 The endpoint embedding, switch-order estimate, mixed-forest composition,
 suffix transaction, and exact checkpoint insertion were independently
 hand-audited. The Splay repository already contains checked local heavy
-and rib interfaces used in Section~\ref{sec:forest}. The Tango-squared
+and rib interfaces used in Section~\ref{sec:forest}. The Cha-Cha
 repository contains a checked lower endpoint for its stated midpoint
 hierarchy and a hand physical upper construction. The arbitrary
 secondary hierarchy extension in Section~\ref{sec:endpoint}, the forest
 trace composition, and the composed theorem here have not been added
 as Lean theorems. The mathematical dependencies are the stated core
-proofs of \cite{Splay,Tango2}, rather than the existence of a compiled
+proofs of \cite{Splay,ChaCha}, rather than the existence of a compiled
 PDF or the outcome of finite tests.
 
 The source of this paper is self-contained apart from those two core
@@ -1235,10 +1235,10 @@ V.~Rozho\v{n}, O.~Sladk\'y, and R.~E.~Tarjan.
 The current local manuscript, especially its normal-form and split
 appendices, and its checked accounting interfaces are used here.
 
-\bibitem{Tango2}
-\emph{Tango Squared: An $O(\log\log\log n)$-Competitive Binary
+\bibitem{ChaCha}
+\emph{Cha-Cha: An $O(\log\log\log n)$-Competitive Binary
 Search Tree}. Current local research manuscript, October 2026.
-Source: \texttt{tango\_squared/research/tango-squared.tex}.
+Source: \texttt{chacha/research/chacha.tex}.
 The dynamic lower bound, initialized flip conversion, no-copy unfolding,
 rooted-hull transfer, suffix invariant, and exposed splice are the
 imported results.

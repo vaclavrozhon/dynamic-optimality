@@ -3,7 +3,7 @@ import DynamicOptimality.SplayBlackBoxBound
 import DynamicOptimality.SearchRotationEquivalence
 import DynamicOptimality.OnlineBST
 import Greedy.Competitive
-import TangoSquaredAll
+import ChaChaAll
 import DynamicOptimality.MultiSplayBound
 import MultiSplay.CompetitiveLogHeight
 import DynamicOptimality.BSTModels
@@ -17,7 +17,7 @@ key-tree types. Algorithm-specific cost conventions remain explicit:
 
 * splay: requests plus the rotations of standard splay;
 * Greedy: geometric touches from the initial tree's depth surface;
-* Tango²: a fixed online search-and-rotation strategy, from every initial
+* Cha-Cha: a fixed online search-and-rotation strategy, from every initial
   tree on every finite key universe, with the shared-OPT competitive bound;
 * classical MultiSplay: a fixed online search-and-rotation strategy, with
   factor `L₃(n) * egTargetFactor (ceil(log₂(n+1)))` from every initial tree.
@@ -35,8 +35,8 @@ theorem splay :
 theorem greedy : Competitive Greedy.cost Greedy.loglogFactor :=
   Greedy.competitive
 
-theorem tango2 : Competitive Tango2.All.cost (Splay.Analysis.iteratedLog 3) :=
-  Tango2.All.third_log_competitive
+theorem chacha : Competitive ChaCha.All.cost (Splay.Analysis.iteratedLog 3) :=
+  ChaCha.All.third_log_competitive
 
 theorem multisplay : Competitive MultiSplay.Online.cost
     (MultiSplay.logarithmicFactor Splay.Analysis.egTargetFactor) :=

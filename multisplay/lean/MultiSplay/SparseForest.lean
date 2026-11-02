@@ -14,7 +14,7 @@ lazy splay comparison against these runs, are separate obligations.
 namespace MultiSplay.SparseHeavy
 
 open DynamicOptimality (RawTree)
-open TangoSquared.Paper20261030.Auxiliary (Rearranges)
+open ChaCha.Paper20261030.Auxiliary (Rearranges)
 open CommonForest (RootAccess)
 
 variable {α : Type*}
@@ -60,7 +60,7 @@ end MultiSplay.SparseHeavy
 namespace MultiSplay.SparseRib
 
 open DynamicOptimality (RawTree)
-open TangoSquared.Paper20261030.Auxiliary (Rearranges)
+open ChaCha.Paper20261030.Auxiliary (Rearranges)
 open CommonForest (RootAccess)
 
 variable {α : Type*}

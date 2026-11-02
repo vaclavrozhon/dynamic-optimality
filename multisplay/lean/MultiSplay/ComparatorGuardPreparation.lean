@@ -15,8 +15,8 @@ The bound charges the skeleton, never the sizes of the opaque payloads.
 namespace MultiSplay.ComparatorGuard
 
 open DynamicOptimality (RawTree)
-open TangoSquared.MTR
-open TangoSquared.MTR.Tree (inorder size plug)
+open ChaCha.MTR
+open ChaCha.MTR.Tree (inorder size plug)
 open CommonForest
 
 variable {α : Type*}
@@ -30,8 +30,8 @@ theorem split_hull (before : RawTree α) (leftKeys rightKeys : List α) (pivot :
         Program [plug gaps offset before] []
           [.node (plug gaps offset left) pivot (plug gaps (offset+left.size+1) right)] work := by
   obtain ⟨left,right,rotations,run,leftKeysEq,rightKeysEq⟩ := ClassicalSwitch.split_unique keys unique
-  obtain ⟨work,bound,program⟩ := rooted_hull_program before (TangoSquared.MTR.Tree.node left pivot right) run.inorder_eq gaps offset
-  have sizes : before.size = (TangoSquared.MTR.Tree.node left pivot right).size := by
+  obtain ⟨work,bound,program⟩ := rooted_hull_program before (ChaCha.MTR.Tree.node left pivot right) run.inorder_eq gaps offset
+  have sizes : before.size = (ChaCha.MTR.Tree.node left pivot right).size := by
     simpa only [Tree.length_inorder] using congrArg List.length run.inorder_eq
   exact ⟨left,right,leftKeysEq,rightKeysEq,work,by omega,program⟩
 
@@ -43,12 +43,12 @@ theorem three_guard_shape (before : RawTree α) (aKeys oldKeys bKeys : List α)
     (unique : before.inorder.Nodup) :
     ∃ a old b : RawTree α,
       a.inorder = aKeys ∧ old.inorder = oldKeys ∧ b.inorder = bKeys ∧
-      before.inorder = (TangoSquared.MTR.Tree.node (TangoSquared.MTR.Tree.node a lower old) pivot (TangoSquared.MTR.Tree.node .empty upper b)).inorder := by
+      before.inorder = (ChaCha.MTR.Tree.node (ChaCha.MTR.Tree.node a lower old) pivot (ChaCha.MTR.Tree.node .empty upper b)).inorder := by
   obtain ⟨left,right,pivotRotations,pivotRun,leftWord,rightWord⟩ :=
     ClassicalSwitch.split_unique (tree := before) (pivot := pivot)
       (left := aKeys ++ [lower] ++ oldKeys) (right := upper::bKeys)
       (by simpa only [List.append_assoc,List.cons_append,List.nil_append] using keys) unique
-  have targetUnique : (TangoSquared.MTR.Tree.node left pivot right).inorder.Nodup := pivotRun.inorder_eq ▸ unique
+  have targetUnique : (ChaCha.MTR.Tree.node left pivot right).inorder.Nodup := pivotRun.inorder_eq ▸ unique
   have leftUnique : left.inorder.Nodup := targetUnique.of_append_left.of_append_left
   have rightUnique : right.inorder.Nodup := targetUnique.of_append_right
   obtain ⟨a,old,lowerRotations,lowerRun,aWord,oldWord⟩ :=
@@ -70,10 +70,10 @@ theorem prepare_three (before : RawTree α) (aKeys oldKeys bKeys : List α)
       a.inorder = aKeys ∧ old.inorder = oldKeys ∧ b.inorder = bKeys ∧
       ∃ work ≤ 12*before.size,
         Program [plug gaps offset before] []
-          [plug gaps offset (TangoSquared.MTR.Tree.node (TangoSquared.MTR.Tree.node a lower old) pivot (TangoSquared.MTR.Tree.node .empty upper b))] work := by
+          [plug gaps offset (ChaCha.MTR.Tree.node (ChaCha.MTR.Tree.node a lower old) pivot (ChaCha.MTR.Tree.node .empty upper b))] work := by
   obtain ⟨a,old,b,aWord,oldWord,bWord,same⟩ := three_guard_shape before aKeys oldKeys bKeys lower pivot upper keys unique
   obtain ⟨work,bound,program⟩ := rooted_hull_program before
-    (TangoSquared.MTR.Tree.node (TangoSquared.MTR.Tree.node a lower old) pivot (TangoSquared.MTR.Tree.node .empty upper b)) same gaps offset
+    (ChaCha.MTR.Tree.node (ChaCha.MTR.Tree.node a lower old) pivot (ChaCha.MTR.Tree.node .empty upper b)) same gaps offset
   have sizes := congrArg List.length same
   simp only [Tree.length_inorder] at sizes
   exact ⟨a,old,b,aWord,oldWord,bWord,work,by omega,program⟩
@@ -84,9 +84,9 @@ shape. This equation keeps all other opaque payloads verbatim. -/
 theorem plug_three_shape (a old b : RawTree α) (lower pivot upper : α)
     (gaps : Nat → RawTree α) (offset : Nat)
     (emptyGap : gaps (offset+a.size+old.size+2) = .empty) :
-    plug gaps offset (TangoSquared.MTR.Tree.node (TangoSquared.MTR.Tree.node a lower old) pivot (TangoSquared.MTR.Tree.node .empty upper b)) =
-      .node (TangoSquared.MTR.Tree.node (plug gaps offset a) lower (plug gaps (offset+a.size+1) old)) pivot
-        (TangoSquared.MTR.Tree.node .empty upper (plug gaps (offset+a.size+old.size+3) b)) := by
+    plug gaps offset (ChaCha.MTR.Tree.node (ChaCha.MTR.Tree.node a lower old) pivot (ChaCha.MTR.Tree.node .empty upper b)) =
+      .node (ChaCha.MTR.Tree.node (plug gaps offset a) lower (plug gaps (offset+a.size+1) old)) pivot
+        (ChaCha.MTR.Tree.node .empty upper (plug gaps (offset+a.size+old.size+3) b)) := by
   simp only [plug,Tree.size]
   have first : offset+(a.size+1+old.size)+1 = offset+a.size+old.size+2 := by omega
   have second : offset+(a.size+1+old.size)+1+0+1 = offset+a.size+old.size+3 := by omega
@@ -96,7 +96,7 @@ theorem plug_three_shape (a old b : RawTree α) (lower pivot upper : α)
 old physical tail is detached only at its prescribed split. -/
 theorem prepare_checkpoints (before a old b incoming : RawTree α)
     (lower pivot upper : α)
-    (same : before.inorder = (TangoSquared.MTR.Tree.node (TangoSquared.MTR.Tree.node a lower old) pivot (TangoSquared.MTR.Tree.node .empty upper b)).inorder)
+    (same : before.inorder = (ChaCha.MTR.Tree.node (ChaCha.MTR.Tree.node a lower old) pivot (ChaCha.MTR.Tree.node .empty upper b)).inorder)
     (gaps : Nat → RawTree α) (offset : Nat)
     (emptyGap : gaps (offset+a.size+old.size+2) = .empty) :
     ∃ work ≤ 12*before.size+6,
@@ -104,11 +104,11 @@ theorem prepare_checkpoints (before a old b incoming : RawTree α)
         (leftToRightWord (inorder (plug gaps offset a))
           (inorder (plug gaps (offset+a.size+1) old)) (inorder incoming)
           (inorder (plug gaps (offset+a.size+old.size+3) b)) lower pivot upper)
-        [.node (TangoSquared.MTR.Tree.node (plug gaps offset a) lower .empty) pivot
-          (TangoSquared.MTR.Tree.node incoming upper (plug gaps (offset+a.size+old.size+3) b)),
+        [.node (ChaCha.MTR.Tree.node (plug gaps offset a) lower .empty) pivot
+          (ChaCha.MTR.Tree.node incoming upper (plug gaps (offset+a.size+old.size+3) b)),
           plug gaps (offset+a.size+1) old] work := by
   obtain ⟨work,bound,prepare⟩ := rooted_hull_program before
-    (TangoSquared.MTR.Tree.node (TangoSquared.MTR.Tree.node a lower old) pivot (TangoSquared.MTR.Tree.node .empty upper b)) same gaps offset
+    (ChaCha.MTR.Tree.node (ChaCha.MTR.Tree.node a lower old) pivot (ChaCha.MTR.Tree.node .empty upper b)) same gaps offset
   have sizes := congrArg List.length same
   simp only [Tree.length_inorder] at sizes
   rw [plug_three_shape a old b lower pivot upper gaps offset emptyGap] at prepare
@@ -123,8 +123,8 @@ theorem prepare_checkpoints (before a old b incoming : RawTree α)
 /-- The unique occurrence of a displayed root separates its two exact
 inorder intervals. -/
 theorem node_domains {left right : RawTree α} {pivot : α} {leftKeys rightKeys : List α}
-    (keys : (TangoSquared.MTR.Tree.node left pivot right).inorder = leftKeys ++ [pivot] ++ rightKeys)
-    (unique : (TangoSquared.MTR.Tree.node left pivot right).inorder.Nodup) :
+    (keys : (ChaCha.MTR.Tree.node left pivot right).inorder = leftKeys ++ [pivot] ++ rightKeys)
+    (unique : (ChaCha.MTR.Tree.node left pivot right).inorder.Nodup) :
     left.inorder = leftKeys ∧ right.inorder = rightKeys := by
   have parts := Auxiliary.nodup_node unique
   have split := (List.append_cons_inj_of_notMem parts.2.2.1 parts.2.2.2.1).mp
@@ -135,9 +135,9 @@ theorem node_domains {left right : RawTree α} {pivot : α} {leftKeys rightKeys 
 This includes the case where the external gap itself is empty. -/
 theorem empty_between_adjacent {left middle right : RawTree α} {pivot upper : α}
     {leftKeys rightKeys : List α}
-    (keys : (TangoSquared.MTR.Tree.node left pivot (TangoSquared.MTR.Tree.node middle upper right)).inorder =
+    (keys : (ChaCha.MTR.Tree.node left pivot (ChaCha.MTR.Tree.node middle upper right)).inorder =
       leftKeys ++ [pivot,upper] ++ rightKeys)
-    (unique : (TangoSquared.MTR.Tree.node left pivot (TangoSquared.MTR.Tree.node middle upper right)).inorder.Nodup) :
+    (unique : (ChaCha.MTR.Tree.node left pivot (ChaCha.MTR.Tree.node middle upper right)).inorder.Nodup) :
     middle = .empty := by
   have rightWord := (node_domains (rightKeys := upper::rightKeys)
     (by simpa only [List.append_assoc,List.cons_append,List.nil_append] using keys) unique).2
@@ -158,8 +158,8 @@ theorem plug_inorder_eq {before after : RawTree α} (same : before.inorder = aft
 /-- The apparently empty checkpoint gap is derived from adjacency in the
 actual original-key component; it is not an additional representation axiom. -/
 theorem checkpoint_gap_empty {before a old b : RawTree α} {lower pivot upper : α}
-    (same : before.inorder = (TangoSquared.MTR.Tree.node (TangoSquared.MTR.Tree.node a lower old)
-      pivot (TangoSquared.MTR.Tree.node .empty upper b)).inorder)
+    (same : before.inorder = (ChaCha.MTR.Tree.node (ChaCha.MTR.Tree.node a lower old)
+      pivot (ChaCha.MTR.Tree.node .empty upper b)).inorder)
     (gaps : Nat → RawTree α) (offset : Nat) {leftKeys rightKeys : List α}
     (adjacent : (plug gaps offset before).inorder = leftKeys ++ [pivot,upper] ++ rightKeys)
     (unique : (plug gaps offset before).inorder.Nodup) :

@@ -8,7 +8,7 @@ The singleton case requires no rotation: its sole cell is already exposed.
 
 namespace DynamicOptimality.SingleFinger.SourceDeque
 
-open TangoSquared.Paper20261030 ColoredStorage SourcePointer SourceLocalProgram
+open ChaCha.Paper20261030 ColoredStorage SourcePointer SourceLocalProgram
 open DynamicOptimality.LocalProgram (Move)
 open SourceSpine SourceCounted
 

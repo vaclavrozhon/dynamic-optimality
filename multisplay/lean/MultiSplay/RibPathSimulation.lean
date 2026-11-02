@@ -16,7 +16,7 @@ open Splay.Tree (BST)
 open Splay.Accounting.OfflineConnectedSupport
   (RibRepresentation HasSupportedPath RootPrefix SupportedPath ribs_of_height
    exists_restrictedPath_of_sameFrontier)
-open TangoSquared.Paper20261030.Auxiliary (Rearranges rearranges_refl)
+open ChaCha.Paper20261030.Auxiliary (Rearranges rearranges_refl)
 
 /-- The component's size is determined by its ordinal interval, regardless
 of the source or normalizer shape. -/

@@ -11,7 +11,7 @@ splits, joins, rotations, and services use the compiler's persistent states.
 namespace MultiSplay.SparseHeavy
 
 open DynamicOptimality (RawTree)
-open TangoSquared.MTR.Tree (size)
+open ChaCha.MTR.Tree (size)
 
 variable {α : Type*} [Inhabited α]
 
@@ -58,7 +58,7 @@ end MultiSplay.SparseHeavy
 namespace MultiSplay.SparseRib
 
 open DynamicOptimality (RawTree)
-open TangoSquared.MTR.Tree (size)
+open ChaCha.MTR.Tree (size)
 
 variable {α : Type*} [Inhabited α]
 

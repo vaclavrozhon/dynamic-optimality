@@ -13,8 +13,8 @@ factor for hierarchy height or number of primary owners.
 
 namespace MultiSplay.Secondary
 
-open TangoSquared (DepthTree changesFrom)
-open TangoSquared.Primary (Key)
+open ChaCha (DepthTree changesFrom)
+open ChaCha.Primary (Key)
 
 def ascendingCount {lower upper : Nat} (hierarchy : DepthTree lower upper)
     (initial : Row → Bool) (queries : List Query) : Nat :=

@@ -16,7 +16,7 @@ The proposed bound
        (1+\log^{(3)}n)^2(1+\log^{(4)}n)^2\right)
 \]
 passes this independent hand audit as a composition of the stated local
-Splay and Tango-squared proof dependencies. This audit did not
+Splay and Cha-Cha proof dependencies. This audit did not
 independently reprove the two core manuscripts and does not establish
 a new Lean theorem. In particular the mixed-forest comparison must be
 proved from the accounting interfaces; it is not a black-box consequence
@@ -33,7 +33,7 @@ The four required statements have matching domains and conventions:
 \item The mixed word $W_{\rm MS}(X)$ uses at most $6S$ structural
       operations, starts on exactly $n$ original keys, and every
       intermediate component has at most $H$ keys.
-\item Its balanced Tango-squared comparator has cost
+\item Its balanced Cha-Cha comparator has cost
       $C=O(n+\lambda(S+F_{\rm act}))$ and obeys exactly that word's
       pivot deletions and raw root joins.
 \item The persistent forest Splay comparison costs
@@ -107,7 +107,7 @@ preparation. The incoming component is prepared through its own root
 handle. Reconfiguring the two rooted skeletons to the exact split/join
 checkpoints preserves the opaque frontier intervals, after which each
 resulting skeleton is separately reconfigured to the prescribed
-Tango-squared state. No rotation crosses a current component boundary.
+Cha-Cha state. No rotation crosses a current component boundary.
 
 \paragraph{Scope that must remain explicit.}
 The reference is height-optimal; this gives $2^H=O(n)$ in the endpoint
@@ -115,7 +115,7 @@ initialization estimate. Padding adds only virtual routing nodes and
 retains all original external gaps as distinct active atoms, including
 the two null gaps beside a real leaf. Thus there are no physical dummy
 keys or extra prescribed splits. The comparator uses the augmented
-pointer-BST model of the local Tango-squared proof, with free computation
+pointer-BST model of the local Cha-Cha proof, with free computation
 from read headers. No word-RAM running-time claim follows. The exact
 $O(\log^{(3)}n)$ bound for standard multi-splay is not established.
 

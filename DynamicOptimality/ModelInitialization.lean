@@ -12,7 +12,7 @@ The empty request sequence performs no initialization.
 
 namespace DynamicOptimality.ModelInitialization
 
-open TangoSquared.MTR
+open ChaCha.MTR
 
 theorem toRaw_injective {lower upper : Nat} {a b : BST lower upper}
     (same : a.toRaw = b.toRaw) : a = b := by

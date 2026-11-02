@@ -12,8 +12,8 @@ throughout the execution; it does not replace them by canonical shapes.
 namespace MultiSplay.ClassicalSwitch
 
 open DynamicOptimality (RawTree)
-open TangoSquared.MTR.Tree (inorder)
-open TangoSquared.Primary (Key)
+open ChaCha.MTR.Tree (inorder)
+open ChaCha.Primary (Key)
 open EndpointEncoding CommonForest
 
 variable {α : Type*}

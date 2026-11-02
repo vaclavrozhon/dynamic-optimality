@@ -1,6 +1,0 @@
-import TangoSquared.FiniteArityMerge
-
-#print axioms TangoSquared.FiniteArityMerge.step_bound
-#print axioms TangoSquared.FiniteArityMerge.cyclic_finite_alphabet
-#print axioms TangoSquared.FiniteArityMerge.cyclicCost_merge
-#print axioms TangoSquared.FiniteArityMerge.cyclicCost_merge_length

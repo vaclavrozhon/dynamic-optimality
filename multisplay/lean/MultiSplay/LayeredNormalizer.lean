@@ -15,8 +15,8 @@ namespace MultiSplay.Layered
 open Splay.Tree (BST)
 open Splay.Accounting.OfflineConnectedSupport (HeavyRepresentation RibRepresentation)
 open DynamicOptimality (RawTree)
-open TangoSquared.MTR.Tree (inorder)
-open TangoSquared.Paper20261030.Auxiliary (Rearranges)
+open ChaCha.MTR.Tree (inorder)
+open ChaCha.Paper20261030.Auxiliary (Rearranges)
 
 structure Component (capacity : Nat) where
   lower : Nat
@@ -104,7 +104,7 @@ theorem State.inorder_eq {capacity : Nat} (state : State capacity α) :
     inorder state.actual = inorder state.source := Alphabet.indexed_inorder_eq _ _ _
 
 @[simp] theorem State.source_size {capacity : Nat} (state : State capacity α) :
-    TangoSquared.MTR.Tree.size state.source = state.size := by
+    ChaCha.MTR.Tree.size state.source = state.size := by
   simp [State.source, State.size, Component.size, DynamicOptimality.BST.toRaw_size]
 
 theorem State.potential_le_size {capacity : Nat} (state : State capacity α) :
@@ -149,7 +149,7 @@ theorem split_exists {capacity : Nat} (state : State capacity α)
   | empty => simp [State.source, DynamicOptimality.BST.toRaw, Auxiliary.map] at root
   | node l r =>
       simp only [State.source, DynamicOptimality.BST.toRaw, Auxiliary.map,
-        TangoSquared.MTR.Tree.node.injEq] at root
+        ChaCha.MTR.Tree.node.injEq] at root
       obtain ⟨heavy⟩ := Heavy.exists_split heavyRep
       have heavyFits : heavyTree.size ≤ capacity := (Rib.same_interval_size (.node l r) heavyTree) ▸ fits
       obtain ⟨exposed, exposedRep, work, run, simulatedBound⟩ :=

@@ -1,6 +1,6 @@
 import MultiSplay.EndpointEncoding
-import TangoSquared.Monotonicity
-import TangoSquared.FlipAccounting
+import ChaCha.Monotonicity
+import ChaCha.FlipAccounting
 import Mathlib.Algebra.BigOperators.Group.Finset.Piecewise
 
 /-!
@@ -14,8 +14,8 @@ node, even though the full leaf reference has height twice as large.
 
 namespace MultiSplay.EndpointEncoding
 
-open TangoSquared (changesFrom edgeChange alternations primaryCount primaryAlternations)
-open TangoSquared.Primary (Key branch owners mem_owners)
+open ChaCha (changesFrom edgeChange alternations primaryCount primaryAlternations)
+open ChaCha.Primary (Key branch owners mem_owners)
 
 theorem nodeCost_eq_sum (height : Nat) (state : State) (addresses : List Key) :
     nodeCost height state addresses =
@@ -49,7 +49,7 @@ theorem nodeCost_le_primary_add_nodes (height : Nat) (state : State) (addresses 
       primaryCount (2 * height) (encode height state addresses) + (owners height).card := by
   rw [nodeCost_eq_sum]
   have initialized := Finset.sum_le_sum (s := owners height)
-    (fun owner _ => TangoSquared.FlipAccounting.changesFrom_le_alternations_add_one
+    (fun owner _ => ChaCha.FlipAccounting.changesFrom_le_alternations_add_one
       (state owner) ((encode height state addresses).filterMap (branch (core owner))))
   have coreBound :
       (∑ owner ∈ owners height,

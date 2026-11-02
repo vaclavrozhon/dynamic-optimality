@@ -26,7 +26,7 @@ theorem split_root (component : Component α) (common : CommonRoot component.tre
   let b : Component α := ⟨⟨r, cr, sr⟩, fun index => alphabet (0+l+1+index)⟩
   change Auxiliary.map alphabet (DynamicOptimality.BST.toRaw (JoinRanks.tree cl cr)) = _ at root
   rw [Alphabet.joined_physical] at root
-  obtain ⟨leftEq, keyEq, rightEq⟩ := TangoSquared.MTR.Tree.node.inj root
+  obtain ⟨leftEq, keyEq, rightEq⟩ := ChaCha.MTR.Tree.node.inj root
   refine ⟨a, b, leftEq, rightEq, ?_, .next (.split cl cr sl sr []) (.done _), rfl, rfl, rfl, rfl, rfl⟩
   change Auxiliary.map alphabet (DynamicOptimality.BST.toRaw (JoinRanks.tree sl sr)) = _
   rw [Alphabet.joined_physical, keyEq]
@@ -52,7 +52,7 @@ theorem join (a b : Component α) (key : α)
     have leftEq : Auxiliary.map a.alphabet (DynamicOptimality.BST.toRaw (OrdinalShift.tree 0 left)) =
         Auxiliary.map a.alphabet (DynamicOptimality.BST.toRaw left) := by
       simpa only [Nat.sub_zero] using OrdinalShift.tree_alphabet 0 left a.alphabet
-    exact congrArg₂ (fun x y => TangoSquared.MTR.Tree.node x key y) leftEq
+    exact congrArg₂ (fun x y => ChaCha.MTR.Tree.node x key y) leftEq
       (OrdinalShift.tree_alphabet (0+a.trees.size+1) right b.alphabet)
   exact ⟨result, joined _ _, joined _ _, .next
     (.join a.trees.comparison b.trees.comparison a.trees.splay b.trees.splay [] growing cap) (.done _),

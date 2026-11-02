@@ -6,7 +6,7 @@ also preserve BST order; no second tree or execution model is introduced. -/
 
 namespace DynamicOptimality.Relabel
 
-open TangoSquared.MTR
+open ChaCha.MTR
 
 variable {α β γ : Type*}
 

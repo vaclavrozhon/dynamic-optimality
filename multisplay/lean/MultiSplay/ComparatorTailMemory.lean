@@ -10,7 +10,7 @@ is exactly the ordinary stable suffix convention, without memory resets.
 
 namespace MultiSplay.ComparatorStableSuffix
 
-open TangoSquared
+open ChaCha
 open Paper20261030
 open Std Std.DTreeMap.Internal Std.DTreeMap.Internal.Impl
 open ColoredStorage Auxiliary AuxiliaryComponent BoundaryObservations PathDecomposition

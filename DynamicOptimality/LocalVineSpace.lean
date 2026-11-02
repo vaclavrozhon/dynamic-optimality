@@ -7,8 +7,8 @@ prefix, so it has only `n+1` possible values on an `n`-vertex input. -/
 
 namespace DynamicOptimality.LocalVineInitialization
 
-open TangoSquared.MTR
-open TangoSquared.Paper20261030.Auxiliary
+open ChaCha.MTR
+open ChaCha.Paper20261030.Auxiliary
 open LocalProgram
 
 variable {α ρ : Type*}

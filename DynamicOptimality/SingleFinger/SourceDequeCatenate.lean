@@ -9,7 +9,7 @@ Choosing the smaller side requires the constant-size interchange kernel.
 
 namespace DynamicOptimality.SingleFinger.SourceDequeCatenate
 
-open TangoSquared.Paper20261030 ColoredStorage SourcePointer SourceLocalProgram
+open ChaCha.Paper20261030 ColoredStorage SourcePointer SourceLocalProgram
 open DynamicOptimality.LocalProgram (Move)
 open SourceSpine SourceCounted SourceBoundary SourceOpenDeque SourceDequeTransfer
 

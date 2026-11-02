@@ -5,7 +5,7 @@ import MultiSplay.PackedPhysicalTrees
 namespace MultiSplay.PackedSplay
 
 open Splay.Interface (Element Parameters)
-open TangoSquared.MTR.Tree (inorder)
+open ChaCha.MTR.Tree (inorder)
 open CommonForest (Event Step Trace)
 
 variable {m : Nat} {params : Parameters} {slack depth : Nat}

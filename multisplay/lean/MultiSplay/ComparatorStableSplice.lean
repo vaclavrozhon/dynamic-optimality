@@ -1,6 +1,6 @@
 import MultiSplay.ComparatorStableRestoration
 import MultiSplay.ComparatorStableSeams
-import TangoSquared.Paper20261030.PreparedPrefixJoin
+import ChaCha.Paper20261030.PreparedPrefixJoin
 
 /-! # Restricting a prepared path at an arbitrary component start
 
@@ -12,7 +12,7 @@ the original names of genuine intervals.
 
 namespace MultiSplay.ComparatorStableSuffix
 
-open TangoSquared
+open ChaCha
 open Paper20261030
 open ColoredStorage Auxiliary AuxiliaryComponent BoundaryObservations PathDecomposition
 open SecondaryDecomposition ComparatorSuffix

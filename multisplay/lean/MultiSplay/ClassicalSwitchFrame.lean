@@ -5,7 +5,7 @@ import MultiSplay.ClassicalSwitchSelected
 namespace MultiSplay.ClassicalSwitch
 
 open DynamicOptimality (RawTree)
-open TangoSquared.Primary (Key)
+open ChaCha.Primary (Key)
 open EndpointEncoding
 
 variable {α : Type*}

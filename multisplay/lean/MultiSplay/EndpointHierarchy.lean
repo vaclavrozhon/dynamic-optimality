@@ -1,4 +1,4 @@
-import TangoSquared.Reference
+import ChaCha.Reference
 import MultiSplay.SecondaryRows
 import MultiSplay.EndpointEncoding
 
@@ -13,7 +13,7 @@ The construction and its owner-row injection do not require balanced splits.
 
 namespace MultiSplay.EndpointHierarchy
 
-open TangoSquared (DepthSplit DepthTree)
+open ChaCha (DepthSplit DepthTree)
 open EndpointEncoding (core core_length core_injective)
 
 def upper (height depth : Nat) : Nat := 2 * depth + if depth < height then 1 else 0
@@ -97,7 +97,7 @@ theorem row_injective (height : Nat) : Function.Injective (row height) := by
 theorem row_mem {height a b : Nat} (tree : DepthTree a b) (bounded : b ≤ height)
     {original : Secondary.Row} (member : original ∈ Secondary.rows tree) :
     row height original ∈ Secondary.rows (expand height tree bounded) := by
-  simp only [Secondary.rows, Finset.mem_sigma, TangoSquared.Primary.mem_level] at member ⊢
+  simp only [Secondary.rows, Finset.mem_sigma, ChaCha.Primary.mem_level] at member ⊢
   exact ⟨split_mem tree bounded member.1, by simpa only [row, split, core_length] using congrArg (2*·) member.2⟩
 
 /-- A hierarchy on depths 0 through H becomes one on depths 0 through 2H. -/

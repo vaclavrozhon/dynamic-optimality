@@ -1,6 +1,6 @@
 import MultiSplay.ComparatorSuffixMemory
 import MultiSplay.ComparatorSeam
-import TangoSquared.Paper20261030.SecondaryDecomposition
+import ChaCha.Paper20261030.SecondaryDecomposition
 
 /-!
 # The boundary seam is derived from the actual induced suffix
@@ -14,7 +14,7 @@ they are not arbitrary future components or assumed preservation data.
 
 namespace MultiSplay.ComparatorSuffix
 
-open TangoSquared
+open ChaCha
 open Paper20261030
 open ColoredStorage Auxiliary Auxiliary.Metadata AuxiliaryComponent BoundaryObservations PathDecomposition
 open SecondaryDecomposition

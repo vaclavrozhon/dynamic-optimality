@@ -1,5 +1,5 @@
 import DynamicOptimality.Basic
-import TangoSquared.PriorityHull
+import ChaCha.PriorityHull
 
 /-! Raising the last-touch times of a rooted hull preserves the existing
 max-heap invariant. The gaps are actual untouched BST subtrees; their
@@ -7,7 +7,7 @@ disjointness from the touched keys follows from BST ordering. -/
 
 namespace DynamicOptimality
 
-open TangoSquared TangoSquared.MTR.Tree TangoSquared.MTR.Tree.PriorityHull
+open ChaCha ChaCha.MTR.Tree ChaCha.MTR.Tree.PriorityHull
 
 variable {α : Type*} [LinearOrder α]
 

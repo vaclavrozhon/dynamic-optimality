@@ -13,8 +13,8 @@ namespace MultiSplay.Layered.Bounded
 open Splay.Tree (BST)
 open Splay.Accounting.OfflineConnectedSupport (heavyHeight)
 open DynamicOptimality (RawTree)
-open TangoSquared.MTR.Tree (inorder)
-open TangoSquared.Paper20261030.Auxiliary (Rearranges)
+open ChaCha.MTR.Tree (inorder)
+open ChaCha.Paper20261030.Auxiliary (Rearranges)
 open CommonForest (RootAccess)
 
 variable {α : Type*}
@@ -43,7 +43,7 @@ theorem service_trace {capacity : Nat} (state : State capacity α)
   | empty => simp [State.source, DynamicOptimality.BST.toRaw, Auxiliary.map] at root
   | node l r =>
       simp only [State.source, DynamicOptimality.BST.toRaw, Auxiliary.map,
-        TangoSquared.MTR.Tree.node.injEq] at root
+        ChaCha.MTR.Tree.node.injEq] at root
       obtain ⟨hs⟩ := Heavy.exists_split heavyRep
       have heavyFits : heavyTree.size ≤ capacity := (Rib.same_interval_size (.node l r) heavyTree) ▸ fits
       have hi := heavyRep.height_le_capacity fits

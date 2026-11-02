@@ -1,4 +1,4 @@
-import TangoSquared.Paper20261030.SecondaryReference
+import ChaCha.Paper20261030.SecondaryReference
 
 /-!
 # The actual induced depth reference of a classical path component
@@ -13,8 +13,8 @@ genuine owner histories separate from the structural boundary spine.
 
 namespace MultiSplay.ComparatorSuffix
 
-open TangoSquared
-open TangoSquared.Paper20261030.LocalReferences (depthReference)
+open ChaCha
+open ChaCha.Paper20261030.LocalReferences (depthReference)
 
 def suffix : {a b : Nat} → DepthTree a b →
     (start : Nat) → a ≤ start → start ≤ b → DepthTree start b

@@ -14,9 +14,9 @@ persistent forest, with the same word and the same work.
 namespace MultiSplay.Global.Preferred
 
 open DynamicOptimality (RawTree)
-open TangoSquared.MTR
+open ChaCha.MTR
 open Pointer (MarkedTree)
-open TangoSquared.Primary (Key)
+open ChaCha.Primary (Key)
 open EndpointEncoding ClassicalSwitch CommonForest
 
 variable {α : Type*}

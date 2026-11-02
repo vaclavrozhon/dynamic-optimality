@@ -13,8 +13,8 @@ This is a counter theorem, not yet a physical multisplay cost theorem.
 
 namespace MultiSplay.EndpointEncoding
 
-open TangoSquared.Primary (Key)
-open TangoSquared (DepthTree)
+open ChaCha.Primary (Key)
+open ChaCha (DepthTree)
 
 noncomputable def liftState (state : State) (owner : Key) : Bool := by
   classical
@@ -42,7 +42,7 @@ theorem actual_counters_le_encoded_lower {height : Nat} (hierarchy : DepthTree 0
     addresses.length + (actualHistory state addresses).length + Secondary.actualLedger hierarchy (fun _ => true) state addresses ≤
       5*((encode height state addresses).length +
         IntervalLower.secondaryDemands (EndpointHierarchy.doubled hierarchy) (encode height state addresses) +
-        TangoSquared.primaryCount (2*height) (encode height state addresses)) + 21*(2^height-1) := by
+        ChaCha.primaryCount (2*height) (encode height state addresses)) + 21*(2^height-1) := by
   have embedding := Secondary.actualLedger_le_encoded hierarchy (fun _ => true) (liftState_matches state) inside
   have ledger := Secondary.encoded_leafLedger_bound (EndpointHierarchy.doubled hierarchy) (liftState_right height state) state inside
   have primary := nodeCost_le_primary height state addresses
@@ -65,7 +65,7 @@ theorem actual_counters_le_OPT {n height : Nat} (requests : List (Fin n))
     (fun key member => within key (DynamicOptimality.BST.toRaw_mem initial |>.mp member).2)
     (fun x hx y hy less => between x (DynamicOptimality.BST.toRaw_mem initial |>.mp hx).2
       y (DynamicOptimality.BST.toRaw_mem initial |>.mp hy).2 less)
-  have leaves : ∀ leaf ∈ TangoSquared.MTR.Tree.inorder
+  have leaves : ∀ leaf ∈ ChaCha.MTR.Tree.inorder
       (CopyComparator.expand (fun side key => copy height (address key) side) initial.toRaw), leaf.length = 2*height := by
     intro leaf member
     rw [CopyComparator.inorder_expand] at member

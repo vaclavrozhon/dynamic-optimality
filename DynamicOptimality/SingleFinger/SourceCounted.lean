@@ -6,7 +6,7 @@ length is bounded by a constant, while its counters store spine lengths. -/
 
 namespace DynamicOptimality.SingleFinger.SourceCounted
 
-open TangoSquared.Paper20261030 SourcePointer SourceLocalProgram
+open ChaCha.Paper20261030 SourcePointer SourceLocalProgram
 open DynamicOptimality.LocalProgram (Move)
 
 variable {α ρ : Type*}

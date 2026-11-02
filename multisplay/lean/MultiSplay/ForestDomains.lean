@@ -11,7 +11,7 @@ It is the common interface for the splay execution and its offline comparator.
 namespace MultiSplay.CommonForest
 
 open DynamicOptimality (RawTree)
-open TangoSquared.MTR.Tree (inorder size length_inorder)
+open ChaCha.MTR.Tree (inorder size length_inorder)
 
 variable {α : Type*}
 

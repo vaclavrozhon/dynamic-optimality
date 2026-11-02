@@ -36,7 +36,7 @@ theorem Evolution.volume_bound {m slack depth seed : Nat} {params : Parameters} 
   dsimp [History.volume, History.structuralVolume, normalCoefficient]
   nlinarith
 
-/-- The splay-side comparison theorem, independent of any Tango2 upper bound.
+/-- The splay-side comparison theorem, independent of any ChaCha upper bound.
 `Evolution` contains only actual component geometry and local normal-form
 bounds; it contains no cost estimates or competitive-ratio premise. -/
 theorem forest_splay_bound (shape : Shape) (slack depth : Nat) :

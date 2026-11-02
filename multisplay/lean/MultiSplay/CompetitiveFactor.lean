@@ -1,5 +1,5 @@
 import MultiSplay.BalancedReference
-import TangoSquared.Paper20261030.ReferenceHeight
+import ChaCha.Paper20261030.ReferenceHeight
 import Mathlib.Tactic.Ring
 
 /-!
@@ -91,17 +91,17 @@ def comparisonFactor (height : Nat) : Nat :=
 
 /-- A shared midpoint depth hierarchy, with no requirement that the
 original reference be perfect or have uniform leaf depth. -/
-noncomputable def balancedHierarchy (n : Nat) : TangoSquared.DepthTree 0 (balancedReference n).height :=
-  TangoSquared.DepthTree.midpoint 0 _ (Nat.zero_le _)
+noncomputable def balancedHierarchy (n : Nat) : ChaCha.DepthTree 0 (balancedReference n).height :=
+  ChaCha.DepthTree.midpoint 0 _ (Nat.zero_le _)
 
  theorem balancedHierarchy_repairFactor_le (n : Nat) :
-    Nat.clog 2 ((TangoSquared.Paper20261030.LocalReferences.depthReference
+    Nat.clog 2 ((ChaCha.Paper20261030.LocalReferences.depthReference
       (balancedHierarchy n)).height+1)+1 ≤ comparisonFactor (balancedReference n).height := by
-  have height := TangoSquared.Paper20261030.LocalReferences.midpoint_height_log
+  have height := ChaCha.Paper20261030.LocalReferences.midpoint_height_log
     0 (balancedReference n).height (Nat.zero_le _)
   simp only [Nat.sub_zero] at height
   have bound := Nat.clog_mono_right 2 (show
-      (TangoSquared.Paper20261030.LocalReferences.depthReference (balancedHierarchy n)).height+1 ≤
+      (ChaCha.Paper20261030.LocalReferences.depthReference (balancedHierarchy n)).height+1 ≤
         Nat.clog 2 ((balancedReference n).height+1)+2 by exact Nat.le_trans (Nat.add_le_add_right height 1) (by omega))
   exact Nat.add_le_add_right bound 1
 

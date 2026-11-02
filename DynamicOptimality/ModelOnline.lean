@@ -15,7 +15,7 @@ separately in `ModelOnlineNormalization`.
 
 namespace DynamicOptimality
 
-open TangoSquared.MTR
+open ChaCha.MTR
 
 /-- A BST access relation, including its exact natural-number charge. -/
 abbrev ModelAccess (n : Nat) := Fin n → BST 0 n → BST 0 n → Nat → Prop

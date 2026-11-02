@@ -13,8 +13,8 @@ lemmas. The exact-word comparator and its budget remain explicit.
 namespace MultiSplay.ClassicalSwitch.Accounting
 
 open DynamicOptimality (RawTree BST)
-open TangoSquared.MTR.Tree (inorder size length_inorder)
-open TangoSquared.Primary (Key)
+open ChaCha.MTR.Tree (inorder size length_inorder)
+open ChaCha.Primary (Key)
 open EndpointEncoding CommonForest
 
 /-- One uniform constant bounds the supplied actual splay execution. The

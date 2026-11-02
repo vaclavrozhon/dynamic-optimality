@@ -7,7 +7,7 @@ the two keys in their BST order. -/
 
 namespace DynamicOptimality
 
-open TangoSquared TangoSquared.MTR.Tree TangoSquared.MTR.Tree.PriorityHull
+open ChaCha ChaCha.MTR.Tree ChaCha.MTR.Tree.PriorityHull
 
 variable {α : Type*} [LinearOrder α]
 

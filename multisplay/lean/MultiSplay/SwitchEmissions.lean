@@ -14,7 +14,7 @@ depths when subsequently analyzing the secondary ledger.
 
 namespace MultiSplay.EndpointEncoding
 
-open TangoSquared.Primary (Key branch owners mem_owners)
+open ChaCha.Primary (Key branch owners mem_owners)
 
 def below (state : State) (edge : Bool) : State := fun owner => state (edge :: owner)
 

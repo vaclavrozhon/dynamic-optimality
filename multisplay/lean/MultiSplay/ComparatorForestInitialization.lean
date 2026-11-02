@@ -14,7 +14,7 @@ exactly the canonical preferred-forest order, including empty components.
 namespace MultiSplay.ComparatorForest
 
 open DynamicOptimality (RawTree BST)
-open TangoSquared
+open ChaCha
 open Paper20261030
 open Primary (Key)
 open EndpointEncoding ClassicalSwitch

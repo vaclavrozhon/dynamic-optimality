@@ -1,5 +1,5 @@
 import DynamicOptimality.ConnectedPointer
-import TangoSquared.Paper20261030.GraftedPointer
+import ChaCha.Paper20261030.GraftedPointer
 
 /-!
 # A competitor serving either of two copies of each key
@@ -18,9 +18,9 @@ and requests; it has no initialization charge proportional to a larger alphabet.
 namespace MultiSplay.CopyComparator
 
 open DynamicOptimality (RawTree)
-open TangoSquared.MTR.Tree (inorder rootKey)
-open TangoSquared.MTR.Pointer (Frame Cursor Step Trace Access Execution plug)
-open TangoSquared.Paper20261030.Auxiliary (trace_append)
+open ChaCha.MTR.Tree (inorder rootKey)
+open ChaCha.MTR.Pointer (Frame Cursor Step Trace Access Execution plug)
+open ChaCha.Paper20261030.Auxiliary (trace_append)
 
 variable {α β : Type*}
 
@@ -50,12 +50,12 @@ theorem inorder_expand (copies : Bool → α → β) (tree : RawTree α) :
 
 theorem expand_ordered [LinearOrder α] [LinearOrder β]
     (copies : Bool → α → β) (tree : RawTree α)
-    (ordered : TangoSquared.MTR.Tree.Ordered tree)
+    (ordered : ChaCha.MTR.Tree.Ordered tree)
     (within : ∀ x ∈ inorder tree, copies false x < copies true x)
     (between : ∀ x ∈ inorder tree, ∀ y ∈ inorder tree,
       x < y → copies true x < copies false y) :
-    TangoSquared.MTR.Tree.Ordered (expand copies tree) := by
-  rw [TangoSquared.MTR.Tree.Ordered, inorder_expand, List.pairwise_flatMap]
+    ChaCha.MTR.Tree.Ordered (expand copies tree) := by
+  rw [ChaCha.MTR.Tree.Ordered, inorder_expand, List.pairwise_flatMap]
   constructor
   · intro x member
     simpa using within x member
@@ -195,12 +195,12 @@ theorem execution_graft {before after : RawTree β} {requests : List β} {cost :
   | nil tree => exact .nil _
   | cons access rest ih =>
       obtain ⟨final, finalTree, trace⟩ := access
-      refine .cons ⟨TangoSquared.Paper20261030.PointerGraft.cursor gaps base final, ?_, ?_⟩ ih
-      · rw [TangoSquared.Paper20261030.PointerGraft.cursor_tree, finalTree]
-      · simpa only [TangoSquared.Paper20261030.PointerGraft.cursor,
-          TangoSquared.Paper20261030.PointerGraft.offset,
-          TangoSquared.Paper20261030.PointerGraft.frames, Cursor.atRoot, Nat.add_zero] using
-          TangoSquared.Paper20261030.PointerGraft.trace trace gaps base
+      refine .cons ⟨ChaCha.Paper20261030.PointerGraft.cursor gaps base final, ?_, ?_⟩ ih
+      · rw [ChaCha.Paper20261030.PointerGraft.cursor_tree, finalTree]
+      · simpa only [ChaCha.Paper20261030.PointerGraft.cursor,
+          ChaCha.Paper20261030.PointerGraft.offset,
+          ChaCha.Paper20261030.PointerGraft.frames, Cursor.atRoot, Nat.add_zero] using
+          ChaCha.Paper20261030.PointerGraft.trace trace gaps base
 
 theorem execution_expand_graft {before after : RawTree α} {requests : List α} {cost : Nat}
     (execution : Execution before requests after cost) (copies : Bool → α → β)

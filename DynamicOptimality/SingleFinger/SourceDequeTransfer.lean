@@ -10,7 +10,7 @@ requires no ghost tree information or address oracle.
 
 namespace DynamicOptimality.SingleFinger.SourceDequeTransfer
 
-open TangoSquared.Paper20261030 ColoredStorage SourcePointer SourceLocalProgram
+open ChaCha.Paper20261030 ColoredStorage SourcePointer SourceLocalProgram
 open DynamicOptimality.LocalProgram (Move)
 open SourceSpine SourceCounted SourceBoundary SourceOpenDeque
 

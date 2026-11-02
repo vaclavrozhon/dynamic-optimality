@@ -6,7 +6,7 @@ import Mathlib.Data.List.Nodup
 namespace MultiSplay.Auxiliary
 
 open DynamicOptimality (RawTree)
-open TangoSquared.MTR.Tree (inorder rootKey)
+open ChaCha.MTR.Tree (inorder rootKey)
 
 variable {α : Type*} {key : α}
 
@@ -134,7 +134,7 @@ theorem Double.deterministic {a b c : RawTree α} (first : Double key a b)
       | leftRight => exact False.elim ((inside.not_child (nodup_node unique).1).2 rfl)
       | rightRight | rightLeft =>
           exact False.elim (List.disjoint_left.mp (nodup_node unique).2.2.2.2 inside.member (by simp [inorder]))
-      | leftContext other _ _ => exact congrArg (fun tree => TangoSquared.MTR.Tree.node tree pivot right) (ih other (nodup_node unique).1)
+      | leftContext other _ _ => exact congrArg (fun tree => ChaCha.MTR.Tree.node tree pivot right) (ih other (nodup_node unique).1)
       | rightContext _ _ other =>
           exact False.elim (List.disjoint_left.mp (nodup_node unique).2.2.2.2 inside.member other.member)
   | rightContext left pivot inside ih =>
@@ -143,7 +143,7 @@ theorem Double.deterministic {a b c : RawTree α} (first : Double key a b)
       | rightLeft => exact False.elim ((inside.not_child (nodup_node unique).2.1).1 rfl)
       | leftLeft | leftRight =>
           exact False.elim (List.disjoint_left.mp (nodup_node unique).2.2.2.2 (by simp [inorder]) inside.member)
-      | rightContext _ _ other => exact congrArg (fun tree => TangoSquared.MTR.Tree.node left pivot tree) (ih other (nodup_node unique).2.1)
+      | rightContext _ _ other => exact congrArg (fun tree => ChaCha.MTR.Tree.node left pivot tree) (ih other (nodup_node unique).2.1)
       | leftContext other _ _ =>
           exact False.elim (List.disjoint_left.mp (nodup_node unique).2.2.2.2 other.member inside.member)
 
@@ -202,8 +202,8 @@ theorem Splay.member {a b : RawTree α} {cost : Nat} (execution : Splay key a b 
 /-- Every supplied standard splay transcript has the shared pointer-model
 implementation, including a single initial descent and the final access. -/
 theorem Splay.pointer {a b : RawTree α} {rotations : Nat} (execution : Splay key a b rotations)
-    (unique : (inorder a).Nodup) (outer : List (TangoSquared.MTR.Pointer.Frame α)) :
-    TangoSquared.MTR.Pointer.Trace ⟨a, outer⟩ [key] ⟨b, outer⟩ (3*rotations+1) := by
+    (unique : (inorder a).Nodup) (outer : List (ChaCha.MTR.Pointer.Frame α)) :
+    ChaCha.MTR.Pointer.Trace ⟨a, outer⟩ [key] ⟨b, outer⟩ (3*rotations+1) := by
   obtain ⟨result, count, run, physical⟩ := exists_pointer_splay execution.member
   obtain ⟨rfl, rfl⟩ := execution.deterministic run unique
   exact physical outer

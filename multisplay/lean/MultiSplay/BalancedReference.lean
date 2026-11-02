@@ -48,7 +48,7 @@ theorem balancedReference_initialization_le (n : Nat) :
 /-- All actual primary and secondary counters have a uniform OPT bound on
 this exact-key reference, including the empty universe. -/
 theorem balancedReference_counters_le_OPT {n : Nat} (requests : List (Fin n))
-    (hierarchy : TangoSquared.DepthTree 0 (balancedReference n).height)
+    (hierarchy : ChaCha.DepthTree 0 (balancedReference n).height)
     (state : EndpointEncoding.State) :
     requests.length +
       (EndpointEncoding.actualHistory state

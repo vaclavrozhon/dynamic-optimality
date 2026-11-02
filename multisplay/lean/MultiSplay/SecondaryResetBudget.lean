@@ -10,7 +10,7 @@ of mixed rows is at most the number of actual primary changes.
 
 namespace MultiSplay.EndpointEncoding
 
-open TangoSquared.Primary (Key branch owners mem_owners)
+open ChaCha.Primary (Key branch owners mem_owners)
 
 theorem ancestorEmissions_toFinset {height : Nat} (state : State) {leaf : Key}
     (length : leaf.length = height) :
@@ -40,8 +40,8 @@ end MultiSplay.EndpointEncoding
 
 namespace MultiSplay.Secondary
 
-open TangoSquared (DepthTree)
-open TangoSquared.Primary (Key)
+open ChaCha (DepthTree)
+open ChaCha.Primary (Key)
 open EndpointEncoding
 
 theorem query_writes_eq_project (state : State) (leaf : Key) (row : Row) :

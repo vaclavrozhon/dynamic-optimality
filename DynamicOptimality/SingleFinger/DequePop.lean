@@ -8,7 +8,7 @@ The singleton case requires no rotation: its sole cell is already exposed.
 
 namespace DynamicOptimality.SingleFinger.Deque
 
-open TangoSquared.MTR TangoSquared.Paper20261030.Auxiliary LocalProgram
+open ChaCha.MTR ChaCha.Paper20261030.Auxiliary LocalProgram
 open Spine Counted
 
 variable {κ α ρ : Type*}

@@ -15,7 +15,7 @@ namespace MultiSplay.BoundedMacros
 open Splay.Tree (BST)
 open DynamicOptimality (RawTree)
 open Splay.Accounting.OfflineNormalForm (HasBoundedMinorRibs)
-open TangoSquared.Paper20261030.Auxiliary (Rearranges)
+open ChaCha.Paper20261030.Auxiliary (Rearranges)
 
 variable {α : Type*}
 

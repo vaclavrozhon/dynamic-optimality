@@ -9,8 +9,8 @@ Only the finite family of interval-owner pairs is generalized.
 
 namespace MultiSplay.IntervalLower
 
-open TangoSquared
-open TangoSquared.Primary TangoSquared.CyclicRuns
+open ChaCha
+open ChaCha.Primary ChaCha.CyclicRuns
 
 theorem sum_allGadgets {M : Type*} [AddCommMonoid M] {H : Nat} (hierarchy : DepthTree 0 H) (F : Gadget → M) :
     ∑ q ∈ allGadgets hierarchy, F q =

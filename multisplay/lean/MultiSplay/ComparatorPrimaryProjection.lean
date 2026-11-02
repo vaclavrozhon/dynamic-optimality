@@ -1,6 +1,6 @@
 import MultiSplay.ClassicalSwitchReference
 import MultiSplay.ComparatorGapProgram
-import TangoSquared.Paper20261030.PhysicalComponentOperations
+import ChaCha.Paper20261030.PhysicalComponentOperations
 
 /-! # A primary comparator component has exactly its original keys
 
@@ -20,7 +20,7 @@ this exact original-key alphabet.
 namespace MultiSplay.ComparatorPrimary
 
 open DynamicOptimality (BST)
-open TangoSquared
+open ChaCha
 open Paper20261030
 open PreferredProjection ColoredStorage PrimaryWings PrimaryPhysical
 open EndpointEncoding

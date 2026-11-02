@@ -1,6 +1,6 @@
 import MultiSplay.ComparatorRecordTransport
 import MultiSplay.ComparatorSuffixMemory
-import TangoSquared.Paper20261030.SuffixSource
+import ChaCha.Paper20261030.SuffixSource
 
 /-! # The same suffix with persistent original interval names
 
@@ -13,7 +13,7 @@ prepared suffix-cut lemmas without introducing or resetting an owner.
 
 namespace MultiSplay.ComparatorStableSuffix
 
-open TangoSquared
+open ChaCha
 open Paper20261030
 open ColoredStorage Auxiliary AuxiliaryComponent BoundaryObservations PathDecomposition
 open SecondaryDecomposition

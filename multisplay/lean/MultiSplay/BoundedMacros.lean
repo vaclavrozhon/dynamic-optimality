@@ -15,7 +15,7 @@ open Splay.Tree (BST)
 open Splay.Accounting.OfflineNormalForm (HasBoundedMinorRibs)
 open Splay.Accounting.OfflineConnectedSupport
   (HasSupportedPath RootPrefix SupportedPath exists_restrictedPath_of_sameFrontier)
-open TangoSquared.Paper20261030.Auxiliary (Rearranges rearranges_refl)
+open ChaCha.Paper20261030.Auxiliary (Rearranges rearranges_refl)
 
 inductive Path (height slack : Nat) : {lower upper : Nat} → BST lower upper → BST lower upper → Nat → Prop
   | nil {lower upper : Nat} (source : BST lower upper)

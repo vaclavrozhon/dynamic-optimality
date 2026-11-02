@@ -7,7 +7,7 @@ every prefix of its execution, not just at the end of the tour. -/
 
 namespace DynamicOptimality.LocalSnapshot
 
-open TangoSquared.MTR TangoSquared.Paper20261030.Auxiliary LocalProgram
+open ChaCha.MTR ChaCha.Paper20261030.Auxiliary LocalProgram
 
 variable {α ρ : Type*}
 
@@ -27,7 +27,7 @@ def State.records : State α ρ → Nat
 theorem node_records (entry : Record α ρ) (left right : Snapshot α ρ) :
     (node entry left right).records.length = 1+left.records.length+right.records.length := by
   rcases entry with ⟨size,key,value⟩
-  simp [node,TangoSquared.Paper20261030.Auxiliary.Snapshot.records]
+  simp [node,ChaCha.Paper20261030.Auxiliary.Snapshot.records]
   omega
 
 theorem finish_records (result : Snapshot α ρ) (stack : List (Frame α ρ)) :
@@ -56,14 +56,14 @@ theorem step_records {state next : State α ρ} {before after : Metadata.Cursor 
         rw [← instruction]
         change (finish (node view.entry .unseen .unseen) stack).records = stackRecords stack+1
         rw [finish_records,node_records]
-        simp [TangoSquared.Paper20261030.Auxiliary.Snapshot.records,Nat.add_comm]
+        simp [ChaCha.Paper20261030.Auxiliary.Snapshot.records,Nat.add_comm]
       | succ depth =>
         simp only [program,Instruction.read.injEq] at instruction
         rw [← instruction]
         dsimp only
         split
         · rw [afterLeft_records]
-          simp [State.records,Nat.add_comm,TangoSquared.Paper20261030.Auxiliary.Snapshot.records]
+          simp [State.records,Nat.add_comm,ChaCha.Paper20261030.Auxiliary.Snapshot.records]
         · simp [State.records,Nat.add_comm]
     | left | right | done => simp [program] at instruction
     | up result frame stack => cases frame <;> simp [program] at instruction

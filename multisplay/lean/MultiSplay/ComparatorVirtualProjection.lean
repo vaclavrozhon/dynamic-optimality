@@ -12,7 +12,7 @@ preparation are explicit.
 
 namespace MultiSplay.ComparatorPrimary
 
-open TangoSquared
+open ChaCha
 open Paper20261030
 open PreferredProjection ColoredStorage PrimaryWings PrimaryPhysical
 

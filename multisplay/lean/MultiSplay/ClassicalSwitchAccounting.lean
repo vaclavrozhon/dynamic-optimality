@@ -14,8 +14,8 @@ not yet an unconditional competitive theorem for classical MultiSplay.
 namespace MultiSplay.ClassicalSwitch.Accounting
 
 open DynamicOptimality (RawTree BST)
-open TangoSquared.MTR.Tree (inorder size length_inorder)
-open TangoSquared.Primary (Key)
+open ChaCha.MTR.Tree (inorder size length_inorder)
+open ChaCha.Primary (Key)
 open EndpointEncoding CommonForest
 
 variable {α : Type*}

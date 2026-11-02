@@ -14,7 +14,7 @@ is redefined.
 namespace MultiSplay.Auxiliary
 
 open DynamicOptimality (RawTree)
-open TangoSquared.MTR.Tree (inorder rootKey Ordered size)
+open ChaCha.MTR.Tree (inorder rootKey Ordered size)
 
 variable {α : Type*}
 
@@ -81,7 +81,7 @@ theorem Splay.ordered_after [LinearOrder α] {key : α} {a b : RawTree α} {rota
 
 theorem Splay.size_eq {key : α} {a b : RawTree α} {rotations : Nat}
     (execution : Splay key a b rotations) : size a = size b := by
-  rw [← TangoSquared.MTR.Tree.length_inorder, ← TangoSquared.MTR.Tree.length_inorder,
+  rw [← ChaCha.MTR.Tree.length_inorder, ← ChaCha.MTR.Tree.length_inorder,
     execution.inorder_eq]
 
 /-- Relabeling keys preserves the full splay transcript. This is the

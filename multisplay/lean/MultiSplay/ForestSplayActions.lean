@@ -5,7 +5,7 @@ import MultiSplay.ForestUniqueness
 namespace MultiSplay.CommonForest
 
 open DynamicOptimality (RawTree)
-open TangoSquared.MTR.Tree (inorder)
+open ChaCha.MTR.Tree (inorder)
 
 variable {α : Type*}
 
@@ -53,7 +53,7 @@ theorem SplayPrimitive.deterministic_of_eq {event event' : Event α} {before bef
           cases keys
           cases trees
           obtain ⟨same,rfl⟩ := execution.deterministic other (unique _ (by simp))
-          obtain ⟨rfl,_,rfl⟩ := TangoSquared.MTR.Tree.node.inj same
+          obtain ⟨rfl,_,rfl⟩ := ChaCha.MTR.Tree.node.inj same
           exact ⟨rfl,rfl⟩
       | search | join => cases sameEvent
   | join left right pivot =>

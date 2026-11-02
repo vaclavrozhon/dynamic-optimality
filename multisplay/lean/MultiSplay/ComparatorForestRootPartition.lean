@@ -5,7 +5,7 @@ import MultiSplay.ComparatorForestEndpoints
 namespace MultiSplay.ComparatorForest
 
 open DynamicOptimality (RawTree BST)
-open TangoSquared.Primary (Key)
+open ChaCha.Primary (Key)
 open EndpointEncoding ClassicalSwitch
 
 /-- The main component retains its indexed primary subtree and acquires

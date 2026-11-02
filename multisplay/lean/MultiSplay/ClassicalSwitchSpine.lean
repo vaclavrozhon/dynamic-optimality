@@ -14,8 +14,8 @@ outside domain. No auxiliary tree shape participates in this calculation.
 namespace MultiSplay.ClassicalSwitch
 
 open DynamicOptimality (RawTree)
-open TangoSquared.MTR.Tree (inorder)
-open TangoSquared.MTR.Pointer (Frame)
+open ChaCha.MTR.Tree (inorder)
+open ChaCha.MTR.Pointer (Frame)
 
 variable {α : Type*}
 
@@ -27,7 +27,7 @@ def frame (entry : Bool × α) : Frame α :=
   if entry.1 then .right .empty entry.2 else .left entry.2 .empty
 
 def plug (spine : Spine α) (focus : RawTree α) : RawTree α :=
-  TangoSquared.MTR.Pointer.plug focus (spine.map frame)
+  ChaCha.MTR.Pointer.plug focus (spine.map frame)
 
 def lowerKeys : Spine α → List α
   | [] => []

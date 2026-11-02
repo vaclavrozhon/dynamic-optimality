@@ -15,7 +15,7 @@ pointer intermediate, nor the lazy splay comparison against the compiled run.
 namespace MultiSplay.Layered
 
 open DynamicOptimality (RawTree)
-open TangoSquared.MTR.Tree (size)
+open ChaCha.MTR.Tree (size)
 
 variable {α : Type*}
 

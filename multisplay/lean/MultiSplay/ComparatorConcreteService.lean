@@ -14,7 +14,7 @@ endpoint addresses; the forest service supplies the unchanged component frame.
 namespace MultiSplay.ComparatorForest
 
 open DynamicOptimality (RawTree BST)
-open TangoSquared Paper20261030
+open ChaCha Paper20261030
 open Primary (Key)
 open EndpointEncoding ClassicalSwitch CommonForest
 open ColoredStorage AuxiliaryComponent BoundaryObservations PathDecomposition

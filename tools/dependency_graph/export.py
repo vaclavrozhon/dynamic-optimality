@@ -34,7 +34,7 @@ def command(*args: str) -> str:
 def group_for(path: str) -> str:
     if path.startswith(("splay/", "interface/")):
         return "Splay"
-    if path.startswith("tango_squared/") or path.startswith("TangoSquared"):
+    if path.startswith("chacha/") or path.startswith("ChaCha"):
         return "Cha-Cha"
     if path.startswith("greedy/"):
         return "Greedy"

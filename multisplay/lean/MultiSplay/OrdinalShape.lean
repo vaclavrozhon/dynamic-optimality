@@ -7,7 +7,7 @@ namespace MultiSplay.Alphabet
 
 open DynamicOptimality (RawTree)
 open Splay.Tree (BST)
-open TangoSquared.MTR.Tree (inorder size)
+open ChaCha.MTR.Tree (inorder size)
 open Splay.Accounting.OfflineNormalForm (leftBoundaryDepth rightBoundaryDepth HasBoundedMinorRibs)
 
 variable {α : Type*}
@@ -35,7 +35,7 @@ theorem indexed_eq_of_map_eq {lower upper : Nat} (first second : BST lower upper
       cases second with
       | empty => simp [DynamicOptimality.BST.toRaw, Auxiliary.map] at same
       | @node _ other _ left' right' =>
-          simp only [DynamicOptimality.BST.toRaw, Auxiliary.map, TangoSquared.MTR.Tree.node.injEq] at same
+          simp only [DynamicOptimality.BST.toRaw, Auxiliary.map, ChaCha.MTR.Tree.node.injEq] at same
           have count := congrArg size same.1
           simp only [map_size, DynamicOptimality.BST.toRaw_size] at count
           have firstCount := left.size_add_lower_eq_upper
@@ -59,7 +59,7 @@ theorem geometry_of_map_eq {aLower aUpper bLower bUpper : Nat}
       cases second with
       | empty => simp [DynamicOptimality.BST.toRaw, Auxiliary.map] at same
       | node left' right' =>
-          simp only [DynamicOptimality.BST.toRaw, Auxiliary.map, TangoSquared.MTR.Tree.node.injEq] at same
+          simp only [DynamicOptimality.BST.toRaw, Auxiliary.map, ChaCha.MTR.Tree.node.injEq] at same
           obtain ⟨lh, ll, lr, li⟩ := ihl left' same.1
           obtain ⟨rh, rl, rr, ri⟩ := ihr right' same.2.2
           simp [BST.height, leftBoundaryDepth, rightBoundaryDepth, HasBoundedMinorRibs, lh, rh, ll, lr, rl, rr, li, ri]
@@ -73,7 +73,7 @@ theorem exists_on_same_alphabet [Inhabited α] {n : Nat} (reference : BST 0 n)
   obtain ⟨count, indexed, interpretation, represented, cardinality⟩ := exists_encoding physical
   have sizeEq : count = n := by
     have length := congrArg List.length same
-    simp only [TangoSquared.MTR.Tree.length_inorder, map_size, DynamicOptimality.BST.toRaw_size,
+    simp only [ChaCha.MTR.Tree.length_inorder, map_size, DynamicOptimality.BST.toRaw_size,
       BST.size_eq_upper] at length
     omega
   clear cardinality

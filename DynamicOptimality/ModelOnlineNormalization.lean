@@ -20,7 +20,7 @@ them.
 
 namespace DynamicOptimality.OnlineModel.Normalization
 
-open TangoSquared.MTR
+open ChaCha.MTR
 open Splay.Accounting.OfflineConnectedSupport
 
 variable {n : Nat}

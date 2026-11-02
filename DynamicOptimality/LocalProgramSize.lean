@@ -6,8 +6,8 @@ and the cursor's ancestor frames are actual vertices of that same tree. -/
 
 namespace DynamicOptimality.LocalProgram
 
-open TangoSquared.MTR
-open TangoSquared.Paper20261030.Auxiliary
+open ChaCha.MTR
+open ChaCha.Paper20261030.Auxiliary
 
 variable {κ α ρ σ : Type*}
 

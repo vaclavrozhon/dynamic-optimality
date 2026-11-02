@@ -8,7 +8,7 @@ with right catenation and port interchange, this permits smaller-side work.
 
 namespace DynamicOptimality.SingleFinger.SourceDequeCatenateLeft
 
-open TangoSquared.Paper20261030 ColoredStorage SourcePointer SourceLocalProgram
+open ChaCha.Paper20261030 ColoredStorage SourcePointer SourceLocalProgram
 open SourceSpine SourceCounted SourceBoundary SourceOpenDeque SourceDequeTransferLeft
 
 variable {α ρ : Type*}

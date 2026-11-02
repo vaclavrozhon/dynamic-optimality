@@ -1,5 +1,5 @@
 import MultiSplay.ComparatorSuffixReference
-import TangoSquared.Paper20261030.DepthPreferences
+import ChaCha.Paper20261030.DepthPreferences
 import Mathlib.Data.Finset.Card
 
 /-!
@@ -14,8 +14,8 @@ structural bits therefore does not initialize or overwrite genuine memory.
 
 namespace MultiSplay.ComparatorSuffix
 
-open TangoSquared
-open TangoSquared.Paper20261030.Secondary (intervalUpdate)
+open ChaCha
+open ChaCha.Paper20261030.Secondary (intervalUpdate)
 
 def boundaryChanges {a b : Nat} (reference : DepthTree a b) (start request : Nat) :
     Finset DepthSplit := reference.nodes.filter fun split =>

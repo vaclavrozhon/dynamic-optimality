@@ -6,7 +6,7 @@ length is bounded by a constant, while its counters store spine lengths. -/
 
 namespace DynamicOptimality.SingleFinger.Counted
 
-open TangoSquared.MTR TangoSquared.Paper20261030.Auxiliary LocalProgram
+open ChaCha.MTR ChaCha.Paper20261030.Auxiliary LocalProgram
 
 variable {α ρ : Type*}
 

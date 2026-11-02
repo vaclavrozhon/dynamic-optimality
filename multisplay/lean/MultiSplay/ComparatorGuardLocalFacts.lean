@@ -4,7 +4,7 @@ import MultiSplay.ComparatorGuardPortSelection
 
 namespace MultiSplay.ComparatorGuard
 
-open DynamicOptimality TangoSquared Paper20261030
+open DynamicOptimality ChaCha Paper20261030
 open ColoredStorage PreferredProjection PrimaryWings
 open ComparatorPrimary (routing signature lastGap projected)
 

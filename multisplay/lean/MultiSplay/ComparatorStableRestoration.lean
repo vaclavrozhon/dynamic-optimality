@@ -1,5 +1,5 @@
 import MultiSplay.ComparatorPreparedAccess
-import TangoSquared.Paper20261030.HeadMemorySplice
+import ChaCha.Paper20261030.HeadMemorySplice
 
 /-! # Structural restoration after the source splice
 
@@ -11,7 +11,7 @@ repair changes no additional persistent owner bit.
 
 namespace MultiSplay.ComparatorStableSuffix
 
-open TangoSquared
+open ChaCha
 open Paper20261030
 open ColoredStorage Auxiliary AuxiliaryComponent BoundaryObservations PathDecomposition
 open SecondaryDecomposition

@@ -1,19 +1,19 @@
 import MultiSplay.IntervalWitnesses
-import TangoSquared.ProjectedRecords
+import ChaCha.ProjectedRecords
 
 /-!
 # Actual projected records for arbitrary secondary depth hierarchies
 
 The physical occurrence records and fine-cell projections are the existing
-Tango-squared objects. These extensions replace midpoint membership by
+Cha-Cha objects. These extensions replace midpoint membership by
 membership in the supplied interval hierarchy; all source occurrences and
 exact chronological prefix/suffix decompositions are retained.
 -/
 
 namespace MultiSplay.IntervalLower
 
-open TangoSquared
-open TangoSquared.Primary TangoSquared.NormalizedWords TangoSquared.Witnesses
+open ChaCha
+open ChaCha.Primary ChaCha.NormalizedWords ChaCha.Witnesses
 
 theorem projection_coarse_depth {H : Nat} {hierarchy : DepthTree 0 H} {q : Gadget} (hq : Valid hierarchy q) :
     q.split.cut + 1 ≤ min (q.split.hi + 1) H := by

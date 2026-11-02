@@ -13,7 +13,7 @@ the original secondary writes exactly.
 
 namespace MultiSplay.EndpointEncoding
 
-open TangoSquared.Primary (Key branch)
+open ChaCha.Primary (Key branch)
 
 theorem ascendingEmissions_increasing (state : State) (address : Key) :
     (ascendingEmissions state address).Pairwise (fun a b => a.length < b.length) := by
@@ -90,7 +90,7 @@ end MultiSplay.EndpointEncoding
 
 namespace MultiSplay.EndpointHierarchy
 
-open TangoSquared.Primary (Key)
+open ChaCha.Primary (Key)
 open EndpointEncoding
 
 /-- A retained even-depth emission makes exactly the same owner-row write. -/
