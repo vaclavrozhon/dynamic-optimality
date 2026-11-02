@@ -41,6 +41,13 @@ in addition to the targeted builds used during development.
 Source identity and reproduction
 -------------------------------
 
+Verified Lean source commit:
+9ea807f8012c14ddef957516d43b55367a849047
+Formalize the remaining BST bounds and causal simulations
+
+The following publication commit updates documentation and the graph without
+changing those Lean sources.
+
 snapshots/2026-11-02.additional.sources.sha256 records 2,515 hashes:
 all tracked Lean files and the three pinned project configuration files.
 Every hash was checked after the audit completed. Run from the repository root:
@@ -63,3 +70,34 @@ literal Splay on pruned trees, expected entropy bounds from pointwise bounds,
 static offline colored-walk bounds from unknown-subset online algorithms,
 and specified potential obstructions from competitive lower bounds.
 Untracked research notes predating this work are excluded from publication.
+
+Dependency graph
+----------------
+
+The complete export used the verified source commit above, rebuilt all
+2,507 registered modules, and covered them through 40 compiler-derived
+entry imports. Its 69,472 declarations agree with the
+audit inventory, including 43,646 theorems. The graph contains
+584,023 direct local references and 2,496 nonempty modules.
+There are 11 registered modules without declarations and no unresolved
+constant references. Registered sources match the recorded Git commit.
+
+Registered-source SHA-256:
+cdfc621364f5605ce70dd47db3cff8499f5a20ce4b3782e6ef43a08be8149c32
+
+Uncompressed graph JSON SHA-256:
+fdff262413f3c3be08b523e64fab46e5d16577bc091be820d5be9f563ec4e1c5
+
+Standalone HTML SHA-256:
+204b5cca0f444af4fbd7cc468167806cf4d82e61a2df959a15ca09b6d2d34479
+
+Browser verification
+--------------------
+
+Automated Chrome checks passed on desktop and mobile viewports. All 16 result
+shortcuts selected their intended declarations, and all 31 curated canonical
+endpoints were present. The checks covered module/declaration/neighborhood
+switching, preserved selection, zoom controls, filter reset, mobile controls,
+and highlighting every incident edge, including edges omitted from the large
+view's background sample. No JavaScript errors or horizontal overflow occurred.
+The desktop overview and mobile neighborhood screenshots were also inspected.

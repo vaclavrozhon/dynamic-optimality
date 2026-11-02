@@ -2,7 +2,7 @@
 
 Open the [interactive graph](https://vaclavrozhon.github.io/dynamic-optimality/proof-atlas.html) on the [project website](https://vaclavrozhon.github.io/dynamic-optimality/). You can also download [dependency-graph.html](https://github.com/vaclavrozhon/dynamic-optimality/raw/refs/heads/main/docs/dependency-graph.html) and open the saved file in a current browser. It is one self-contained HTML file: the graph data, drawing code, and spring simulation are included. It works offline and needs no server or account.
 
-The current snapshot contains **63,301 declarations**, including **39,429 theorems**, and **541,073 direct dependency edges** across all **2,225 registered modules**. Ten modules contain no declarations; the module overview therefore has 2,215 nodes. See the [verification record](verification-review-2026-11-02.txt).
+The current snapshot contains **69,472 declarations**, including **43,646 theorems**, and **584,023 direct dependency edges** across all **2,507 registered modules**. 11 modules contain no declarations; the module overview therefore has 2,496 nodes. See the [verification record](verification-additional-2026-11-02.txt).
 
 The graph contains the declarations from every tracked Lean module registered in this repository's `lakefile.toml`, including private declarations and generated helpers. It covers modules outside the import closure of the main public results as well. Lean, Mathlib, and other external-library declarations are omitted; references to them are counted in the metadata. Root audit scripts and the exporter itself are tooling outside the mathematical libraries.
 
