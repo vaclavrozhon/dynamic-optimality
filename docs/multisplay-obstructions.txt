@@ -1,0 +1,95 @@
+Two precise obstructions in the MultiSplay analysis
+==================================================
+
+These are counterexamples to specified proof steps. They are not lower
+bounds on the competitive ratio of classical MultiSplay. Its composed
+competitive theorem retains the scope stated in FORMALIZATION.md.
+
+1. Ordinary Splay and interval restriction do not commute
+-------------------------------------------------------
+
+Start with the four-key ordered BST whose root-to-leaf path is
+
+    0 --right--> 1 --right--> 3 --left--> 2.
+
+Ordinary bottom-up Splay on key 2 performs three rotations. If we then
+restrict the result to the interval {0,1,2}, its root is 2, with left
+child 0 and 0's right child 1.
+
+If we instead restrict the input first, the input is the increasing path
+0,1,2. Splaying 2 now performs two rotations and produces root 2, left
+child 1, and 1's left child 0. The resulting BSTs differ.
+
+IntervalProjection.restriction_not_splay strengthens this finite
+comparison: no ordinary Splay transcript on the restricted input reaches
+the restriction of the four-key output, whatever rotation count is
+claimed. The proof uses the existing determinism theorem for ordinary
+Splay, as well as the two explicit rotation transcripts.
+
+This obstructs an exact coupling of the two shapes. It does not assert
+that their costs cannot be compared by a different argument.
+
+2. A sum-of-logarithms potential does not prove a proposed local bound
+--------------------------------------------------------------------
+
+Let Phi be the sum, over all nodes of all actual auxiliary Splay trees,
+of log_2 of the corresponding auxiliary subtree size. Let p count the
+nonmandatory primary switches, and let f be the actual owner-indexed
+secondary ledger. Let G be any real-valued function of the primary
+preferred forest alone. For a reference height H define
+
+    A(H) = 1 + floor(log_2(floor(log_2(H+2)))).
+
+The endpoint Classical.classical_potential_obstruction disproves a
+universal per-request inequality of the form
+
+    actual cost + alpha * (Phi_after - Phi_before)
+      + G(forest_after) - G(forest_before)
+        <= C * A(H) * (1+p+f)
+
+for arbitrary legal initialized states, any fixed real C, and any fixed
+alpha >= 0. All quantifiers, the physical execution, and the counters
+occur in the Lean statement.
+
+For arbitrarily large positive s, the witness uses
+
+    H = 2^(2s+1) - 1,
+    n = 2^H - 1.
+
+The reference is an actual perfect BST on n keys. The initial physical
+BST has precisely those keys, with a certified persistent auxiliary
+inventory. One actual classical MultiSplay access performs 3s-1 ordinary
+rotations, so its shared search-plus-rotations cost is at least 3s-1.
+For that same access:
+
+    p = 0;
+    there is exactly one mandatory emission;
+    f = 1 for the actual midpoint depth reference;
+    the primary preferred forest is unchanged;
+    Phi_after - Phi_before > s * log_2(6).
+
+Consequently G cancels and the nonnegative multiple of the potential
+change only increases the proposed left-hand side. The factor A(H) is
+O(log(s+1)), whereas the actual rotation count grows linearly with s.
+The theorem includes an arbitrary threshold, so these are unbounded
+families, not merely isolated small examples.
+
+The witness starts from a legal supplied state. It does not prove that
+this state is reached cheaply from a chosen canonical cold start, nor
+does it repeat the costly access while preserving the witness. A global
+startup allowance can absorb a single such access. This is why the
+statement refutes the specified local potential argument without
+contradicting the proved global competitive bound.
+
+Lean sources
+------------
+
+- multisplay/lean/MultiSplay/Obstructions/IntervalProjection.lean
+- multisplay/lean/MultiSplay/Obstructions/ClassicalFamily.lean
+- multisplay/lean/MultiSplay/Obstructions/ClassicalPotentialObstruction.lean
+
+All names above lie in namespace MultiSplay.Obstructions. The construction
+uses the existing ordinary Splay relation, physical Global.Switches,
+preferred-component Core inventory, secondary ledger, and shared Access.
+The separate finite obstruction to adding fixed ancestor guards is
+documented in docs/reference-closure.txt.

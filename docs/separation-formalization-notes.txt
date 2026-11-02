@@ -1,0 +1,76 @@
+Notes for the explicit separation formalization
+==============================================
+
+Status: ChaCha.Separation.Explicit passes its targeted Lean build. The
+complete repository audit is recorded separately; this note describes
+the construction and the exact mathematical scope of its endpoint.
+
+The request family
+------------------
+
+Choose r >= 2 and a positive repetition count N, and put
+
+    k = 2^r, H = 2^(k-1), n = 2^H,
+    s_0 = 0, s_j = 2^(2^(j-1)) for 1 <= j < k.
+
+The word consists of N repetitions of bit reversal on the k active
+ranks, mapped to the increasing original keys s_0,...,s_(k-1). Its
+length is m=N*k. The primary reference is the canonical balanced
+reference on all n keys. The depth reference is the full midpoint
+tree on 0,...,H-1. sparseRequests_valid certifies that every request
+belongs to this universe; no rank-space optimum replaces the original
+key-space counters.
+
+Relative to the manuscript's parameters H=2^(k-1)-1 and
+s_j=2^(2^(j-1)-1), this doubles n and every positive active key. The
+primary branching depths d_j=H-2^(j-1)-1 are unchanged. The full
+midpoint tree now realizes the required induced comb without pruning
+its final leaf. The stabilized shared factor satisfies L_3(n)=r.
+
+The counters and conclusion
+---------------------------
+
+P is the existing primaryWilber counter on the fixed primary reference.
+D is the existing fragmentAlternations counter on the fixed depth
+reference, evaluated on all original timestamped occurrences. R is the
+existing robustBound on the same request point set. Put F0=m+P+D.
+
+The checked endpoint explicit_third_log_separation proves
+
+    m <= F0 <= 4m,
+    L_3(n)*F0 <= 8*R,       R <= 4*L_3(n)*F0.
+
+The first pair of inequalities is also separately available as
+fixedCounter_linear. Hence R/F0 is Theta(L_3(n)) on this explicit
+family, with constants independent of r and N. The statement does not
+assert that D alone is Omega(m); that extra assertion is unnecessary
+for the separation from the length-plus-alternation counter F0.
+
+Proof chain
+-----------
+
+1. WordCounts and NumericPrimary evaluate repeated bit reversal in the
+   existing primary counter. A first-visit correction relates the cyclic
+   count to the ordinary empty-history count and gives r*m+1 <= R+k
+   on the dense rank word.
+2. RankEmbedding proves exact invariance of the robust bound under a
+   strictly increasing embedding. It transfers the dense certificate
+   to the sparse original keys, including all repeated occurrences.
+3. SparsePrimary charges each primary alternation to an occurrence
+   whose key has a nonzero bit. Each active key has at most one such
+   bit, so P <= 2m.
+4. FragmentCharges and SparseFragments evaluate the actual depth
+   fragment decomposition. Each nontrivial down-up event is charged
+   to its singleton exceptional occurrence; the midpoint recursion
+   partitions these charges. Inactive and single-depth fragments have
+   zero charge. This proves D <= m.
+5. StaticUpper constructs an actual static pointer execution on the
+   dense rank keys, of height at most r+1. The existing rectangle
+   lower bound gives R <= 2(r+1)m; increasing-embedding invariance
+   transfers this upper bound as well.
+6. Explicit computes L_3(n)=r and combines these inequalities, with
+   r>=2 and N>0, to obtain the displayed two-sided separation.
+
+All definitions are shared with the Cha-Cha lower-bound development.
+The finite sequences, reference trees, timestamps, rotations in the
+static comparison, and counter estimates are proved in Lean.

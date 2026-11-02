@@ -1,0 +1,117 @@
+Entropy residual for the fixed-reference alternation bound
+=========================================================
+
+This guide describes ChaCha/Entropy. Verification outcomes are recorded
+separately in the additional-formalization record. The probabilistic and
+deterministic statements have different quantifiers, as explained below.
+
+Counters at the original request times
+--------------------------------------
+
+Let X be a request word of length m. Fix the original ordered primary
+reference T and depth reference S. A primary reference is an ordered
+binary routing tree whose leaves are keys. The depth reference is the
+existing DepthTree used by the fragment-alternation decomposition.
+
+At each original request time t, let b_t count the primary and depth
+events charged at that time. For another ordered primary reference Q,
+let a_t count its primary events. EventProfiles.lean constructs these
+events from the actual recursive counters, retaining their original
+timestamps and multiplicities. Its cardinality theorems identify their
+totals with primaryWilber and fragmentAlternations.
+
+The residual events at time t number max(0,a_t-b_t). The strengthened
+counter is therefore
+
+    F_res(X;T,S,Q) = m + sum_t max(b_t,a_t)
+                   = m + P_T(X) + D_S(X) + sum_t max(0,a_t-b_t).
+
+Deterministic.lean implements the maximum and subtraction with multisets
+of original times. No unrelated total is redistributed across requests.
+residual_identity proves the second displayed identity, and
+residual_domination proves
+
+    F_res >= max(m+P_T+D_S, m+P_Q).
+
+The auxiliary reference may be any ordered reference containing the
+requested keys. OrderedReference.lean bounds its primary counter by the
+existing robust rectangle counter R. Together with P_T<=R and D_S<=5R,
+this gives
+
+    F_res <= m+7R <= 519 OPT(X).
+
+The last inequality is residual_shared_OPT and uses the shared optimum
+on the original Fin n keys, not an entropy-specific competitor. It is
+deterministic and holds for every request order and every such Q.
+
+The random-order entropy statement
+----------------------------------
+
+Fix a histogram: f_x is the number of occurrences of key x and
+m=sum_x f_x. For m>0, write p_x=f_x/m and
+
+    H = -sum_x p_x log_2(p_x).
+
+The formal histogramEntropyBits is m*H, defined without division by m
+as (m ln(m)-sum_x f_x ln(f_x))/ln(2); it is zero for an empty word.
+
+ExpectationUniform.lean samples a uniformly random permutation of the
+m distinct occurrence indices and then reads their original keys.
+ExpectationDistribution.lean proves that forgetting the occurrence
+labels gives equal probability to every word with this histogram and
+zero probability outside it. The expectation is identified with the
+finite sum weighted by an actual normalized PMF. The empty word has
+one sample and causes no exceptional probability-space convention.
+
+There is one ordered Q, chosen before this random permutation from the
+histogram, such that
+
+    E[F_res(X;T,S,Q)] >= m*(1+H)/(2 log_2(3)).
+
+The original T and S remain fixed. The assertion is about expectation
+over the ordering; it does not claim m*(1+H) as a lower bound for every
+individual ordering. The same chosen Q still satisfies the deterministic
+519*OPT bound on every word in the histogram's support.
+
+Why a weighted-median reference works
+-------------------------------------
+
+Histogram.lean defines the natural-log entropy mass and the expected
+binary alternation mass. At a fork with a occurrences in its left child
+and b in its right child, the exact expected number of changes is
+2ab/(a+b), with value zero when a+b=0. The proof counts neighboring
+distinct occurrence tokens after restriction to that fork, using
+permutation symmetry; it assumes no expected-cost identity.
+
+Choose a key of positive mass c so that the masses a and b on either
+side are each at most half of w=a+c+b. Recurse on the two sides. The
+binary reference first separates the larger outer side, then separates
+the median key from the remaining side. If s=max(a,b), its first binary
+toll satisfies
+
+    2s(w-s)/w >= s >= (w-c)/2.
+
+The entropy paid at the corresponding ternary split is at most w*ln(3).
+WeightedMedianAnalytic and WeightedMedianAssembly prove these estimates,
+including zero side masses. WeightedMedianReference recursively builds
+the actual ordered reference and telescopes the entropy identity to
+
+    entropyMass <= ln(3)*(2*alternationMass+m).
+
+The exact random-order primary expectation is alternationMass.
+Combining the last inequality with F_res>=m+P_Q and ln(2)<=ln(3)
+gives the displayed coefficient 2*log_2(3). The reference construction
+preserves precisely the ordered positive-frequency support.
+
+Public endpoints
+----------------
+
+- ChaCha.Entropy.residual_shared_OPT (Deterministic.lean):
+  the deterministic comparison to the shared optimum.
+- ChaCha.Entropy.primary_expectation (ExpectationReference.lean):
+  the exact primary expectation for an arbitrary duplicate-free reference.
+- ChaCha.Entropy.exists_expected_residual_entropy (ExpectationEntropy.lean):
+  the histogram-dependent auxiliary reference and entropy bound.
+- ChaCha.Entropy.exists_entropy_residual_lower_bound (ExpectationEntropy.lean):
+  one shared auxiliary reference with both the entropy assertion and the
+  deterministic comparison on every permutation of the original Fin n word.

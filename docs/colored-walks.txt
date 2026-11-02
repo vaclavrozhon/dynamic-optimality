@@ -1,0 +1,131 @@
+Colored ordered subsets and shuffles of nearest-neighbor walks
+
+The public endpoints are ColoredWalks.shuffle_OPT_bound and
+ColoredWalks.shuffle_from_initial, in DynamicOptimality/ColoredWalks/Shuffle.lean.
+Every optimum and physical execution uses the repository's shared BST model.
+
+Statement and conventions
+
+There are n original ordered keys and k source walks. Source i has a fixed
+subset S_i of those keys. On each of its events it either stays at its
+previous key or moves to the preceding or following key in S_i. Its first
+event may choose any key of S_i. Different subsets may overlap. Events
+specify their source and key, so the arbitrary interleaving retains every
+occurrence, including repeated visits to the same key. Inactive sources
+keep their previous positions. ShuffleModel.lean defines NeighborStep,
+WalkFrom, and ShuffleWalk with precisely these rules.
+
+Write m for the total number of events and
+
+  lambda(k) = 1 + floor(log_2(k+1)).
+
+The results give
+
+  OPT(request word) <= 292864*m*lambda(k)^2,
+
+and an actual search-plus-rotations execution from any supplied BST with
+cost at most 585728*m*lambda(k)^2 + 12*n. The first bound has no additive n.
+The second pays a single initialization allowance. The statements include
+unused colors, empty subsets, repeated requests, and the empty word.
+These are existence bounds for the shared offline optimum and executions;
+they do not assert an online algorithm that discovers unknown subsets or
+future first occurrences at the same cost.
+
+The static colored tree
+
+Embedding.lean proves a separate geometric statement about an actual BST.
+Given distinct ordered keys labeled with k colors, there is a tree on
+exactly those keys in which successive keys of one color have tree-edge
+distance at most 4*ceil(log_2(2*k+1)). The theorem supplies actual pointer
+moves between any supplied cursors at the two keys, leaving the reference
+tree fixed. This tree depends on the colored key set, before any walk.
+
+The construction selects the minimum and maximum key of each nonempty
+color, at most 2k keys in all. It builds a balanced skeleton on them and
+recurses into the remaining ordered gaps. An adjacent same-color pair
+either lies in one recursive gap or crosses an endpoint of that color.
+EmbeddingAssembly controls both the endpoint depths and the crossing
+distance. EmbeddingExtrema discharges the selection premise using the
+actual finite color set. No assumed short-distance tree remains.
+
+Only observed keys need initialization
+
+For the optimum bound, ShuffleEncoding encodes exactly the pairs
+(source color, original key) that occur in the word. It orders them by
+key first and color second. The resulting dense finite alphabet has
+N <= m keys. It also compacts the colors to c <= min(k,m) active sources.
+The decoder is monotone in the original key, and is strictly increasing
+inside each one color. Unused total-function arguments receive harmless
+default values; all subsequent occurrence claims explicitly concern
+observed events.
+
+Removing unused pairs does not put a new same-color key between neighbors
+of the original subset. ShuffleMetric therefore applies the colored tree
+to every actual step. ShuffleWalk chooses each finger's starting position
+at its source's first event and constructs one forward persistent-finger
+execution. Later movements update only the named finger. Its cost F is
+at most m*(4*ceil(log_2(2*c+1))+1), charging one per edge and per service.
+The backwards induction used to choose initial positions never resets a
+finger during this forward execution.
+
+An implemented multifinger simulation
+
+MultiFinger.simulationBound, in MultiFinger/Simulation.lean, proves the
+actual physical simulation with cost at most
+
+  1024*((F+c)*lambda(c)+N).
+
+The reference tree stays fixed. The simulation reuses the hand-and-tendon
+construction of Chalermsook, Goswami, Kozma, Mehlhorn, and Saranurak,
+Multi-Finger Binary Search Trees, ISAAC 2018, Appendix A:
+https://drops.dagstuhl.de/entities/document/10.4230/LIPIcs.ISAAC.2018.55
+
+A hand retains occupied finger positions, the reference root, and the
+branching vertices joining them. Its core has at most 2*(c+1) vertices.
+A tendon is an exact suppressed unary source path between retained
+vertices; its hanging subtrees and sequence of left/right turns persist.
+Two actual BST deques represent its lower-key and upper-key sides. Their
+endpoint pops cost at most 14 amortized rotations and pushes at most five.
+Singleton and empty cases preserve their exact physical endpoint trees.
+
+The physical top skeleton retains the core and at most four deque port
+keys per core vertex, for at most 10*(c+1) top keys. Ordinary Splay exposes
+any requested top key. A source edge movement changes at most two hand
+endpoints, proved from the actual same-tree pointer step in HandMoves.
+PhysicalEndpoint realizes each such change by one consecutive region of
+at most three top keys. RegionReplacement isolates that region using
+actual rotations, applies the supplied deque operation, and retains all
+outside markers and physical hanging subtrees exactly. Its overhead is
+32*(1+floor(log_2(capacity+4))) in the top-tree potential.
+
+State retains both the canonical deque representation and the actual
+splayed top shape. Equal ordered marker and hole lists relate them. The
+potential is queue credit plus twice the sum of integer logarithmic
+subtree ranks in the actual top skeleton. It is initially at most
+4*N + 20*(c+1)*floor(log_2(10*(c+1))). StateRun telescopes that same potential
+through the entire literal finger chronology. RawTrace converts the
+resulting rotations and root services into the shared search model with
+factor two, charging each initial search depth in the correct tree.
+Unnecessary rotations after the final service are omitted.
+
+Returning to the original universe
+
+ShuffleReduction applies the shared search-to-geometry cost comparison,
+then Geometry.execution_map_monotone projects every actual geometric row
+through the decoder. It merges copies of an original key and omits unused
+target keys without increasing the number of charged positive-time points.
+The shared complete row zero remains free. The existing geometric-to-BST
+cost comparison then bounds the original OPT. This step is offline, which
+is sufficient here; it does not assume that the dense alphabet was known
+to an online strategy at the start.
+
+ShuffleArithmetic uses N <= m, c <= m, c <= k, and
+ceil(log_2(2*c+1)) <= 2*lambda(c). The simulation budget is at most
+11*m*lambda(k)^2 before its constant 1024. The two shared model comparisons
+contribute factors two and thirteen, giving 286*1024 = 292864. Finally,
+ModelInitialization.search_from_initial gives 2*OPT+12*n from the supplied
+initial BST. All constants are uniform and were not optimized.
+
+This separates the two logarithms: the first comes from distances in the
+colored reference tree; the second comes from simulating c persistent
+fingers in one ordinary physical BST.

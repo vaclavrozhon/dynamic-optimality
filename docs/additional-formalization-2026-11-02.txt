@@ -1,0 +1,115 @@
+Additional formalization requested on 2 November 2026
+===================================================
+
+All targets below are formalized and included in the completed full build
+and axiom audit recorded in verification-additional-2026-11-02.txt. Their
+public scope is documented in FORMALIZATION.md. The requested numerical
+lower bounds for the Splay interface (item 5 of the discussion) are excluded.
+
+Main targets
+------------
+
+1. Two-level Cha-Cha with ordinary bottom-up Splay auxiliary trees and
+   competitive factor O(L_3(n)), using the shared search/rotation model.
+   A local access lemma or a conditional representation interface alone
+   does not complete this target.
+
+2. The explicit Theta(L_3(n)) separation between the robust rectangle
+   bound and the fixed-reference primary/depth-alternation counter.
+   Both counters must be evaluated on the same actual request family.
+
+3. Funnel bounds, with occurrences distinguished and repeated keys allowed:
+   - an arbitrary two-source shuffle W of X and Y satisfies
+     F(W) + |W| = O(OPT(X) + OPT(Y));
+   - convex-interval composition satisfies
+     F(W) <= F(template) + sum_i F(part_i) + 9|W|.
+   The optimum is the existing repository optimum.
+
+4. Rowwise nearest-common-ancestor closure in an arbitrary fixed reference
+   BST preserves arboral satisfaction. A nonempty row of r keys grows to
+   at most 2r-1 keys. The keys occurring in any closed time interval are
+   also closed after this construction. Record the separate finite
+   obstruction to adjoining fixed ancestor guards.
+
+6. A comparison normal form of height O(log n), cost O(OPT+n), bounded
+   minor ribs, and constant-depth rotations. Constants are uniform in
+   universe size and request word. A conditional weighted-stack interface
+   does not complete the target.
+
+Further results explicitly mentioned in the discussion
+------------------------------------------------------
+
+- The entropy residual strengthening of depth alternation, distinguishing
+  the deterministic lower-bound assertion from the fixed-histogram
+  random-order expectation.
+- Ordered subsets admitting cheap adjacent-color moves, and the resulting
+  bound for shuffles of nearest-neighbor walks.
+- The precise MultiSplay potential/guard counterexamples; these obstruct
+  specified analyses, not the competitive theorem.
+- A causal online geometric-to-physical-BST conversion with constant
+  factor. Offline reconstruction is insufficient for this claim.
+
+Verification and integration
+----------------------------
+
+The final repository-wide audit passed for all 2,507 registered modules,
+69,472 declarations, and 406 explicit endpoint diagnostics. The
+following targeted checks were also completed during development:
+
+- Item 1: ChaCha.Paper20261030.SplayAuxiliaryAll builds. Its public
+  All.third_log_competitive proves O(L_3(n)) with actual ordinary Splay
+  auxiliaries, original keys, the shared OPT, and an arbitrary supplied
+  initial BST. The ordinary-operation certificates are retained by
+  All.ordinary_active and Natural.ordinary.
+- Item 2: ChaCha.Separation.Explicit builds. The same sparse repeated
+  bit-reversal family has m <= F0 <= 4m, where F0=m+P+D, and
+  L_3(n)*F0 <= 8*RIR <= 32*L_3(n)*F0. The proof uses the full midpoint
+  depth reference. docs/separation-formalization-notes.txt records its
+  minor change of parameters relative to the manuscript.
+- Item 3: all 52 new Funnel modules build. ConvexComposition has the exact
+  additive 9m for arbitrary monotone interval labels. ShuffleOPT proves
+  F(W)+|W| <= 360639*(OPT(X)+OPT(Y)), including repeated keys and overlapping
+  source alphabets, with no universe-size additive term. Both occurrence
+  embedding and inductive interleaving interfaces are exported. The five
+  principal endpoint axiom checks contain only the accepted axioms.
+- Item 4: DynamicOptimality.ReferenceClosure builds, including the actual
+  execution transformation, the closed-time-interval theorem, and the
+  finite ancestor-guard counterexample.
+- Item 6: Splay.Accounting.LogHeightNormalForm builds. Its
+  exists_structuralLogHeightComparisonTrace bounds every intermediate
+  tree's height by 30025000*(ceil(log_2(n+1))+1), every rotation's depth by
+  1, the minor ribs by 20, and the total cost by 400000000*(OPT+n).
+  additiveStructuralHypothesis discharges the existing shared structural
+  hypothesis with constants independent of n and of the request word.
+- Entropy residual: ExpectationEntropy builds with the complete uniform
+  fixed-histogram probability space, exact primary expectation, actual
+  weighted-median auxiliary reference, and the combined entropy/OPT
+  endpoint. The same reference is chosen before the random order and
+  satisfies the deterministic 519*OPT bound on every permutation.
+- MultiSplay obstructions: IntervalProjection and
+  ClassicalPotentialObstruction build. Both use actual ordinary Splay
+  transcripts. The latter embeds an unbounded family into complete
+  physical BST states with persistent inventories and the actual ledger.
+  Its scope is arbitrary legal initialized states and a specified local
+  potential inequality, not a competitive lower bound.
+- Monotone projection: ColoredWalks.ProjectionExecution builds. Actual
+  geometric executions project between finite universes without increasing
+  cost; merged keys and unused target keys are allowed.
+- Online geometric simulation: CausalInitialized and GreedyInstance build.
+  One physical online BST is fixed before all future words and starts from
+  each supplied initial tree. It costs at most 387*n+381*geometricCost.
+  The concrete split-tree system, causal row extraction, and all-prefix
+  potential argument are implemented. Targeted endpoint axioms contain
+  only the standard three axioms.
+- Colored walks: the static colored embedding, dense observed-key
+  encoding, actual persistent-finger walks, and the final projection to
+  the shared OPT build. MultiFinger.simulationBound discharges the complete
+  physical simulator with constant 1024. ColoredWalks.Shuffle then proves
+  OPT <= 292864*m*(1+floor(log_2(k+1)))^2 without an additive universe term,
+  and an actual supplied-initial-BST run at twice that bound plus 12*n.
+  The final public endpoint is unconditional.
+
+New results use the existing tree, cost, geometry, and online interfaces.
+The targeted checks were followed by the full registered-module build and
+axiom audit before publishing the completed results. The untracked research
+notes predate this work and are not included in this commit.

@@ -1,0 +1,65 @@
+Verification of the additional formalizations — 2 November 2026
+================================================================
+
+Scope
+-----
+
+The completed work is listed in additional-formalization-2026-11-02.txt.
+The numerical Splay-interface lower bounds (discussion item 5) are excluded.
+The public imports and aliases are in DynamicOptimalityResults.lean.
+The semantic review and its limits are recorded separately in
+additional-review-2026-11-02.txt.
+
+This record describes a completed local build and axiom audit, using Linux
+x86_64, Lean 4.32.1, and the pinned lake-manifest.json. It does not claim that
+the subsequent GitHub Actions run has completed. GitHub Actions repeats the
+same full registered-module audit after publication.
+
+Build and logical dependencies
+------------------------------
+
+Command:
+  flock /tmp/dynamic-optimality-lean-build.lock env LEAN_NUM_THREADS=2 make audit
+
+All 2,507 registered modules built successfully (11,170 Lake jobs).
+The audit ran 406 distinct explicit endpoint diagnostics and checked
+all 69,472 local declarations, including private and generated ones.
+Declarations using nonstandard axioms: [].
+
+The only accepted logical axioms are propext, Classical.choice, and Quot.sound.
+The audit verifies coverage by originating module, including modules outside
+the public import closure. Existing linter warnings did not prevent the build
+or audit. No sorry, admitted proof, new axiom, or native_decide shortcut was
+introduced. Noncomputable online choices are fixed per current state and
+request; the construction does not assert bounded computation time.
+
+This audit includes the completed physical multifinger simulator, its
+unconditional colored-shuffle corollary, the causal geometric simulator,
+and all aliases in the public entry point. Their final versions were checked
+in addition to the targeted builds used during development.
+
+Source identity and reproduction
+-------------------------------
+
+snapshots/2026-11-02.additional.sources.sha256 records 2,515 hashes:
+all tracked Lean files and the three pinned project configuration files.
+Every hash was checked after the audit completed. Run from the repository root:
+
+  sha256sum -c docs/snapshots/2026-11-02.additional.sources.sha256
+  make audit
+
+The local full logs are generated at build/audit/build.log and
+build/audit/audit.log. They are not committed caches. The CI workflow uploads
+the corresponding logs, inventories, and dependency graph as an artifact.
+The dependency-graph summary separately records its exact source commit and
+registered-source fingerprint.
+
+Documentation and scope checks
+------------------------------
+
+Local links in README.md, FORMALIZATION.md, and docs/DEPENDENCY_GRAPH.md resolve.
+The added proof guides distinguish padded ordinary-Splay certificates from
+literal Splay on pruned trees, expected entropy bounds from pointwise bounds,
+static offline colored-walk bounds from unknown-subset online algorithms,
+and specified potential obstructions from competitive lower bounds.
+Untracked research notes predating this work are excluded from publication.

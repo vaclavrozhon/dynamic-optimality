@@ -778,8 +778,8 @@
           </div>
           <div class="legend-note">
             <span class="result-symbol">★</span> Main result or its proof
-            module. <span class="result-symbol">◇</span> Supporting model
-            equivalence.
+            module. <span class="result-symbol">◇</span> Supporting structural
+            or model result.
           </div>
         </div>
         <div class="section details" id="details">
@@ -1161,11 +1161,80 @@
             endpoints: ["DynamicOptimality.ChaCha.All.third_log_competitive"],
           },
           {
+            key: "chacha-splay",
+            label: "Cha-Cha · Splay auxiliaries",
+            group: "Cha-Cha",
+            name: "DynamicOptimality.Results.chacha_splay",
+            endpoints: ["ChaCha.Paper20261030.SplayAuxiliary.All.third_log_competitive"],
+          },
+          {
             key: "multisplay",
             label: "MultiSplay",
             group: "MultiSplay",
             name: "DynamicOptimality.Results.multisplay",
             endpoints: ["MultiSplay.Online.competitive_logarithmic"],
+          },
+          {
+            key: "funnel-shuffle",
+            label: "Funnel · shuffles",
+            group: "Shared",
+            name: "DynamicOptimality.Results.funnel_shuffle",
+            endpoints: ["DynamicOptimality.Funnel.Shuffle.OPT_bound"],
+          },
+          {
+            key: "funnel-convex",
+            label: "Funnel · intervals",
+            group: "Shared",
+            name: "DynamicOptimality.Funnel.convex_composition",
+            endpoints: [],
+          },
+          {
+            key: "colored-shuffle",
+            label: "Colored walk shuffles",
+            group: "Shared",
+            name: "DynamicOptimality.Results.colored_shuffle",
+            endpoints: [
+              "DynamicOptimality.ColoredWalks.shuffle_OPT_bound",
+              "DynamicOptimality.MultiFinger.simulationBound",
+            ],
+          },
+          {
+            key: "rectangle-separation",
+            label: "Rectangle separation",
+            group: "Cha-Cha",
+            name: "ChaCha.Separation.explicit_third_log_separation",
+            endpoints: [],
+          },
+          {
+            key: "reference-closure",
+            label: "NCA closure",
+            group: "Shared",
+            secondary: true,
+            name: "DynamicOptimality.Geometry.ReferenceClosure.execution_referenceClosure",
+            endpoints: ["DynamicOptimality.Geometry.ReferenceClosure.closePoints_satisfied"],
+          },
+          {
+            key: "entropy-residual",
+            label: "Entropy residual",
+            group: "Cha-Cha",
+            name: "ChaCha.Entropy.exists_entropy_residual_lower_bound",
+            endpoints: ["ChaCha.Entropy.residual_shared_OPT"],
+          },
+          {
+            key: "multisplay-obstruction",
+            label: "MultiSplay · potential obstruction",
+            group: "MultiSplay",
+            secondary: true,
+            name: "MultiSplay.Obstructions.Classical.classical_potential_obstruction",
+            endpoints: ["MultiSplay.Obstructions.IntervalProjection.restriction_not_splay"],
+          },
+          {
+            key: "log-height-normal-form",
+            label: "Log-height normal form",
+            group: "Splay",
+            secondary: true,
+            name: "Splay.Accounting.LogHeightNormalForm.exists_structuralLogHeightComparisonTrace",
+            endpoints: ["Splay.Accounting.LogHeightNormalForm.additiveStructuralHypothesis"],
           },
           {
             key: "models",
@@ -1174,6 +1243,17 @@
             secondary: true,
             name: "DynamicOptimality.Results.bst_models_equivalent",
             endpoints: [],
+          },
+          {
+            key: "online-geometry",
+            label: "Online geometry → BST",
+            group: "Shared",
+            secondary: true,
+            name: "DynamicOptimality.Results.geometric_online",
+            endpoints: [
+              "DynamicOptimality.Geometry.OnlineStrategy.exists_onlineBST",
+              "DynamicOptimality.Geometry.OnlineGreedy.exists_onlineBST",
+            ],
           },
         ];
         const resultByKey = new Map(

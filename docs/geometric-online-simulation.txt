@@ -1,0 +1,92 @@
+Online geometric strategies and ordinary BSTs
+
+The checked endpoint is
+  DynamicOptimality.Geometry.OnlineStrategy.exists_onlineBST
+in DynamicOptimality/GeometricOnlineSimulation/CausalInitialized.lean.
+
+A geometric row is the finite set of keys touched at the current time. The
+last-touch height of a key records its most recent touch. The source is any
+Geometry.OnlineStrategy whose initial height is zero on every column: the
+standard complete baseline is free. Each source row contains the request
+and satisfies the existing rectangle condition, and its cost is its
+cardinality. The source may have arbitrary mathematical bookkeeping.
+
+For n original keys, the theorem has the following quantifier order:
+
+  for every source strategy and its baseline initial state,
+  there exist one target OnlineBST and an initial-state map,
+  such that for every supplied BST and every finite request word W,
+
+    targetCost(W) <= 387*n + 381*sourceCost(W).
+
+The initial-state map returns exactly the supplied physical BST. Every
+physical tree uses the same original keys 0,...,n-1. There are no added
+sentinels or duplicate keys. Each target access pays its initial successful
+search depth plus one and the actual number of ordinary rotations. The
+next state and its finite rotation witness depend only on the current
+state and request. Classical choice fixes these choices; no running-time
+or computability guarantee is asserted. The quantifier order does not
+choose a different target strategy after seeing W.
+
+The proof follows the equal-last-touch classes of Demaine, Harmon, Iacono,
+Kane, and Patrascu, The Geometry of Binary Search Trees, SODA 2009,
+Sections 2.4-2.5. The physical implementation uses dyadic perfect blocks
+and deques. A class is a set of keys with one common last-touch height.
+Its skeleton is a split tree, and its external holes contain entire older
+classes. ClassTree.Realizes records all original keys in each represented
+interval, with strict height separation between classes.
+
+SplitTree.lean supplies the unconditional dyadicSplitTrees instance of
+SplitTreeSystem, with K=184. Setup stores at most 184 credits per key. A
+cut at any present key gives an actual rotation trace moving that key to
+the root, leaving two valid split-tree states, and proves
+
+  rotations + leftCredit + rightCredit <= oldCredit.
+
+The credits pay for perfect-block expansion, transfers between components,
+and deque imbalance. This interface is implemented in Lean; it is not an
+unproved simulator assumption. A stronger implementation helper also
+bounds setup rotations plus initial credit by 190 per key, although the
+public endpoint uses the existing general initialization wrapper.
+
+ClassFrame.Realizes.row_hits_class in ClassIntervals.lean combines two
+existing geometric lemmas:
+every interval key is visible from some highest key, and a satisfying row
+contains every key visible from a point already in the row. Consequently,
+when the row touches an interval, it touches its highest class. The
+RowsExtract recursion splits at such a key and continues on both sides.
+It produces exactly the selected-key skeleton, with every untouched hole
+retained literally, and charges all extraction rotations to old credit.
+
+RowsRebuild rearranges this skeleton using at most six rotations per
+selected key and installs one new highest class. The new class stores at
+most 184 credits per selected key. A successful search for a skeleton key
+never enters a hole. The initial search depth is at most the final depth
+plus the number of rotations. With potential equal to twice total stored
+credit, ClassTree.Realizes.row_access proves
+
+  accessCost + newPotential <= oldPotential + 381*rowCardinality.
+
+Causal.causal_run_budget telescopes this inequality on every finite
+prefix; causal_run_source also identifies the exact source state after
+that prefix. Initial stored potential is at most 368*n. The shared
+OnlineBST.Initialization wrapper starts from any supplied BST and adds at
+most 19*n once, giving 387*n in the public bound. It does not repeatedly
+reinitialize between requests.
+
+All empty cases are included. An empty word performs no access. A universe
+with no keys has no requests and an empty represented tree. Repeated
+requests and arbitrary finite row sizes use the same statements.
+
+The earlier offline equivalence constructed a suitable execution for each
+complete point set or request word. It did not supply a single strategy
+working for all future words. The new result supplies that causal strategy
+and its exact initial tree. Together with the existing OnlineSearch
+BST-to-geometry conversion, it provides both online directions up to
+constant factors and the explicit one-time linear initialization.
+
+GreedyInstance.lean specializes this simulation to the existing actual
+Greedy algorithm via GeometricOnlineGreedy.strategy, initial_height, and
+initialized_cost. The negative-depth Greedy initialization and its exact
+Greedy.cost are retained by that existing interface; the simulation does
+not introduce a new Greedy cost or a new competitive assumption.

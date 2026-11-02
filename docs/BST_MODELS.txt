@@ -141,9 +141,18 @@ GeometricOnlineGreedy.lean. Its run_rows and initialized_cost theorems
 retain the existing Greedy rows and cost. Clamping negative initial
 heights to zero proves feasibility without changing those chosen rows.
 
-Deferred: an arbitrary online geometric strategy has not yet been
-converted to an online BST at constant overhead. The backwards offline
-reconstruction cannot supply that stronger quantifier order. An online
-proof must select each physical transition before later request rows are
-known. The current results therefore do not export a physical online
-Greedy BST.
+The converse is Geometry.OnlineStrategy.exists_onlineBST in
+GeometricOnlineSimulation/CausalInitialized.lean. Given a source and its
+standard zero-height baseline state, it fixes one target OnlineBST and
+an initial-state map before quantifying over all supplied physical trees
+and all future words. The bound is
+
+    targetCost <= 387*n + 381*sourceCost.
+
+Every transition consists of actual searches and ordinary rotations on
+the original keys. Initialization is paid once. The construction maintains
+equal-last-touch classes with implemented split trees and a telescoping
+credit; it uses no future rows. See geometric-online-simulation.txt for
+the implementation and the constants. GreedyInstance.lean specializes
+the theorem to the existing Greedy rows and their exact Greedy.cost,
+with the reference initialization fixed before all future words.

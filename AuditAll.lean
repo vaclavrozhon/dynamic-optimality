@@ -54,6 +54,37 @@ run_cmd do
 #print axioms DynamicOptimality.OnlineModel.Normalization.pointer_cost_le_from_state
 #print axioms DynamicOptimality.Geometry.OnlineSearch.run_cost_le
 #print axioms DynamicOptimality.Geometry.greedy_cost_geometric
+#print axioms Splay.Accounting.LogHeightNormalForm.exists_structuralLogHeightComparisonTrace
+#print axioms Splay.Accounting.LogHeightNormalForm.additiveStructuralHypothesis
+#print axioms DynamicOptimality.Geometry.ReferenceClosure.row_card_le
+#print axioms DynamicOptimality.Geometry.ReferenceClosure.closePoints_satisfied
+#print axioms DynamicOptimality.Geometry.ReferenceClosure.closePoints_card_add_rows_le
+#print axioms DynamicOptimality.Geometry.ReferenceClosure.execution_referenceClosure
+#print axioms DynamicOptimality.Geometry.ReferenceClosure.closePoints_interval_closed
+#print axioms DynamicOptimality.Geometry.ReferenceClosure.GuardCounterexample.guarded_not_satisfied
+#print axioms DynamicOptimality.Results.chacha_splay
+#print axioms ChaCha.Paper20261030.SplayAuxiliary.All.execution
+#print axioms ChaCha.Paper20261030.SplayAuxiliary.All.ordinary_active
+#print axioms ChaCha.Separation.explicit_third_log_separation
+#print axioms DynamicOptimality.Funnel.convex_composition
+#print axioms DynamicOptimality.Results.funnel_shuffle
+#print axioms DynamicOptimality.Funnel.wordCount_sublist
+#print axioms MultiSplay.Obstructions.IntervalProjection.restriction_not_splay
+#print axioms MultiSplay.Obstructions.Classical.classical_potential_obstruction
+#print axioms ChaCha.Entropy.residual_shared_OPT
+#print axioms ChaCha.Entropy.primary_expectation
+#print axioms ChaCha.Entropy.exists_entropy_residual_lower_bound
+#print axioms DynamicOptimality.Geometry.execution_map_monotone
+#print axioms DynamicOptimality.ColoredWalks.exists_colored_embedding
+#print axioms DynamicOptimality.ColoredWalks.exists_colored_pointer_tree
+#print axioms DynamicOptimality.Results.geometric_online
+#print axioms DynamicOptimality.GeometricOnlineSimulation.dyadicSplitTrees
+#print axioms DynamicOptimality.Geometry.OnlineStrategy.exists_onlineBST
+#print axioms DynamicOptimality.Geometry.OnlineGreedy.exists_onlineBST
+#print axioms DynamicOptimality.MultiFinger.simulationBound
+#print axioms DynamicOptimality.ColoredWalks.shuffle_OPT_bound
+#print axioms DynamicOptimality.ColoredWalks.shuffle_from_initial
+#print axioms DynamicOptimality.Results.colored_shuffle
 
 open Lean in
 run_cmd do

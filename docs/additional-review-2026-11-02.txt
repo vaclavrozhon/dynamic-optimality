@@ -1,0 +1,124 @@
+Semantic review of the additional endpoints
+==========================================
+
+Scope and verification limit
+----------------------------
+
+This is a read-only mathematical review of selected public endpoints,
+their definitions, and critical composition steps in the working tree
+based on commit a76ddab30f3bfe18226e2a6d1948ab000e2ea1ac. It is not a
+line-by-line review of the whole library or a fresh build/axiom certificate.
+The repository-wide audit is recorded separately. The reviewer contributed
+the split-tree and region-replacement infrastructure, so this is not an
+independent audit of every proof in those components.
+
+No mathematical scope mismatch was found in the inspected chains. The
+following findings and boundaries matter when presenting the results.
+
+1. Ordinary-Splay Cha-Cha
+------------------------
+
+SplayAuxiliaryAll.third_log_competitive uses the shared Competitive/OPT
+definitions, one constant, and every supplied initial BST. Its strategy
+and state transitions are fixed before requests; SplayAuxiliaryOnline.step
+chooses from the current state and request only. Transition retains both
+the actual search/rotation access and the ordinary RequestExecution on
+the same persistent component inventory. Initialization is paid once;
+empty words and the zero-key universe have explicit endpoints.
+
+For arbitrary n, ordinary_active certifies ordinary Splay in the padded
+bookkeeping state. Online projection realizes the transition physically
+on exactly the original keys. This does not assert that pruning each
+ordinary Splay transcript gives another literal ordinary Splay transcript
+on the pruned component. FORMALIZATION.md explains this distinction;
+avoid strengthening it when abbreviating the README description.
+
+2. Explicit robust-counter separation
+--------------------------------------
+
+ChaCha/Separation/Explicit.lean:97 proves the two-sided ratio on one
+explicit sparse repeated-bit-reversal family, for parameter >= 2 and a
+positive repetition count. Both counters use the same original-key word.
+The denominator is F0 = length + primary + fragment alternations, not
+fragment alternations alone. The claim is an infinite explicit family,
+not a separation for every universe size or an algorithmic cost lower
+bound. README.md and the separation guide state this scope correctly.
+The documented factor-two change in positive keys and universe size is
+consistent with the full midpoint reference used in the proof.
+
+3. Entropy residual
+-------------------
+
+ExpectationEntropy.exists_entropy_residual_lower_bound chooses one
+ordered auxiliary reference before quantifying over every permutation
+of the supplied histogram. The same reference has the deterministic
+519*OPT bound on all those words and the stated expected entropy bound.
+histogramEntropyBits is m*H, not H. Empty words are covered.
+
+The residual is the sum of pointwise maxima of actual timestamped event
+multiplicities, plus length: Deterministic.lean:31 uses multiset union,
+not a maximum of the two total counters. EventProfiles identifies both
+event cardinalities with their original counters. ExpectationDistribution
+proves that uniform occurrence permutations induce a uniform distribution
+on distinct words with the prescribed histogram. The expectation claim
+must not be restated as a pointwise entropy lower bound. Current prose
+makes this distinction and retains the original Fin n optimum.
+
+4. Causal geometric simulation
+-----------------------------
+
+CausalInitialized.lean:45 has the required order of quantifiers: one
+target OnlineBST and initial-state map precede all supplied physical
+trees and request words. CausalState stores the current geometric state,
+one physical class tree, and its full interval realization. The next
+state is tied to the source advance operation. Each local choice uses
+only that state and the current request. causal_run_budget telescopes
+the same stored potential on every prefix; no backward reconstruction
+or future-dependent initial target is substituted here.
+
+The concrete split-tree constant is 184, giving 381 times source cost
+and 387*n startup after the shared initialization wrapper. The premise
+is the complete zero-height geometric baseline. GreedyInstance retains
+the original Greedy rows and cost: its hidden real surface may have
+negative initial depths, while its public geometric surface is clamped.
+Greedy's reference initialization is fixed separately from the arbitrary
+physical initial BST. The physical universe is exactly 0,...,n-1.
+
+Documentation correction identified during review: FORMALIZATION.md:29
+placed an old 1 November full-audit sentence immediately after the new
+causal theorem, using "these modules". That older verification record
+cannot certify the new modules. Keep it explicitly historical or replace
+it with the later audit result after that audit completes.
+
+5. Colored walks and the physical region bridge
+-----------------------------------------------
+
+ShuffleReduction.shuffle_OPT_of_simulation is explicitly conditional on
+SimulationBound. Its unconditional public specialization must import and
+apply the completed simulation witness; merely defining the interface
+does not discharge it. The final simulation witness was being integrated
+while this review was performed and was not built by this review.
+
+The reduction is an offline shared-OPT upper bound for an interleaving
+of nearest-neighbor walks on fixed colored subsets. Its static embedding
+and initial finger positions may depend on the complete word. Fingers
+then persist through every event of other colors. This is not a new
+online algorithm for unknown future colored subsets, nor a simulation
+of a reference BST that itself rotates.
+
+Dense observed tags bound the actual simulated universe by the word
+length; active colors are bounded by both length and the supplied color
+count. Monotone geometric projection coalesces overlapping colored copies
+and allows unused target keys without an n startup term in the OPT bound.
+The supplied-initial-BST version separately includes 12*n. The stabilized
+factor is 1+floor(log2(k+1)), so small or unused color universes are explicit.
+
+PhysicalEndpoint, TendonPromote/Demote, TendonRegion, and RegionBoundary
+were also inspected. The prefix region keeps the exact interior marker
+word and holes.tail outside the kernel; the kernel receives the literal
+firstHole. The suffix case uses holes.dropLast and lastHole. The untouched
+half-tendon queue and child representations are retained literally, and
+queue potential is threaded rather than reinitialized. DataEquivalent
+rewrites canonical shape bookkeeping only; RegionStep.realize pays the
+physical top reassembly. State.endpoint combines that bound with the
+queue bound, preserving both potentials and the actual rotation endpoints.

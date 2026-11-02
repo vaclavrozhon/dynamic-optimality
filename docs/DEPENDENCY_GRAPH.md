@@ -14,7 +14,7 @@ Dependencies come from Lean's compiled expressions, not searches through source 
 
 The default module overview groups declarations by their source module. An edge between two modules represents one or more actual declaration references crossing that boundary. Use the prominent **Modules** and **Declarations** buttons to change the level of detail. **Neighborhood** shows the chosen declaration and nearby dependencies. Selecting a declaration and switching to modules highlights its containing module; switching back retains the declaration selection. Colors identify Splay, Greedy, Cha-Cha, MultiSplay, and shared infrastructure; they describe source ownership, not a theorem's logical strength.
 
-The **Start with a result** strip opens the main Splay, refined Splay, Greedy, Cha-Cha, and MultiSplay theorem statements. Stars mark those statements, their canonical proof endpoints, and their containing modules. The supporting five-model equivalence has a diamond marker. These are curated navigation markers; they do not change the exported dependencies or certify a theorem independently of Lean. Result shortcuts clear conflicting filters so the selected statement is visible.
+The **Start with a result** strip opens the main algorithm bounds, including Cha-Cha with Splay auxiliaries, and the funnel, colored-walk, rectangle-separation, and entropy results. Stars mark those statements, their canonical proof endpoints, and their containing modules. Supporting model equivalence, online geometric simulation, NCA closure, normal form, and the MultiSplay obstruction have diamond markers. These are curated navigation markers; they do not change the exported dependencies or certify a theorem independently of Lean. Result shortcuts clear conflicting filters so the selected statement is visible.
 
 Search for a full declaration name, such as:
 
@@ -23,7 +23,11 @@ DynamicOptimality.Results.splay
 DynamicOptimality.Results.splay_refined
 DynamicOptimality.Results.greedy
 DynamicOptimality.Results.chacha
+DynamicOptimality.Results.chacha_splay
 DynamicOptimality.Results.multisplay
+DynamicOptimality.Results.funnel_shuffle
+DynamicOptimality.Results.colored_shuffle
+DynamicOptimality.Results.geometric_online
 DynamicOptimality.Results.bst_models_equivalent
 ```
 

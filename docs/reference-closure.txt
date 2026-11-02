@@ -1,0 +1,84 @@
+Reference closure of geometric BST executions
+============================================
+
+This guide describes the development in DynamicOptimality/ReferenceClosure.
+Its final verification status is recorded separately; a source description
+is not a build or axiom-audit certificate.
+
+Statement and conventions
+-------------------------
+
+A reference tree is an ordinary indexed BST containing exactly the keys
+0,...,n-1. It can have any shape. A geometric point (key,time) records a
+touched key at an integer time. Arboral satisfaction is the repository's
+closed-rectangle condition: two points in different rows and columns need
+a third point in their rectangle, including its boundary.
+
+The nearest common ancestor of two keys is the lowest reference vertex
+whose subtree contains both; a key can be its own ancestor. Reference
+closure replaces each row R by R together with the nearest common
+ancestors of every pair of keys in R. The construction retains the same
+time coordinates and performs no changes to the request word.
+
+The development proves:
+
+- This is already a closure: applying it twice adds nothing.
+- A row with r>0 keys has at most 2r-1 keys after closure. An empty row
+  remains empty.
+- Closure preserves arboral satisfaction. The whole point set has at most
+  twice its original cardinality; a sharper statement subtracts one for
+  each nonempty row.
+- In an arborally satisfied set with closed rows, the union of the keys in
+  any closed time interval is also closed.
+- Applying the construction to a shared geometric execution gives an
+  execution of the same requests, at most twice its touch cost. The shared
+  complete initialization row remains uncharged.
+
+Proof organization
+------------------
+
+Rows.lean defines the closure recursively on the existing indexed BST.
+A vertex is retained if it belongs to the original row or if both child
+subtrees contain an original row key. Counting the two child sets proves
+the sharp bound by induction. NCA.lean identifies these retained vertices
+with the original keys and pairwise nearest common ancestors, and proves
+idempotence.
+
+Cut.lean proves the geometric step for a single reference cut. Inside a
+convex reference interval, add the pivot in every row containing keys on
+both sides. If an empty rectangle had a new corner, choose the latest
+original point on its left side, and then the rightmost at that time.
+The original rectangle condition gives a contradiction. Reflecting either
+coordinate covers all orientations. This argument is valid for arbitrary
+linearly ordered coordinates.
+
+Geometry.lean fills the cuts from the children upward and proves that the
+resulting rows are exactly the closure defined in Rows.lean. This modular
+assembly is an alternative to treating all newly added ancestors at once
+in the hand proof. Cardinality.lean sums the row estimates without charging
+empty times or adding a universe-size term.
+
+Crossing.lean shows that a finite satisfied set with keys on both sides of
+a cut contains either a point on the pivot or a row straddling it. Choose
+the latest left point, the earliest subsequent right point, and the two
+appropriate horizontal extremes. An otherwise empty rectangle excludes a
+crossing between different rows. TimeInterval.lean applies this fact after
+restricting to a closed time interval and a convex reference subtree.
+Execution.lean connects the result to Geometry.ArboralExecution and its
+existing initialization and cost conventions.
+
+Scope of the pivot witness
+--------------------------
+
+An interval crossing supplies a pivot at some time in the interval. It
+does not place that pivot at the next request time. The construction by
+itself therefore does not supply the synchronized comparison forest or
+guard operations needed for a stronger MultiSplay bound.
+
+GuardCounterexample.lean checks the guard obstruction on the perfect
+reference BST on 0,...,30 (the research example shifted down by one).
+The original rows {21,22} and {22,23} are both NCA-closed and together are
+arborally satisfied. Adjoining each key's nearest strict lower and upper
+reference ancestors produces {19,21,22,23} and {15,21,22,23}. The rectangle
+between (19,1) and (15,2) is empty. This refutes that particular guard
+completion; it is not a lower bound against MultiSplay competitiveness.
